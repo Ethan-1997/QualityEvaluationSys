@@ -72,28 +72,28 @@
                             </div>
                             <el-row type="flex" justify="center" :gutter="20">
                                 <el-col :xs="24" :sm="24" :lg="11">
-                                    <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="90" status="success"></el-progress></div>
+                                    <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="arrived*10" status="success"></el-progress></div>
                                     <div style="width:126px;margin:30px auto 0px auto"><el-button @click="goToParticipation" type="primary">&nbsp;&nbsp;&nbsp;查看详情&nbsp;&nbsp;&nbsp;</el-button></div>
                                 </el-col>
                                 <el-col :xs="24" :sm="24" :lg="13">
                                     <el-row :gutter="1">
                                         <el-alert title="" type="success" :closable="false">
-                                            <div style="line-height:30px;font-size:18px;">已到:18/20</div>
+                                            <div style="line-height:30px;font-size:18px;">已到:{{arrived}}人</div>
                                         </el-alert>
                                     </el-row>
                                     <el-row :gutter="1">
                                         <el-alert title="" type="info" :closable="false">
-                                            <div style="line-height:30px;font-size:16px;">请假:1人</div>
+                                            <div style="line-height:30px;font-size:16px;">请假:{{askForLeave}}人</div>
                                         </el-alert>
                                     </el-row>
                                     <el-row :gutter="1">
                                         <el-alert title="" type="warning" :closable="false">
-                                            <div style="line-height:30px;font-size:16px;">迟到:1人</div>
+                                            <div style="line-height:30px;font-size:16px;">迟到:{{later}}人</div>
                                         </el-alert>
                                     </el-row>
                                     <el-row :gutter="1">
                                         <el-alert title="" type="error" :closable="false">
-                                            <div style="line-height:30px;font-size:16px;">未到:0人</div>
+                                            <div style="line-height:30px;font-size:16px;">未到:{{unarrived}}人</div>
                                         </el-alert>
                                     </el-row>
                                 </el-col>
@@ -182,16 +182,23 @@
     import { fetchList } from '@/api/announcement'
     import { fetchListWork } from '@/api/work'
     import { mapGetters } from 'vuex'
+    import { fetchListDaily } from '@/api/participation'
     
     import storage from '@/utils/storage'
     export default {
     
       data() {
         return {
+          dailyList: null,
           active: null,
           announcementDataData: null,
           taskData: null,
-
+          participation: [],
+          askForLeave: 0,
+          arrived: 0,
+          unarrived: 0,
+          later: 0,
+          figure: 0,
           dynamicTags: ['今晚检查学生学生作业', '周五下午四点行政楼开会', '今天有5人迟到', '提醒课代表收作业', '前台使用的技术是Vue.js', '主要的组件是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
           inputVisible: false,
           inputValue: '',
@@ -227,6 +234,47 @@
         // }
       },
       methods: {
+        getList() {
+          fetchListDaily().then(response => {
+            const date = new Date().getFullYear() + '/' + (+new Date().getMonth() + +1) + '/' + (+new Date().getDay() + +4)
+            this.dailyList = response.data.items
+            const figure = response.data.total
+            console.log(date)
+            for (let i = 0; i < figure; i++) {
+              if (this.dailyList[i].date === date) {
+                console.log(1)
+                this.participation.push({
+                  sid: this.dailyList[i].sid,
+                  sclass: this.dailyList[i].sclass,
+                  sname: this.dailyList[i].sname,
+                  status: this.dailyList[i].status,
+                  date: this.dailyList[i].date,
+                  time: this.dailyList[i].time,
+                  reason: this.dailyList[i].reason
+                })
+              }
+            }
+            this.askForLeave = 0
+            this.arrived = 0
+            this.unarrived = 0
+            this.later = 0
+            console.log(this.dailyList.length)
+            for (let i = 0; i < this.participation.length; i++) {
+              if (this.participation[i].status === '已到') {
+                this.arrived++
+              } else if (this.participation[i].status === '请假') {
+                this.askForLeave++
+              } else if (this.participation[i].status === '未到') {
+                this.askForLeave++
+              } else if (this.participation[i].status === '迟到') {
+                this.askForLeave++
+              }
+            }
+            console.log(2)
+            console.log(this.arrived)
+            console.log(this.participation)
+          })
+        },
     
         goToInformation() {
           this.$router.push({ path: '/teacherInformation/index' })
