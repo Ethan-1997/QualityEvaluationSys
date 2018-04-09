@@ -53,7 +53,7 @@
                     <span><svg-icon icon-class="table" />&nbsp;系统公告</span>
                     <el-button style="float: right; padding: 3px 0" type="text" @click="goToAnnocument" >更多</el-button>
                 </div>
-                <el-table :data="bulletinData" max-height= 264px style="width: 100%"  >
+                <el-table :data="bulletinData" style="width: 100%"  >
                     <el-table-column prop="bulletin" label="公告"> 
                     </el-table-column>
                     <el-table-column fixed="right" prop="date" label="发布日期" width="100" align="center"> 
