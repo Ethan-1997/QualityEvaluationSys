@@ -1,0 +1,428 @@
+<template>
+  <div class="dashboard-editor-container">
+    <el-row :gutter="20">
+        <el-col :xs="24" :sm="24" :lg="9">
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="24" :lg="24">
+                    <el-card>
+                        <div slot="header" class="clearfix">
+                            <span><svg-icon icon-class="table" />&nbsp;系统公告</span>
+                            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+                        </div>
+                        <el-table :data="bulletinData" max-height= 264px style="width: 100%"  >
+                            <el-table-column fit prop="bulletin" label="公告">
+                            
+                            </el-table-column>
+                            <el-table-column fixed="right" prop="date" label="发布日期" width="100px" align="center">
+                                
+                            </el-table-column>
+                        </el-table>
+                    </el-card>
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="24" :lg="24">
+                    <el-card>
+                        <div slot="header" class="clearfix">
+                            <span><svg-icon icon-class="form" />&nbsp;每日任务</span>
+                            <el-button style="float: right; padding: 3px 0" type="text" @click="showDaliyTask">更多</el-button>
+                        </div>
+                        <el-table :data="taskData" style="width: 100%" :row-class-name="tableRowClassName" @row-click="showDaliyTask">
+                            <el-table-column align="center" label="序号" width="65" type="index" :index="indexMethod">
+                            </el-table-column>
+                            <el-table-column prop="task" label="每日任务">
+                            </el-table-column>
+                            <el-table-column label="截止时间" width="130" align="center">
+                                <template slot-scope="scope">
+                                    <i class="el-icon-time"></i>
+                                    <span>{{scope.row.date}}</span>
+                                </template>        
+                            </el-table-column>
+                            <el-table-column fixed="right" prop="status" label="提交状态" width="100" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
+                                <template slot-scope="scope">
+                                    <el-tag :type="scope.row.status === '已提交' ? 'success' : 'warning'">{{scope.row.status}}</el-tag>
+                                </template>   
+                            </el-table-column>
+                        </el-table>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-col>
+        <el-col :xs="24" :sm="24" :lg="9">
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="24" :lg="24">
+                    <el-card>
+                        <div slot="header" class="clearfix">
+                            <span><svg-icon icon-class="example" />&nbsp;日常表现</span>
+                            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+                        </div>
+                        <el-tabs tab-position="left" style="height: 264px;"><!-- tip:静态数据 -->
+                            <el-tab-pane label="日常出勤">
+                                <div style="padding: 4px 0">
+                                    <el-alert title="已到" type="success" show-icon :closable="false"> 2018-01-26
+                                    </el-alert>
+                                </div>
+                                <div style="padding: 4px 0">
+                                    <el-alert title="迟到" type="warning" show-icon :closable="false"> 2018-01-25
+                                    </el-alert>
+                                </div>
+                                <div style="padding: 4px 0">
+                                    <el-alert title="请假" type="info" show-icon :closable="false"> 2018-01-24
+                                    </el-alert>
+                                </div>
+                                <div style="padding: 4px 0">
+                                    <el-alert title="未到" type="error" show-icon :closable="false"> 2018-01-23
+                                    </el-alert>
+                                </div>
+                                <div style="padding: 4px 0">
+                                    <el-alert title="已到" type="success" show-icon :closable="false"> 2018-01-22
+                                    </el-alert>
+                                </div>
+                            </el-tab-pane>
+                            <el-tab-pane label="违纪情况">
+                                <template>
+                                        <el-table :data="breakRuleData" style="width:100%" :row-class-name="breakRuleTable">
+                                            <el-table-column prop="item" label="违纪情况" > </el-table-column>
+                                            <el-table-column prop="date" label="日期" width="100" align="center"> </el-table-column>
+                                        </el-table>
+                                </template>
+                            </el-tab-pane>
+                            <el-tab-pane label="突出表现">
+                                <template>
+                                        <el-table :data="highlightData" style="width:100%" :row-class-name="highlightTable">
+                                            <el-table-column prop="item" label="突出表现" > </el-table-column>
+                                            <el-table-column prop="date" label="日期" width="100" align="center"> </el-table-column>
+                                        </el-table>
+                                </template>
+                            </el-tab-pane>
+                            <el-tab-pane label="重大事项">
+                                <template>
+                                        <el-table :data="bigThingData" style="width:100%" :row-class-name="bigThingTable">
+                                            <el-table-column prop="item" label="重大事件" > </el-table-column>
+                                            <el-table-column prop="date" label="日期" width="100" align="center"> </el-table-column>
+                                        </el-table>
+                                </template>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </el-card>
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="24" :lg="24">
+                    <el-card>
+                        <div slot="header" class="clearfix">
+                            <span><svg-icon icon-class="chart" />&nbsp;评测报告</span>
+                            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+                        </div>
+                        <el-tabs tab-position="left" style="height:300px" @tab-click="clickTab" >
+                            <el-tab-pane label="入学测评" style="width:100%">
+                                <raddar-chart ref="gradeTabsOne" id="gradeTabsOne"></raddar-chart>
+                            </el-tab-pane>
+                            <el-tab-pane label="学中测评">
+                                <pie-chart ref="gradeTabsTwo"></pie-chart>
+                            </el-tab-pane>
+                            <el-tab-pane label="结业测评">
+                                <bar-chart ref="gradeTabsThree"></bar-chart>
+                            </el-tab-pane>
+                        </el-tabs>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-col>
+        <el-col :xs="24" :sm="24" :lg="6">
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="24" :lg="24">
+                    <el-card>
+                        <div slot="header" class="clearfix">
+                            <span><svg-icon icon-class="user" />&nbsp;学生信息</span>
+                            <el-button style="float: right; padding: 3px 0" type="text">修改个人信息</el-button>
+                        </div>
+                        <el-row type="flex" justify="center" :gutter="20">
+                        <el-col :span="24">
+                            <div style="width:100%">
+                            <div style="line-height:28px;width:150px;margin:0px auto">
+                                <img style="width:150px;height:150px;border-radius:75px" :src="avatar"/>
+                            </div>
+                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;摇滚兔子</div>
+                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<i class="el-icon-info"/>&nbsp;&nbsp;学号:&nbsp;&nbsp;16147131</div>
+                            <div style="line-height:28px;width:150px;margin:0px auto"><el-button type="primary" :plain="signInButton" @click="open2" :disabled="signIn" style="width:150px">{{signInText}}</el-button></div>
+                            </div>
+                        </el-col>
+                        </el-row>
+                    </el-card>
+                </el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :xs="24" :sm="24" :lg="24">
+                    <el-card>
+                        <div slot="header" class="clearfix">
+                            <span><svg-icon icon-class="clipboard" />&nbsp;备忘录</span>
+                        </div>
+                        <el-tag :key="tag" v-for="tag in dynamicTags" closable :disable-transitions="false" @close="handleClose(tag)" class="el-tag-todoList"> {{tag}} </el-tag>
+                            <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm" >
+                            </el-input>
+                        <el-button v-else class="button-new-tag" size="small" @click="showInput">+ 新 事 务</el-button>
+                    </el-card>
+                </el-col>
+            </el-row>
+        </el-col>
+    </el-row>
+  </div>
+</template>
+
+<script>
+    import { daliyTask } from '@/api/daliyTask'
+    import { bulletin } from '@/api/bulletin'
+    import { mapGetters } from 'vuex'
+    import RaddarChart from './components/RaddarChart'
+    import PieChart from './components/PieChart'
+    import BarChart from './components/BarChart'
+    export default {
+    
+      data() {
+        return {
+          taskData: null,
+          active: null,
+          bulletinData: null,
+
+          dynamicTags: ['晚上前提交布置的任务', '13：30理工楼101开会', '数据结构作业', '选修课作业', '前台使用的是Vue.js', '主要的是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
+          inputVisible: false,
+          inputValue: '',
+    
+          signIn: false,
+          signInText: '签到',
+          signInButton: false,
+
+          breakRuleData: [{
+            item: '违纪情况',
+            date: '2016-05-02'
+          }, {
+            item: '违纪情况',
+            date: '2016-05-02'
+          }, {
+            item: '违纪情况',
+            date: '2016-05-02'
+          }, {
+            item: '违纪情况',
+            date: '2016-05-02'
+          }, {
+            item: '违纪情况',
+            date: '2016-05-02'
+          }],
+          highlightData: [{
+            item: '突出表现',
+            date: '2016-05-02'
+          }, {
+            item: '突出表现',
+            date: '2016-05-02'
+          }, {
+            item: '突出表现',
+            date: '2016-05-02'
+          }, {
+            item: '突出表现',
+            date: '2016-05-02'
+          }, {
+            item: '突出表现',
+            date: '2016-05-02'
+          }],
+          bigThingData: [{
+            item: '重大事件',
+            date: '2016-05-02'
+          }, {
+            item: '重大事件',
+            date: '2016-05-02'
+          }, {
+            item: '重大事件',
+            date: '2016-05-02'
+          }, {
+            item: '重大事件',
+            date: '2016-05-02'
+          }, {
+            item: '重大事件',
+            date: '2016-05-02'
+          }]
+        }
+      },
+      components: {
+        RaddarChart,
+        PieChart,
+        BarChart
+      },
+      computed: {
+        ...mapGetters([
+          'avatar'
+        ])
+    
+      },
+      updated() {
+        this.$refs.gradeTabsOne.chart.resize()
+        this.$refs.gradeTabsTwo.chart.resize()
+        this.$refs.gradeTabsThree.chart.resize()
+      },
+      created() {
+        this.getTaskData()
+        this.getBulletionData()
+        this.$nextTick(() => {
+          this.$refs.gradeTabsOne.chart.resize()
+          this.$refs.gradeTabsTwo.chart.resize()
+          this.$refs.gradeTabsThree.chart.resize()
+        })
+      },
+      methods: {
+        clickTab() {
+          this.$nextTick(() => {
+            this.$refs.gradeTabsOne.chart.resize()
+            this.$refs.gradeTabsTwo.chart.resize()
+            this.$refs.gradeTabsThree.chart.resize()
+          })
+        },
+
+        showDaliyTask() {
+          this.$router.push({ name: 'daliyTask' })
+        },
+
+        handleClose(tag) { // 动态编辑标签
+          this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
+        },
+
+        showInput() {
+          this.inputVisible = true
+          this.$nextTick(_ => {
+            this.$refs.saveTagInput.$refs.input.focus()
+          })
+        },
+
+        handleInputConfirm() {
+          const inputValue = this.inputValue
+          if (inputValue) {
+            this.dynamicTags.push(inputValue)
+          }
+          this.inputVisible = false
+          this.inputValue = ''
+        },
+
+        open2() { // 签到弹窗
+          this.$message({
+            message: '签到成功!',
+            type: 'success'
+          })
+          this.signIn = true
+          this.signInText = '已签到'
+          this.signInButton = true
+        },
+
+        breakRuleTable({ row, rowIndex }) {
+          return 'danger-row'
+        },
+        highlightTable({ row, rowIndex }) {
+          return 'success-row'
+        },
+        bigThingTable({ row, rowIndex }) {
+          return 'warning-row'
+        },
+
+        tableRowClassName({ row, rowIndex }) {
+          if (row.status === '已提交') {
+            return 'success-row'
+          }
+          return ''
+        },
+
+        getTaskData() {
+          daliyTask().then(response => {
+            this.taskData = response.data
+          })
+        },
+        filterTaskTag(value, row) {
+          return row.status === value
+        },
+
+        getBulletionData() {
+          bulletin().then(response => {
+            this.bulletinData = [
+              response.data[0],
+              response.data[1],
+              response.data[2],
+              response.data[3],
+              response.data[4]
+            ]
+          })
+        },
+
+        indexMethod(index) {
+          return index + 1
+        }
+      }
+    }
+  </script>
+
+
+<style rel="stylesheet/scss" lang="scss">
+    .el-tag-todoList {//动态编辑标签
+        margin: 5px;
+        line-height: 30px;
+        height: 30px;
+        font-size: 16px;
+        color: black;
+    }
+    .button-new-tag {
+        margin: 5px;
+        height: 32px;
+        line-height: 30px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .input-new-tag {
+        width: 90px;
+        margin-left: 10px;
+        vertical-align: bottom;
+    }
+    
+    .el-row {
+        margin-bottom: 20px;
+        &:last-child {
+        margin-bottom: 0;
+        }
+    }
+    .bg-purple-dark {
+        background: #99a9bf;
+    }
+    .bg-purple {
+        background: #d3dce6;
+    }
+    .bg-purple-light {
+        background: #e5e9f2;
+    }
+    .grid-content {
+        border-radius: 4px;
+        min-height: 36px;
+    }
+    .row-bg {
+        padding: 10px 0;
+        background-color: #f9fafc;
+    }
+
+    .dashboard-editor-container {
+        padding: 32px;
+        background-color: rgb(240, 242, 245);
+    }
+
+    .el-table .danger-row{
+        background: rgb(248, 240, 240);
+        color:rgb(255, 0, 0);
+    }
+    .el-table .warning-row{
+        background: rgb(253, 246, 236);
+        color:rgb(220, 162, 60);
+    }
+    .el-table .success-row{
+        background: rgb(240, 249, 235);
+        color:rgb(103, 194, 58);
+    }
+
+    .chart-wrapper {
+        background: #fff;
+        padding: 16px 16px 0;
+        margin-bottom: 32px;
+    }
+</style>
