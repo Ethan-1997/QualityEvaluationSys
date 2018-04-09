@@ -70,9 +70,10 @@
     }
 </script>
 
-<style>
+<style rel="stylesheet/scss" lang="scss">
   .midtest-index{
     padding:32px;
+    background-color: rgb(240, 242, 245);
   }
     .text-bottom{
     font-size: 24px;
