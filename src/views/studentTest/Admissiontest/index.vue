@@ -3,7 +3,7 @@
     <el-row>
       <el-col :xl="5" class="fill-height"></el-col>
       <el-col :xl="14">
-        <el-row style="background:#fff;">
+        <el-row style="background:#fff;margin-bottom:0px">
           <el-col :span="24">
             <el-row>
               <el-col :lg="4" :md="6" :sm="6" :xs="6">
@@ -37,7 +37,7 @@
           <el-col :span="24" style="height:10px;"></el-col>
         </el-row>
         <el-row>
-          <el-col :md="18" style="background:#fff;padding:16px 32px 16px 32px;">
+          <el-col :md="18" style="background:#fff;padding:16px 32px 16px 32px;margin:0px">
             <el-row>
               <el-col :span="24">
                   <el-collapse v-model="activeName" accordion>

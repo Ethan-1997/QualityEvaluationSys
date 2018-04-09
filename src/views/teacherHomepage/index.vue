@@ -286,7 +286,7 @@
         vertical-align: bottom;
     }
     .el-row {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
         &:last-child {
         margin-bottom: 0;
         }
