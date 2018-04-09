@@ -371,11 +371,15 @@ export default{
   }
 }
 </script>
-<style>
+<style  rel="stylesheet/scss" lang="scss">
   .dashboard-editor-container {
-    min-height: 100vh;
-		padding: 100px 60px 0px;
-    background-color: #e3e3e3;
+  padding: 32px;
+  background-color: rgb(240, 242, 245);
+    .chart-wrapper {
+      background: #fff;
+      padding: 16px 16px 0;
+      margin-bottom: 32px;
+    }
   }
   .router-font{
     color:#409EFF;
