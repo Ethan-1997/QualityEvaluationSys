@@ -33,7 +33,7 @@ Mock.mock(/\/studentTeam\/update/, 'post', informationAPI.updateStudentTeam)
 Mock.mock(/\/information\/getList/, 'post', informationAPI.getList)
 
 // 系统公告
-Mock.mock(/\/bulletin\/bulletin/, 'post', bulletin.bulletin)
+Mock.mock(/\/bulletin\/bulletin/, 'get', bulletin.bulletin)
 // Mock.setup({
 //   timeout: '350-600'
 // })

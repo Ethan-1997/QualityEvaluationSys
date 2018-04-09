@@ -249,13 +249,32 @@
         },
         getBulletionData() {
           bulletin().then(response => {
-            this.bulletinData = response.data
+            this.bulletinData = [
+              response.data[0],
+              response.data[1],
+              response.data[2],
+              response.data[3],
+              response.data[4],
+              response.data[5],
+              response.data[6],
+              response.data[7],
+              response.data[8],
+              response.data[9],
+              response.data[10],
+              response.data[11],
+              response.data[12],
+              response.data[13],
+              response.data[14],
+              response.data[15]
+            ]
           })
         },
         getTaskData() {
           daliyTask().then(response => {
             this.taskData = response.data
           })
+        //   this.$storage.set('taskData', this.taskData)
+        //   this.$storage.get('taskData')
         },
         indexMethod(index) {
           return index + 1
