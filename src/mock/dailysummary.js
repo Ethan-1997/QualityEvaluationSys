@@ -6,7 +6,7 @@ const List2 = []
 const List3 = []
 for (let i = 0; i < 20; i++) {
   List.push(Mock.mock({
-    date: '@date',
+    date: '2018.9.' + +(i + 1),
     'status|1': [
       '已到',
       '迟到',
@@ -16,10 +16,9 @@ for (let i = 0; i < 20; i++) {
   })
   )
 }
-
 for (let i = 0; i < 3; i++) {
   List1.push(Mock.mock({
-    date: '@date',
+    date: '2018.9.' + +(i + 1),
     'status|1': [
       '警告',
       '严重警告',
@@ -36,7 +35,7 @@ for (let i = 0; i < 3; i++) {
 }
 for (let i = 0; i < 5; i++) {
   List2.push(Mock.mock({
-    date: '@date',
+    date: '2018.9.' + +(i + 1),
     'status|1': [
       '上课积极',
       '提前完成作业',
@@ -51,7 +50,7 @@ for (let i = 0; i < 5; i++) {
 
 for (let i = 0; i < 2; i++) {
   List3.push(Mock.mock({
-    date: '@date',
+    date: '2018.9.' + +(i + 1),
     'status|1': [
       '休学一学期',
       '解决社会问题'

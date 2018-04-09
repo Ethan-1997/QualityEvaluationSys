@@ -7,10 +7,10 @@
         <el-tabs :tab-position="tabPosition" v-model="activeName" @tab-click="handleClick" >
           <el-tab-pane label="日常出勤" name="first">
             <el-row :gutter="20">
-              <el-col :span="6"><div class="grid-content bg-purple1">已到次数:</div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple1">请假次数:</div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple1">未到次数:</div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple1">迟到次数:</div></el-col>
+              <el-col :span="6"><div class="grid-content bg-purple1">已到:</div></el-col>
+              <el-col :span="6"><div class="grid-content bg-purple1">请假:</div></el-col>
+              <el-col :span="6"><div class="grid-content bg-purple1">未到:</div></el-col>
+              <el-col :span="6"><div class="grid-content bg-purple1">迟到:</div></el-col>
             </el-row>
             <el-row :gutter="20">
               <el-col :span="6"><div class="grid-content bg-purple2">12次</div></el-col>
@@ -24,7 +24,7 @@
                 label="日期"
                 width="180"
                 height="50"
-                sortable>
+                >
               </el-table-column>
                 <el-table-column
                   prop="status"
@@ -170,15 +170,9 @@ export default {
 }
 .el-tabs__item{
   width:150px;
-  text-align: center;
+  
 }
-.el-tabs__item.is-active{
-  width:150px;
-  text-align: center;
-}
-.el-pagination{
-  text-align: center;
-}
+
 .el-row {
     margin-bottom: 20px;
     &:last-child {
