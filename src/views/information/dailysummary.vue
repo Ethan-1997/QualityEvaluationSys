@@ -1,8 +1,9 @@
 <template>
   <div class="dashboard-editor-container">
     <el-card class="box-card">
-
-
+        <div slot="header" class="clearfix">
+            <span class="span-title"><h3>日常汇总</h3></span>
+        </div>
         <el-tabs :tab-position="tabPosition" v-model="activeName" @tab-click="handleClick" >
           <el-tab-pane label="日常出勤" name="first">
             <el-row :gutter="20">
@@ -228,5 +229,9 @@ export default {
 }
 .el-table-filter {
    left: 520px;
+}
+.span-title{
+  text-align: center;
+  font-size:23px
 }
 </style>
