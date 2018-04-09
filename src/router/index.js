@@ -125,17 +125,6 @@ export const asyncRouterMap = [
       meta: { title: 'ExamAdd', icon: 'icon', noCache: true }
     }]
   },
-  {
-    path: '/Admissiontest',
-    component: Layout,
-    hidden: true,
-    children: [{
-      path: 'submit',
-      component: _import('studentTest/Admissiontest/submit'),
-      name: 'submit',
-      meta: { title: 'submit', icon: 'icon', noCache: true }
-    }]
-  },
 
   // {
   //   path: '/studentTeam',
