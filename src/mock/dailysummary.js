@@ -1,3 +1,13 @@
+const daily = {
+  arrived: '13次',
+  unarrived: '2次',
+  leave: '3次',
+  later: '3次',
+  breakrule: '3次',
+  extrude: '5次',
+  great: '2次'
+}
+
 import Mock from 'mockjs'
 
 const List = []
@@ -67,7 +77,8 @@ export default {
       items: List,
       item: List1,
       item1: List2,
-      item2: List3
+      item2: List3,
+      itemd: daily
     }
   }
 }

@@ -13,10 +13,10 @@
               <el-col :span="6"><div class="grid-content bg-purple1">迟到:</div></el-col>
             </el-row>
             <el-row :gutter="20">
-              <el-col :span="6"><div class="grid-content bg-purple2">12次</div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple4">2次</div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple">3次</div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple3">3次</div></el-col>
+              <el-col :span="6"><div class="grid-content bg-purple2">{{daily.arrived}}</div></el-col>
+              <el-col :span="6"><div class="grid-content bg-purple4">{{daily.unarrived}}</div></el-col>
+              <el-col :span="6"><div class="grid-content bg-purple">{{daily.leave}}</div></el-col>
+              <el-col :span="6"><div class="grid-content bg-purple3">{{daily.later}}</div></el-col>
             </el-row>
             <el-table :data="tableData" style="width:100%" >
               <el-table-column
@@ -46,7 +46,7 @@
           <el-tab-pane label="违纪情况" name="second">
             <el-row :gutter="20">
               <el-col :span="12"><div class="grid-content bg-purple1">违纪次数：</div></el-col>
-              <el-col :span="12"><div class="grid-content bg-purple">3&nbsp;次</div></el-col>
+              <el-col :span="12"><div class="grid-content bg-purple">{{daily.breakrule}}</div></el-col>
             </el-row>
              <el-table :data="breakrule"  fit highlight-current-row style="width: 100%">
             <el-table-column width="180px" align="center" label="时间" prop="date">
@@ -61,7 +61,7 @@
           <el-tab-pane label="突出表现" name="third">
             <el-row :gutter="20">
               <el-col :span="12"><div class="grid-content bg-purple1">突出表现：</div></el-col>
-              <el-col :span="12"><div class="grid-content bg-purple2">5&nbsp;次</div></el-col>
+              <el-col :span="12"><div class="grid-content bg-purple2">{{daily.extrude}}</div></el-col>
             </el-row>
              <el-table :data="extrude"  fit highlight-current-row style="width: 100%">
             <el-table-column width="180px" align="center" label="时间" prop="date">
@@ -76,7 +76,7 @@
           <el-tab-pane label="重大事项" name="fourth">
             <el-row :gutter="20">
               <el-col :span="12"><div class="grid-content bg-purple1">重大事件：</div></el-col>
-              <el-col :span="12"><div class="grid-content bg-purple3">2&nbsp;次</div></el-col>
+              <el-col :span="12"><div class="grid-content bg-purple3">{{daily.great}}</div></el-col>
             </el-row>
              <el-table :data="great"  fit highlight-current-row style="width: 100%">
             <el-table-column width="180px" align="center" label="时间" prop="date">
@@ -111,7 +111,8 @@ export default {
       ruleForm: '',
       breakrule: [],
       extrude: [],
-      great: []
+      great: [],
+      daily: ''
     }
   },
 
@@ -129,6 +130,7 @@ export default {
         this.breakrule = Response.data.item
         this.extrude = Response.data.item1
         this.great = Response.data.item2
+        this.daily = Response.data.itemd
       })
     }
 
@@ -165,7 +167,7 @@ export default {
 }
 .el-tabs--left .el-tabs__item{
   font-size:18px;
-  text-align: center
+  
   
 }
 .el-tabs__item{
