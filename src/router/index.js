@@ -105,7 +105,7 @@ export const asyncRouterMap = [
     path: '/Exams/Exam/',
     component: Layout,
     hidden: true,
-    meta: { roles: ['student'] },
+    // meta: { roles: ['student'] },
     children: [{
       path: ':id',
       component: _import('Exams/ExamDetail'),
@@ -284,6 +284,24 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'index', component: _import('studentTest/midTest/index'), name: 'midTest-index', meta: { title: '专业知识测试', icon: 'icon' }}
+    ]
+  },
+  {
+    path: '/systemTest',
+    component: Layout,
+    name: 'systemTest',
+    hidden: true,
+    meta: {
+      title: 'systemTest',
+      roles: ['student']
+    },
+    children: [
+      { path: 'midTest', component: _import('studentTest/systemTest/midTest'), name: 'systemTest-midTest', meta: { title: '期中测试', icon: 'icon' }},
+      { path: 'lastTest1', component: _import('studentTest/systemTest/lastTest1'), name: 'systemTest-lastTest1', meta: { title: '期末测试（1）', icon: 'icon' }},
+      { path: 'lastTest2', component: _import('studentTest/systemTest/lastTest2'), name: 'systemTest-lastTest2', meta: { title: '期末测试（2）', icon: 'icon' }},
+      { path: 'lastTest3', component: _import('studentTest/systemTest/lastTest3'), name: 'systemTest-lastTest3', meta: { title: '期末测试（3）', icon: 'icon' }},
+      { path: 'lastTest4', component: _import('studentTest/systemTest/lastTest4'), name: 'systemTest-lastTest4', meta: { title: '期末测试（4）', icon: 'icon' }},
+      { path: 'lastTest5', component: _import('studentTest/systemTest/lastTest5'), name: 'systemTest-lastTest5', meta: { title: '期末测试（5）', icon: 'icon' }}
     ]
   },
   {

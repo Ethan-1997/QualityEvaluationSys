@@ -40,7 +40,7 @@ Mock.mock(/\/daliyTask\/daliyTask/, 'post', daliyTask.daliyTask)
 
 Mock.mock(/\/studentTeam\/update/, 'post', informationAPI.updateStudentTeam)
 Mock.mock(/\/information\/getList/, 'post', informationAPI.getList)
-
+Mock.mock(/\/information\/update/, 'post', informationAPI.updateInformation)
 // 系统公告
 Mock.mock(/\/bulletin\/bulletin/, 'post', bulletin.bulletin)
 
