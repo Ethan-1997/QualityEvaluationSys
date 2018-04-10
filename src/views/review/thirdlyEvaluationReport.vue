@@ -39,10 +39,10 @@
                     </el-row>
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:80px"><span>正常出勤：</span></div><div style="float:left;width:78%"><el-progress :text-inside="true" :stroke-width="18" :percentage="100" color="#67c23a"></el-progress></div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:80px"><span>迟到：</span></div><div style="float:left;width:78%"><el-progress :text-inside="true" :stroke-width="18" :percentage="100" color="#e6a23c"></el-progress></div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:80px"><span>未到：</span></div><div style="float:left;width:78%"><el-progress :text-inside="true" :stroke-width="18" :percentage="100" color="#F56C6C"></el-progress></div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:80px"><span>请假：</span></div><div style="float:left;width:78%"><el-progress :text-inside="true" :stroke-width="18" :percentage="100" color="#909399"></el-progress></div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>正常出勤：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="x1/10*100" color="#67c23a"></el-progress></div><div>&nbsp;{{x1}}/20</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>迟到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="y1/10*100" color="#e6a23c"></el-progress></div><div>&nbsp;{{y1}}/20</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>未到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="f1/10*100" color="#F56C6C"></el-progress></div><div>&nbsp;{{f1}}/20</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>请假：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="z1/10*100" color="#909399"></el-progress></div><div>&nbsp;{{z1}}/20</div></div>
                       </el-col>
                     </el-row>
                   </el-col>
@@ -291,8 +291,8 @@ export default {
   data() {
     return {
       breakRuleNumber: 3,
-      highLightingNumber: 10,
-      majorIssuesNumber: 6,
+      highLightingNumber: 5,
+      majorIssuesNumber: 2,
 
       classTeacherAssessment: [55, 66, 76, 88, 50],
       lecturerAssessment: [30, 40, 50, 70, 55],
@@ -303,7 +303,12 @@ export default {
       projectManagerReviewResults: [55, 60, 70, 40, 55],
       HRReviewResults: [55, 66, 76, 88, 50, 90],
 
-      comprehensiveQualityData: [60, 75, 60, 80, 50]
+      comprehensiveQualityData: [60, 75, 60, 80, 50],
+      x1: 0,
+      y1: 0,
+      z1: 0,
+      f1: 0
+
     }
   },
   components: {
@@ -312,6 +317,12 @@ export default {
     ComprehensiveQualityModel,
     ProjectManagerReviewResults,
     HRReviewResults
+  },
+  mounted() {
+    this.x1 = this.$storage.get('daily_tenarrived')
+    this.y1 = this.$storage.get('daily_tenunarrived')
+    this.z1 = this.$storage.get('daily_tenleave')
+    this.f1 = this.$storage.get('daily_tenlater')
   }
 }
 
