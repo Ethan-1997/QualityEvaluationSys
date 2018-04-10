@@ -15,7 +15,6 @@ import parameterAPI from './parameter'
 import userAPI from './user'
 import roleAPI from './role'
 import daliyTask from './daliyTask'
-import bulletin from './bulletin'
 import informationAPI from './information'
 import student from './student'
 
@@ -31,12 +30,6 @@ Mock.mock(/\/daliyTask\/daliyTask/, 'post', daliyTask.daliyTask)
 
 Mock.mock(/\/studentTeam\/update/, 'post', informationAPI.updateStudentTeam)
 Mock.mock(/\/information\/getList/, 'post', informationAPI.getList)
-
-// 系统公告
-Mock.mock(/\/bulletin\/bulletin/, 'get', bulletin.bulletin)
-// Mock.setup({
-//   timeout: '350-600'
-// })
 
 // 文章相关
 Mock.mock(/\/role\/list/, 'get', roleAPI.getList)
