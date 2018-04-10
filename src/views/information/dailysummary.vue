@@ -5,18 +5,18 @@
             <span class="span-title"><h3>日常汇总</h3></span>
         </div>
         <el-tabs :tab-position="tabPosition" v-model="activeName" @tab-click="handleClick" >
-          <el-tab-pane label="日常出勤" name="first">
+          <el-tab-pane label="日常出勤" name="first" style="  font-size:18px;">
             <el-row :gutter="20">
-              <el-col :span="6"><div class="grid-content bg-purple1">已到:</div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple1">请假:</div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple1">未到:</div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple1">迟到:</div></el-col>
+              <el-col :span="6" style="text-align:center"><div class="grid-content bg-purple1">已到:</div></el-col>
+              <el-col :span="6" style="text-align:center"><div class="grid-content bg-purple1">请假:</div></el-col>
+              <el-col :span="6" style="text-align:center"><div class="grid-content bg-purple1">未到:</div></el-col>
+              <el-col :span="6" style="text-align:center"><div class="grid-content bg-purple1">迟到:</div></el-col>
             </el-row>
             <el-row :gutter="20">
-              <el-col :span="6"><div class="grid-content bg-purple2">{{daily.arrived}}</div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple4">{{daily.unarrived}}</div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple">{{daily.leave}}</div></el-col>
-              <el-col :span="6"><div class="grid-content bg-purple3">{{daily.later}}</div></el-col>
+              <el-col :span="6" style="text-align:center"><div class="grid-content bg-purple2">{{x1}}</div></el-col>
+              <el-col :span="6" style="text-align:center"><div class="grid-content bg-purple4">{{f1}}</div></el-col>
+              <el-col :span="6" style="text-align:center"><div class="grid-content bg-purple">{{y1}}</div></el-col>
+              <el-col :span="6" style="text-align:center"><div class="grid-content bg-purple3">{{z1}}</div></el-col>
             </el-row>
             <el-table :data="tableData" style="width:100%" >
               <el-table-column
@@ -45,8 +45,8 @@
           </el-tab-pane>
           <el-tab-pane label="违纪情况" name="second">
             <el-row :gutter="20">
-              <el-col :span="12"><div class="grid-content bg-purple1">违纪次数：</div></el-col>
-              <el-col :span="12"><div class="grid-content bg-purple">{{daily.breakrule}}</div></el-col>
+              <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple1">违纪次数：</div></el-col>
+              <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple">{{daily.breakrule}}</div></el-col>
             </el-row>
              <el-table :data="breakrule"  fit highlight-current-row style="width: 100%">
             <el-table-column width="180px" align="center" label="时间" prop="date">
@@ -60,8 +60,8 @@
           </el-tab-pane>
           <el-tab-pane label="突出表现" name="third">
             <el-row :gutter="20">
-              <el-col :span="12"><div class="grid-content bg-purple1">突出表现：</div></el-col>
-              <el-col :span="12"><div class="grid-content bg-purple2">{{daily.extrude}}</div></el-col>
+              <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple1">突出表现：</div></el-col>
+              <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple2">{{daily.extrude}}</div></el-col>
             </el-row>
              <el-table :data="extrude"  fit highlight-current-row style="width: 100%">
             <el-table-column width="180px" align="center" label="时间" prop="date">
@@ -75,8 +75,8 @@
 
           <el-tab-pane label="重大事项" name="fourth">
             <el-row :gutter="20">
-              <el-col :span="12"><div class="grid-content bg-purple1">重大事件：</div></el-col>
-              <el-col :span="12"><div class="grid-content bg-purple3">{{daily.great}}</div></el-col>
+              <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple1">重大事件：</div></el-col>
+              <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple3">{{daily.great}}</div></el-col>
             </el-row>
              <el-table :data="great"  fit highlight-current-row style="width: 100%">
             <el-table-column width="180px" align="center" label="时间" prop="date">
@@ -112,7 +112,15 @@ export default {
       breakrule: [],
       extrude: [],
       great: [],
-      daily: ''
+      daily: '',
+      x: 0,
+      y: 0,
+      z: 0,
+      f: 0,
+      x1: 0,
+      y1: 0,
+      z1: 0,
+      f1: 0
     }
   },
 
@@ -127,13 +135,37 @@ export default {
     getlist() {
       fetchList().then(Response => {
         this.tableData = Response.data.items
+        console.log(this.tableData)
         this.breakrule = Response.data.item
         this.extrude = Response.data.item1
         this.great = Response.data.item2
         this.daily = Response.data.itemd
+        this.judge()
       })
+    },
+    judge() {
+      console.log(this.tableData)
+      for (let j = 0; j < 20; j++) {
+        if (this.tableData[j].status === '已到') { this.x1++ }
+        if (this.tableData[j].status === '未到') { this.y1++ }
+        if (this.tableData[j].status === '迟到') { this.z1++ }
+        if (this.tableData[j].status === '请假') { this.f1++ }
+      }
+      for (let i = 0; i < 10; i++) {
+        if (this.tableData[i].status === '已到') { this.x++ }
+        if (this.tableData[i].status === '未到') { this.y++ }
+        if (this.tableData[i].status === '迟到') { this.z++ }
+        if (this.tableData[i].status === '请假') { this.f++ }
+      }
+      this.$storage.set('daily_arrived', this.x)
+      this.$storage.set('daily_unarrived', this.y)
+      this.$storage.set('daily_later', this.z)
+      this.$storage.set('daily_leave', this.f)
+      this.$storage.set('daily_tenarrived', this.x1)
+      this.$storage.set('daily_tenunarrived', this.y1)
+      this.$storage.set('daily_tenlater', this.z1)
+      this.$storage.set('daily_tenleave', this.f1)
     }
-
   },
   filtertag(value, row) {
     return row.status === value
@@ -160,15 +192,13 @@ export default {
 }
 </script>
 
-<style  rel="stylesheet/scss" lang="scss">
+<style  rel="stylesheet/scss" lang="scss"scoped >
 .dashboard-editor-container {
   padding: 32px;
   background-color: #fff;
 }
 .el-tabs--left .el-tabs__item{
   font-size:18px;
-  
-  
 }
 .el-tabs__item{
   width:150px;
@@ -182,9 +212,7 @@ export default {
     }
   }
 .el-col {
-    border-radius: 4px;
-    text-align: center;
-    line-height:50px;
+    border-radius: 4px;  
 }
 .bg-purple-dark {
     background: #99a9bf;
@@ -227,7 +255,6 @@ export default {
    left: 520px;
 }
 .span-title{
-  text-align: center;
   font-size:23px
 }
 </style>
