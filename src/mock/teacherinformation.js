@@ -1,7 +1,7 @@
 const infor = {
   classname: 'vue.js',
   back: '中共党员',
-  time: '1990年5月10日',
+  time: '1990-5-10',
   phone: '12345678910',
   home: '杭州临安',
   intro: '特级教师  座右铭：服务学生，在学生中体验价值和尊重。'

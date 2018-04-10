@@ -54,7 +54,8 @@
                       <el-input
                         placeholder="请输入内容"
                         v-model="input_classname"
-                        clearable>
+                        clearable
+                        >
                       </el-input>
                       <div style="margin-top:20px;">
                         <el-button type="primary" style="float:left;" size="small" @click="alter_classname_hid(type)">保存</el-button>
@@ -125,7 +126,7 @@
                     <div style="margin-top:42px;" v-else>
                       <div class="block">
                         <el-date-picker
-                          v-model="value1"
+                          v-model="input_time"
                           type="date"
                           placeholder="选择日期">
                         </el-date-picker>
@@ -202,11 +203,11 @@
                         type="textarea"
                         :autosize="{ minRows: 2, maxRows: 4}"
                         placeholder="请输入内容"
-                        v-model="textarea_intro">
+                        v-model="input_intro">
                       </el-input>
                       <div style="margin-top:20px;">
                         <el-button type="primary" style="float:left;" size="small" @click="alter_intro_hid(type)">保存</el-button>
-                        <el-button size="small" @click="alter_intro_hid(type)">取消</el-button>
+                        <el-button size="small" @click="alter_intro_hid(null)">取消</el-button>
                       </div>
                     </div>
                 </el-col>
@@ -272,15 +273,12 @@ export default{
     },
     alter_classname_show() {
       this.text_classname = false
-      console.log(this.text_classname)
+      this.input_classname = this.infor.classname
     },
     alter_classname_hid(type) {
       console.log(this.input_classname)
       console.log(this.infor.classname)
       if (type === 'save') {
-        if (this.input_classname === '') {
-          this.input_classname = '未知'
-        }
         this.infor.classname = this.input_classname
         updateInformation(this.infor)
       } else {
@@ -290,27 +288,21 @@ export default{
     },
     alter_intro_show() {
       this.text_intro = false
+      this.input_intro = this.infor.intro
     },
     alter_intro_hid(type) {
       if (type === 'save') {
-        if (this.textarea_intro === '') {
-          this.textarea_intro = '未知'
-        }
-        this.infor.intro = this.textarea_intro
+        this.infor.intro = this.input_intro
         updateInformation(this.infor)
-      } else {
-        this.textarea_intro = this.infor.intro
       }
       this.text_intro = true
     },
     alter_back_show() {
       this.text_back = false
+      this.input_back = this.infor.back
     },
     alter_back_hid(type) {
       if (type === 'save') {
-        if (this.input_back === '') {
-          this.input_back = '未知'
-        }
         this.infor.back = this.input_back
         updateInformation(this.infor)
       } else {
@@ -320,12 +312,10 @@ export default{
     },
     alter_home_show() {
       this.text_home = false
+      this.input_home = this.infor.home
     },
     alter_home_hid(type) {
       if (type === 'save') {
-        if (this.input_home === '') {
-          this.input_home = '未知'
-        }
         console.log(1)
         this.infor.home = this.input_home
         updateInformation(this.infor)
@@ -336,12 +326,10 @@ export default{
     },
     alter_phone_show() {
       this.text_phone = false
+      this.input_phone = this.infor.phone
     },
     alter_phone_hid(type) {
       if (type === 'save') {
-        if (this.input_phone === '') {
-          this.input_phone = '未知'
-        }
         console.log(1)
         this.infor.phone = this.input_phone
         updateInformation(this.infor)
@@ -352,14 +340,12 @@ export default{
     },
     alter_time_show() {
       this.text_time = false
+      this.input_time = this.infor.time
     },
     alter_time_hid(type) {
       if (type === 'save') {
         const months = this.value1.getMonth() + 1
         const times = this.value1.getFullYear() + '年' + months + '月' + this.value1.getDate() + '日'
-        if (this.value1 === '') {
-          this.value1 = '未知'
-        }
         console.log(2)
         this.infor.time = times
         console.log(this.infor)
@@ -414,7 +400,6 @@ export default{
     font-size:16px;
     float:left;
   }
-
   .shan{
     background: burlywood;
   }
