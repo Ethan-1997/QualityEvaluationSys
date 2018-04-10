@@ -15,7 +15,6 @@ import parameterAPI from './parameter'
 import userAPI from './user'
 import roleAPI from './role'
 import daliyTask from './daliyTask'
-import bulletin from './bulletin'
 import informationAPI from './information'
 import student from './student'
 import projectDefenseAPI from './projectDefense'
@@ -40,9 +39,8 @@ Mock.mock(/\/daliyTask\/daliyTask/, 'post', daliyTask.daliyTask)
 
 Mock.mock(/\/studentTeam\/update/, 'post', informationAPI.updateStudentTeam)
 Mock.mock(/\/information\/getList/, 'post', informationAPI.getList)
+
 Mock.mock(/\/information\/update/, 'post', informationAPI.updateInformation)
-// 系统公告
-Mock.mock(/\/bulletin\/bulletin/, 'post', bulletin.bulletin)
 
 // 文章相关
 Mock.mock(/\/role\/list/, 'get', roleAPI.getList)

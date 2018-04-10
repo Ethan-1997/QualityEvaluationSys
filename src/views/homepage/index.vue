@@ -9,11 +9,11 @@
                             <span><svg-icon icon-class="table" />&nbsp;系统公告</span>
                             <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
                         </div>
-                        <el-table :data="bulletinData" max-height= 264px style="width: 100%"  >
-                            <el-table-column fit prop="bulletin" label="公告">
+                        <el-table :data="announcementData" style="width: 100%"  >
+                            <el-table-column fit prop="atitle" label="公告">
                             
                             </el-table-column>
-                            <el-table-column fixed="right" prop="date" label="发布日期" width="100px" align="center">
+                            <el-table-column fixed="right" prop="atime" label="发布日期" width="100px" align="center">
                                 
                             </el-table-column>
                         </el-table>
@@ -172,7 +172,7 @@
 
 <script>
     import { daliyTask } from '@/api/daliyTask'
-    import { bulletin } from '@/api/bulletin'
+    import { fetchList } from '@/api/announcement'
     import { mapGetters } from 'vuex'
     import RaddarChart from './components/RaddarChart'
     import PieChart from './components/PieChart'
@@ -183,7 +183,7 @@
         return {
           taskData: null,
           active: null,
-          bulletinData: null,
+          announcementData: null,
 
           dynamicTags: ['晚上前提交布置的任务', '13：30理工楼101开会', '数据结构作业', '选修课作业', '前台使用的是Vue.js', '主要的是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
           inputVisible: false,
@@ -192,7 +192,13 @@
           signIn: false,
           signInText: '签到',
           signInButton: false,
-
+          listQuery: {
+            page: 1,
+            limit: 5,
+            sort: '+id',
+            title: undefined,
+            time: undefined
+          },
           breakRuleData: [{
             item: '违纪情况',
             date: '2016-05-02'
@@ -261,7 +267,7 @@
       },
       created() {
         this.getTaskData()
-        this.getBulletionData()
+        this.getAnnouncementData()
         this.$nextTick(() => {
           this.$refs.gradeTabsOne.chart.resize()
           this.$refs.gradeTabsTwo.chart.resize()
@@ -337,15 +343,9 @@
           return row.status === value
         },
 
-        getBulletionData() {
-          bulletin().then(response => {
-            this.bulletinData = [
-              response.data[0],
-              response.data[1],
-              response.data[2],
-              response.data[3],
-              response.data[4]
-            ]
+        getAnnouncementData() {
+          fetchList(this.listQuery).then(response => {
+            this.announcementData = response.data.items
           })
         },
 

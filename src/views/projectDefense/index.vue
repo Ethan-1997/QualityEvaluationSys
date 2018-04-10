@@ -1,4 +1,6 @@
 <template>
+
+ <div class="dashboard-editor-container">
   <el-card style="width:85%;margin:0 auto">
     <el-button @click="handleCreate" type="success">新建</el-button>
     <el-table
@@ -34,6 +36,7 @@
       </el-table-column>
     </el-table>
   </el-card>
+ </div>
 </template>
 
 <script>
@@ -64,5 +67,8 @@ export default {
 </script>
 
 <style>
-
+.dashboard-editor-container {
+  padding: 32px;
+  background-color: rgb(240, 242, 245);
+}
 </style>
