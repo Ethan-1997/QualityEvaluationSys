@@ -49,14 +49,19 @@
             <h2 class="box-title">系统试卷</h2>
             <template>
                 <el-table style="width: 100%" :data="system_exams_mid">
-                <el-table-column label="试卷名称" width="180">
+                <el-table-column label="试卷名称" width="130">
                     <template slot-scope="scope">
                         <span>{{ scope.row.name }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="上传日期" width="280">
+                <el-table-column label="上传日期" width="130">
                     <template slot-scope="scope">
                         <span>{{ scope.row.year }}/{{ scope.row.month }}/{{ scope.row.day }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="说明">
+                    <template slot-scope="scope">
+                      {{ scope.row.explain }}
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
@@ -91,9 +96,8 @@
           midtest: [],
           type: '',
           system_exams_mid: [
-            { name: '期中测试', year: 2018, month: 4, day: 9, display: true, id: null, state: '未完成' },
-            { name: '期末测试', year: 2018, month: 4, day: 9, display: true, id: null, state: '未完成' }
-    
+            { name: '期中测试', year: 2018, month: 4, day: 9, display: true, id: null, state: '未完成', explain: '系统随机生成一套期中试卷' },
+            { name: '期末测试', year: 2018, month: 4, day: 9, display: true, id: null, state: '未完成', explain: '系统随机生成五套期末试卷' }
           ],
           radio2: ''
         }
