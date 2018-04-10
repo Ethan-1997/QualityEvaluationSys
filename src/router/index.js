@@ -125,17 +125,6 @@ export const asyncRouterMap = [
       meta: { title: 'ExamAdd', icon: 'icon', noCache: true }
     }]
   },
-  {
-    path: '/Admissiontest',
-    component: Layout,
-    hidden: true,
-    children: [{
-      path: 'submit',
-      component: _import('studentTest/Admissiontest/submit'),
-      name: 'submit',
-      meta: { title: 'submit', icon: 'icon', noCache: true }
-    }]
-  },
 
   // {
   //   path: '/studentTeam',
@@ -315,6 +304,20 @@ export const asyncRouterMap = [
       component: _import('projectDefense/index'),
       name: 'projectDefense',
       meta: { title: '项目答辩', icon: 'dashboard', noCache: true }
+    }]
+  },
+  {
+    path: '/projectDefense',
+    component: Layout,
+    meta: {
+      roles: ['student']
+    },
+    hidden: true,
+    children: [{
+      path: 'detail',
+      component: _import('projectDefense/detail'),
+      name: 'projectDefenseDetail',
+      meta: { title: '项目详情', icon: 'dashboard', noCache: true }
     }]
   },
   {

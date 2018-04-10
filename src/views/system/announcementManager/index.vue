@@ -17,24 +17,19 @@
 
     <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.ano" width="65">
-        <template slot-scope="scope">
-          <span>{{scope.row.ano}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="100px" align="center" :label="tableCol.atitle">
+      <el-table-column width="200px" align="center" :label="tableCol.atitle">
         <template slot-scope="scope">
           <span>{{scope.row.atitle }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="200px" :label="tableCol.atime">
-        <template slot-scope="scope">
-         <span>{{scope.row.atime}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="150px" align="center" :label="tableCol.acontent">
+      <el-table-column min-width="150px" :label="tableCol.acontent">
         <template slot-scope="scope">
           <span>{{scope.row.acontent}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="100px" align="center" :label="tableCol.atime">
+        <template slot-scope="scope">
+         <span>{{scope.row.atime}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
@@ -88,8 +83,9 @@
 </template>
 
 <script>
-import { fetchList, createAnnouncement, updateAnnouncement } from '@/api/announcement'
+import { fetchList, updateAnnouncement } from '@/api/announcement'
 import waves from '@/directive/waves' // 水波纹指令
+import storage from '@/utils/storage'
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
 import compare from '@/utils/compare'
@@ -106,7 +102,6 @@ export default {
     return {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
-        ano: '编号',
         atitle: '标题',
         acontent: '内容',
         atime: '时间',
@@ -120,7 +115,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        order: '+id',
+        sort: '+id',
         title: undefined,
         time: undefined
       },
@@ -132,7 +127,6 @@ export default {
 
       showReviewer: false,
       temp: {
-        ano: '编号',
         atitle: '标题',
         acontent: '内容',
         atime: '时间'
@@ -154,7 +148,7 @@ export default {
       tableData: null,
       tableHeader: null,
 
-      tHeader: ['ano', 'atitle', 'acontent', 'atime']
+      tHeader: ['atitle', 'acontent', 'atime']
     }
   },
   filters: {
@@ -202,6 +196,7 @@ export default {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
+        console.log(this.list)
         this.total = response.data.total
         this.listLoading = false
       })
@@ -241,17 +236,15 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createAnnouncement(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
+          this.list.unshift(this.temp)
+          storage.set('announcementList', this.list)
+          console.log(this.list)
+          this.dialogFormVisible = false
+          this.$notify({
+            title: '成功',
+            message: '创建成功',
+            type: 'success',
+            duration: 2000
           })
         }
       })
@@ -291,12 +284,13 @@ export default {
       })
     },
     handleDelete(index) {
-      this.$confirm('此操作将永久删除用户, 是否继续?', '提示', {
+      this.$confirm('是否删除该公告?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.list.splice(index, 1)
+        this.$storage.set('announcementList', this.list)
         this.$message({
           type: 'success',
           message: '删除成功!'

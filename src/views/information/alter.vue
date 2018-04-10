@@ -106,8 +106,8 @@
               <el-col :xl="0" :sm="1" style="height:1px;"></el-col>
               <el-col :xl="18" :sm="23">
                     <div v-if="text_signature">
-                    <div style="float:left;" class="infor-font-right">{{List.signature}}</div>
-                    <div class="infor-font-right"><a @click="alter_signature_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 填写</a></div>
+                      <div style="float:left;" class="infor-font-right">{{List.signature}}</div>
+                      <div class="infor-font-right"><a @click="alter_signature_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 填写</a></div>
                     </div>
                     <div style="margin-top:42px;" v-else>
                       <el-input
@@ -141,7 +141,7 @@
                     <div style="float:left;" class="infor-font-right">{{List.time}}</div>
                     <div class="infor-font-right"><a @click="alter_time_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 设置</a></div>
                     </div>
-                    <div style="margin-top:42px;" v-else="text_time">
+                    <div style="margin-top:42px;" v-else>
                       <div class="block">
                         <el-date-picker
                           v-model="value1"
@@ -174,7 +174,7 @@
                     <div style="float:left;" class="infor-font-right">{{List.home}}</div>
                     <div class="infor-font-right"><a @click="alter_home_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-circle-plus-outline"></i> 添加居住地</a></div>
                     </div>
-                    <div style="margin-top:42px;" v-else="text_home">
+                    <div style="margin-top:42px;" v-else>
                       <el-input
                         style="width:150px;"
                         placeholder="请输入内容"
@@ -204,7 +204,7 @@
                     <div style="float:left;" class="infor-font-right">{{List.phone}}</div>
                     <div class="infor-font-right"><a @click="alter_phone_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 修改</a></div>
                     </div>
-                    <div style="margin-top:42px;" v-else="text_phone">
+                    <div style="margin-top:42px;" v-else>
                       <el-input
                         style="width:150px;"
                         placeholder="请输入内容"
@@ -234,7 +234,7 @@
                     <div style="float:left;" class="infor-font-right">{{List.pro}}</div>
                     <div class="infor-font-right"><a @click="alter_pro_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-circle-plus-outline"></i> 添加职业经历</a></div>
                     </div>
-                    <div style="margin-top:42px;" v-else="text_pro">
+                    <div style="margin-top:42px;" v-else>
                       <el-input
                         style="width:200px;"
                         placeholder="请输入公司或组织名称"
@@ -270,7 +270,7 @@
                     <div style="float:left;" class="infor-font-right">{{List.intro}}</div>
                     <div class="infor-font-right"><a @click="alter_intro_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 填写</a></div>
                     </div>
-                    <div style="margin-top:42px;" v-else="text_intro">
+                    <div style="margin-top:42px;" v-else>
                       <el-input
                         type="textarea"
                         :autosize="{ minRows: 2, maxRows: 4}"
