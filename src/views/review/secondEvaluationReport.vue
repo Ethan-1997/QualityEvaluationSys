@@ -309,12 +309,10 @@ export default {
     ComprehensiveQualityModel
   },
   mounted() {
-
     this.x = this.$storage.get('daily_arrived')
     this.y = this.$storage.get('daily_unarrived')
     this.z = this.$storage.get('daily_leave')
     this.f = this.$storage.get('daily_later')
-
   }
 }
 
