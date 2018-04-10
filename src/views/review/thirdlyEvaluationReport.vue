@@ -120,7 +120,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">100</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{lastTestScore1.score}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -132,7 +132,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">100</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{lastTestScore2.score}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -144,7 +144,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">100</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{lastTestScore3.score}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -156,7 +156,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">100</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{lastTestScore4.score}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -168,7 +168,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">100</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{lastTestScore5.score}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -184,7 +184,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:40px">100</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:40px">{{lastTestAvg}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -294,6 +294,12 @@ export default {
       highLightingNumber: 5,
       majorIssuesNumber: 2,
 
+      lastTestScore1: '',
+      lastTestScore2: '',
+      lastTestScore3: '',
+      lastTestScore4: '',
+      lastTestScore5: '',
+      lastTestAvg: '',
       classTeacherAssessment: [55, 66, 76, 88, 50],
       lecturerAssessment: [30, 40, 50, 70, 55],
       assistantAssessment: [55, 60, 70, 40, 55],
@@ -318,11 +324,21 @@ export default {
     ProjectManagerReviewResults,
     HRReviewResults
   },
+
   mounted() {
     this.x1 = this.$storage.get('daily_tenarrived')
     this.y1 = this.$storage.get('daily_tenunarrived')
     this.z1 = this.$storage.get('daily_tenleave')
     this.f1 = this.$storage.get('daily_tenlater')
+
+  created() {
+    this.lastTestScore1 = this.$storage.get('lastTest1Score')
+    this.lastTestScore2 = this.$storage.get('lastTest2Score')
+    this.lastTestScore3 = this.$storage.get('lastTest3Score')
+    this.lastTestScore4 = this.$storage.get('lastTest4Score')
+    this.lastTestScore5 = this.$storage.get('lastTest5Score')
+    this.lastTestAvg = (this.lastTestScore1.score + this.lastTestScore2.score + this.lastTestScore3.score + this.lastTestScore4.score + this.lastTestScore5.score) / 5
+
   }
 }
 

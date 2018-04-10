@@ -17,24 +17,19 @@
 
     <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.ano" width="65">
-        <template slot-scope="scope">
-          <span>{{scope.row.ano}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="100px" align="center" :label="tableCol.atitle">
+      <el-table-column width="200px" align="center" :label="tableCol.atitle">
         <template slot-scope="scope">
           <span>{{scope.row.atitle }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="200px" :label="tableCol.atime">
-        <template slot-scope="scope">
-         <span>{{scope.row.atime}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="150px" align="center" :label="tableCol.acontent">
+      <el-table-column min-width="150px" :label="tableCol.acontent">
         <template slot-scope="scope">
           <span>{{scope.row.acontent}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="100px" align="center" :label="tableCol.atime">
+        <template slot-scope="scope">
+         <span>{{scope.row.atime}}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">

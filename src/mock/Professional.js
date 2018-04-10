@@ -1,5 +1,10 @@
 import Mock from 'mockjs'
 const List = []
+const List2 = []
+const List3 = []
+const List4 = []
+const List5 = []
+const List6 = []
 const count = 25
 const ProfessionalQuestionText = [
   '在Java中，执行下面的语句后，c的值为' + '<br/>' + 'String s= "Jessica ";' + '<br/>' + 'char c=s.charAt(6);',
@@ -27,6 +32,66 @@ const ProfessionalQuestionText = [
   'ArrayList类是线程安全的。',
   'Java中所有的I/O都是通过流来实现的。',
   'Java中数组的元素只能是简单数据类型。'
+]
+const ProfessionalQuestionText2 = [
+  '在Java中，高优先级的可运行线程会抢占低优先级线程。',
+  'Object是Java中所有类的共同父类。',
+  '一个数组可以存放不同类型的数值。',
+  'A final class can have instances.',
+  'static关键字可以修饰成员变量，也可以修饰局部变量。',
+  '数组也是对象。',
+  '程序开发者必须创建一个线程去管理内存的分配。',
+  '在Java程序中，可以使用protected来修饰一个类。',
+  '当GUI应用程序使用边界布局管理器BorderLayout时，GUI组件可以按任何顺序添加到面板上。',
+  'You can always successfully cast an instance of a superclass to a subclass.'
+]
+const ProfessionalQuestionText3 = [
+  'java语言中不用区分字母的大写小写。',
+  '如果线程死亡，它便不能运行。',
+  '静态变量是被同一个类的所有实例所共享的。',
+  '在Java中，高优先级的可运行线程会抢占低优先级线程。',
+  'ArrayList类是线程安全的。',
+  'Java中所有的I/O都是通过流来实现的。',
+  'Java中数组的元素只能是简单数据类型。',
+  '当GUI应用程序使用边界布局管理器BorderLayout时，GUI组件可以按任何顺序添加到面板上。',
+  '类也是一种数据类型（type）。',
+  '匿名类的类体中不可以声明static成员变量和static方法。'
+]
+const ProfessionalQuestionText4 = [
+  'Java语言有三种技术平台，分别是JavaSE、JavaME、JavaEE',
+  'Java是一门高级计算机语言。',
+  'Java语言具体跨平台的特性',
+  '在Java中，高优先级的可运行线程会抢占低优先级线程。',
+  'JDK安装的时候不可以修改安装目录',
+  'JDK的安装目录中，只包含bin和lib两个目录。',
+  'javac命令可以运行Demo.class文件',
+  '在任意命令行窗口中执行javac命令，如果都能正常地显示帮助信息，说明系统path环境变量配置成功。',
+  'JDK安装成功后，可以将bin目录的路径配置在环境变量path中。',
+  'JDK5以后可以不用配置classpath环境变量。'
+]
+const ProfessionalQuestionText5 = [
+  '配置classpath环境变量时，路径后面加分号与不加分号是一样的。',
+  'main()函数是java程序的执行入口。',
+  '数组的遍历是指依次访问数组中的每个元素',
+  'continue语句只用于循环语句中，它的作用是跳出循环。',
+  'continue语句用在循环语句中，它的作用是终止本次循环，执行下一次循环',
+  '数组的排序算法只有冒泡排序这一种',
+  '方法的返回值类型可以定义也可以不定义',
+  '比较运算符用于对两个数值或变量进行比较，其结果是一个布尔值',
+  '若x=5，则表达式(x+5)/3的值是3',
+  '标识符可以为关键字'
+]
+const ProfessionalQuestionText6 = [
+  '-5%3的运算结果是2',
+  '0xC5表示的是一个十六进制整数。',
+  '在Java中判断方法重载的条件除了参数外，还可以通过返回值类型判断',
+  '方法递归次数过多会导致内存溢出',
+  '在Java中，小数会被默认是double类型的值',
+  'main是Java语言中的关键字',
+  '在进行赋值运算时，将运算符右边的值赋给左边的变量',
+  'Java中有一种特殊的赋值运算叫做三元运算，它和if-else语句类似',
+  '方法内部类是指在成员方法中定义的类，它只能在当前方法中被使用。',
+  '一个类中如果没有定义构造方法，那么这个类就没有构造方法。'
 ]
 const option = [
   ['"c "', '"a "', '\'c \'', '\'a \''],
@@ -82,6 +147,21 @@ const answer = [
   true,
   false
 ]
+const answer2 = [
+  false, true, false, true, false, true, false, true, true, false
+]
+const answer3 = [
+  false, true, true, false, false, true, false, true, true, true
+]
+const answer4 = [
+  true, true, true, true, false, false, false, true, true, true
+]
+const answer5 = [
+  false, true, true, false, true, false, false, true, true, false
+]
+const answer6 = [
+  false, true, false, true, true, false, true, true, true, false
+]
 const type = [
   'single',
   'single',
@@ -119,11 +199,57 @@ for (let i = 0; i < count; i++) {
     userAnswer: null
   }))
 }
-
+for (let i = 0; i < 10; i++) {
+  List2.push(Mock.mock({
+    id: i + 1,
+    type: 'judgment',
+    content: ProfessionalQuestionText2[i],
+    options: null,
+    answer: answer2[i],
+    userAnswer: null
+  }))
+  List3.push(Mock.mock({
+    id: i + 1,
+    type: 'judgment',
+    content: ProfessionalQuestionText3[i],
+    options: null,
+    answer: answer3[i],
+    userAnswer: null
+  }))
+  List4.push(Mock.mock({
+    id: i + 1,
+    type: 'judgment',
+    content: ProfessionalQuestionText4[i],
+    options: null,
+    answer: answer4[i],
+    userAnswer: null
+  }))
+  List5.push(Mock.mock({
+    id: i + 1,
+    type: 'judgment',
+    content: ProfessionalQuestionText5[i],
+    options: null,
+    answer: answer5[i],
+    userAnswer: null
+  }))
+  List6.push(Mock.mock({
+    id: i + 1,
+    type: 'judgment',
+    content: ProfessionalQuestionText6[i],
+    options: null,
+    answer: answer6[i],
+    userAnswer: null
+  }))
+}
 export default {
   getList: () => {
     return {
-      items: List
+      items: List,
+      item1: List2,
+      item2: List3,
+      item3: List4,
+      item4: List5,
+      item5: List6
     }
   }
 }

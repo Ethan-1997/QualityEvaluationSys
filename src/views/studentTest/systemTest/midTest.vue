@@ -58,7 +58,7 @@
             <h2 class="card-title">答案</h2>
             <ul>
                 <li class="item blueborder"
-                    v-for="(q, index) in questions">
+                    v-for="(q, index) in questions" v-bind:key>
                     <h3 v-if="q.type !== 'fill'" v-html="'问题：'+q.content"></h3>
                     <h3 v-if="q.type === 'fill'">问题：{{ getFillContent(q.content) }}</h3>
                     <div v-if="q.type === 'single' || q.type === 'multiple' || q.type === 'aq'">
@@ -138,7 +138,8 @@
           state: '', // 'start', 'end',
           startTime: null,
           endTime: null,
-          minute: 0
+          minute: 0,
+          key: 1
         }
       },
       computed: {
@@ -181,10 +182,14 @@
       },
       methods: {
         submit() {
-          this.$storage.set('name', 'thinking')
-          this.$storage.set('percentage', this.$storage.get('percentage') + 33)
-          this.$storage.set('ptest', true)
-          this.$router.push({ name: 'Admissiontest-index' })
+          const midTest = this.$storage.get('midtest')
+          for (let i = 0; i < midTest.length; i++) {
+            if (midTest[i].name === '期中测试') {
+              midTest[i].state = '已完成'
+              break
+            }
+          }
+          this.$storage.set('midtest', midTest)
           let score = 0
           let single_success = 0
           let judgment_success = 0
@@ -207,13 +212,13 @@
           }
           const professional = {
             score: score,
-            single_total: single_total,
-            judgment_total: judgment_total,
-            single_success: single_success,
-            judgment_success: judgment_success
+            singleTotal: single_total,
+            judgmentTotal: judgment_total,
+            singleSuccess: single_success,
+            judgmentSuccess: judgment_success
           }
-          this.$storage.set('professional', professional)// 专业能力测试数据
-          console.log(professional)
+          this.$storage.set('midTestSocre', professional)
+          this.$router.push({ path: '/midTest/index' })
         },
         getList() {
           fetchList().then(Response => {

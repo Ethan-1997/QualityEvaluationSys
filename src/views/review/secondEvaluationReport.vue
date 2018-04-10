@@ -127,7 +127,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">20/20</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.singleSuccess}}/{{midTest.singleTotal}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -139,7 +139,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">30/30</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.judgmentSuccess}}/{{midTest.judgmentTotal}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -309,10 +309,12 @@ export default {
     ComprehensiveQualityModel
   },
   mounted() {
+
     this.x = this.$storage.get('daily_arrived')
     this.y = this.$storage.get('daily_unarrived')
     this.z = this.$storage.get('daily_leave')
     this.f = this.$storage.get('daily_later')
+
   }
 }
 

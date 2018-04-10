@@ -50,7 +50,7 @@
                     <a @click="alter_classname_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i>填写</a>
                   </div>
                 </div>
-                <div style="margin-top:42px;" v-else="text_classname">
+                <div style="margin-top:42px;" v-else>
                       <el-input
                         placeholder="请输入内容"
                         v-model="input_classname"
@@ -98,7 +98,7 @@
                     <a @click="alter_back_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i>修改</a>
                   </div>
                 </div>
-                <div style="margin-top:42px;" v-else="text_back">
+                <div style="margin-top:42px;" v-else>
                       <el-input
                         placeholder="请输入内容"
                         v-model="input_back"
@@ -123,7 +123,7 @@
                     <div style="float:left;" class="infor-font-right">{{infor.time}}</div>
                     <div class="infor-font-right"><a @click="alter_time_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 设置</a></div>
                     </div>
-                    <div style="margin-top:42px;" v-else="text_time">
+                    <div style="margin-top:42px;" v-else>
                       <div class="block">
                         <el-date-picker
                           v-model="input_time"
@@ -150,7 +150,7 @@
                     <div style="float:left;" class="infor-font-right">{{infor.home}}</div>
                     <div class="infor-font-right"><a @click="alter_home_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-circle-plus-outline"></i> 添加居住地</a></div>
                     </div>
-                    <div style="margin-top:42px;" v-else="text_home">
+                    <div style="margin-top:42px;" v-else>
                       <el-input
                         style="width:150px;"
                         placeholder="请输入内容"
@@ -174,7 +174,7 @@
                     <div style="float:left;" class="infor-font-right">{{infor.phone}}</div>
                     <div class="infor-font-right"><a @click="alter_phone_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 修改</a></div>
                     </div>
-                    <div style="margin-top:42px;" v-else="text_phone">
+                    <div style="margin-top:42px;" v-else>
                       <el-input
                         style="width:150px;"
                         placeholder="请输入内容"
@@ -198,7 +198,7 @@
                     <div style="float:left;" class="infor-font-right">{{infor.intro}}</div>
                     <div class="infor-font-right"><a @click="alter_intro_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 填写</a></div>
                     </div>
-                    <div style="margin-top:42px;" v-else="text_intro">
+                    <div style="margin-top:42px;" v-else>
                       <el-input
                         type="textarea"
                         :autosize="{ minRows: 2, maxRows: 4}"
@@ -357,11 +357,15 @@ export default{
   }
 }
 </script>
-<style>
+<style  rel="stylesheet/scss" lang="scss">
   .dashboard-editor-container {
-    min-height: 100vh;
-		padding: 100px 60px 0px;
-    background-color: #e3e3e3;
+  padding: 32px;
+  background-color: rgb(240, 242, 245);
+    .chart-wrapper {
+      background: #fff;
+      padding: 16px 16px 0;
+      margin-bottom: 32px;
+    }
   }
   .router-font{
     color:#409EFF;

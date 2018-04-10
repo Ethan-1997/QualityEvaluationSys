@@ -58,7 +58,7 @@
             <h2 class="card-title">答案</h2>
             <ul>
                 <li class="item blueborder"
-                    v-for="(q, index) in questions">
+                    v-for="(q, index) in questions" v-bind:key>
                     <h3 v-if="q.type !== 'fill'" v-html="'问题：'+q.content"></h3>
                     <h3 v-if="q.type === 'fill'">问题：{{ getFillContent(q.content) }}</h3>
                     <div v-if="q.type === 'single' || q.type === 'multiple' || q.type === 'aq'">
@@ -138,7 +138,8 @@
           state: '', // 'start', 'end',
           startTime: null,
           endTime: null,
-          minute: 0
+          minute: 0,
+          key: 1
         }
       },
       computed: {
@@ -181,10 +182,17 @@
       },
       methods: {
         submit() {
-          this.$storage.set('name', 'thinking')
-          this.$storage.set('percentage', this.$storage.get('percentage') + 33)
-          this.$storage.set('ptest', true)
-          this.$router.push({ name: 'Admissiontest-index' })
+          const lastTest1 = this.$storage.get('midtest')
+          for (let i = 0; i < lastTest1.length; i++) {
+            console.log(lastTest1[i].name)
+            if (lastTest1[i].name === '期末测试(1)') {
+              lastTest1[i].state = '已完成'
+              break
+            }
+          }
+          console.log(3)
+          console.log(lastTest1)
+          this.$storage.set('midtest', lastTest1)
           let score = 0
           let single_success = 0
           let judgment_success = 0
@@ -199,7 +207,7 @@
               single_total++
             } else if (question.type === 'judgment') {
               if (question.userAnswer === question.answer) {
-                score = score + 4
+                score = score + 10
                 judgment_success++
               }
               judgment_total++
@@ -212,12 +220,12 @@
             single_success: single_success,
             judgment_success: judgment_success
           }
-          this.$storage.set('professional', professional)// 专业能力测试数据
-          console.log(professional)
+          this.$storage.set('lastTest1Score', professional)
+          this.$router.push({ path: '/midTest/index' })
         },
         getList() {
           fetchList().then(Response => {
-            this.questions = Response.data.items
+            this.questions = Response.data.item1
           })
         },
         init() {

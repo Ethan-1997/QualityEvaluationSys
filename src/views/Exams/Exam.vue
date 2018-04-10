@@ -6,12 +6,12 @@
             <h2 class="box-title">我的试卷</h2>
             <template>
                 <el-table style="width: 100%" :data="exams">
-                <el-table-column label="试卷名称" width="180">
+                <el-table-column label="试卷名称" width="130">
                     <template slot-scope="scope">
                         <span>{{ scope.row.name }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="上传日期" width="280">
+                <el-table-column label="上传日期" width="130">
                     <template slot-scope="scope">
                         <span>{{ scope.row.year }}/{{ scope.row.month }}/{{ scope.row.day }}</span>
                     </template>
@@ -45,6 +45,37 @@
             </ul> -->
         </section>
         <ui-raised-button label="制作试卷" primary to="/Exams/ExamAdd" style="float:right;margin:20px;"/>
+        <section>
+            <h2 class="box-title">系统试卷</h2>
+            <template>
+                <el-table style="width: 100%" :data="system_exams_mid">
+                <el-table-column label="试卷名称" width="180">
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.name }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="上传日期" width="280">
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.year }}/{{ scope.row.month }}/{{ scope.row.day }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button type="success" @click="midissue_system(scope.row)" v-if="scope.row.display">发布</el-button>
+                        <el-button type="primary" @click="midcancel_system(scope.row)" v-if="scope.row.display===false">截止</el-button>
+                    </template>
+                </el-table-column>
+                </el-table>
+            </template>
+            <!-- <ul>
+                <li v-for="exam in exams">
+                    {{ exam.name }}
+                    <router-link :to="'/Exams/Exam/' + exam.id">查看</router-link>
+                    <router-link :to="`/Exams/Exam/${exam.id}/edit`">编辑</router-link>
+                    <a href="#" >删除</a>
+                </li>
+            </ul> -->
+        </section>
     </div>
   </el-card>
 </div>
@@ -58,7 +89,13 @@
           exams: [
           ],
           midtest: [],
-          type: ''
+          type: '',
+          system_exams_mid: [
+            { name: '期中测试', year: 2018, month: 4, day: 9, display: true, id: null, state: '未完成' },
+            { name: '期末测试', year: 2018, month: 4, day: 9, display: true, id: null, state: '未完成' }
+    
+          ],
+          radio2: ''
         }
       },
       mounted() {
@@ -84,6 +121,9 @@
         },
         init() {
           const exams = this.$storage.get('exams')
+          if (this.$storage.get('system_exams_mid') !== null) {
+            this.system_exams_mid = this.$storage.get('system_exams_mid')
+          }
           if (exams) {
             this.exams = exams
           } else {
@@ -141,6 +181,78 @@
           this.$storage.set('midtest', midtest)
           this.$storage.set('exams', this.exams)
           console.log(this.exams)
+        },
+        midissue_system(data) {
+          this.$message({
+            message: '发布成功',
+            type: 'success'
+          })
+          const midtest = this.$storage.get('midtest', [])
+          const radio = data.name.split('', 2)[0] + data.name.split('', 2)[1]
+          if (radio === '期中') {
+            midtest.push({
+              id: data.id,
+              name: data.name,
+              day: data.day,
+              month: data.month,
+              year: data.year,
+              state: data.state,
+              radio: radio
+            })
+          } else {
+            for (let i = 0; i < 5; i++) {
+              const name = '期末测试(' + (+i + +1) + ')'
+              console.log(name.split('')[5])
+              midtest.push({
+                id: data.id,
+                name: name,
+                day: data.day,
+                month: data.month,
+                year: data.year,
+                state: data.state,
+                radio: radio
+              })
+            }
+          }
+          console.log()
+          this.$storage.set('midtest', midtest)
+          for (let i = 0; i < this.system_exams_mid.length; i++) {
+            if (this.system_exams_mid[i].name === data.name) {
+              this.system_exams_mid[i].display = false
+            }
+          }
+          this.$storage.set('system_exams_mid', this.system_exams_mid)
+        },
+        midcancel_system(data) {
+          this.$message({
+            message: '截止成功'
+          })
+          const midtest = this.$storage.get('midtest')
+          const dataname = data.name.split('', 2)[0] + data.name.split('', 2)[1]
+          if (dataname === '期中') {
+            for (let i = 0; i < midtest.length; i++) {
+              if (midtest[i].name === data.name) {
+                midtest.splice(i, 1)
+                this.midtest.splice(i, 1)
+              }
+            }
+          } else {
+            for (let i = 0; i < midtest.length; i++) {
+              if (midtest[i].radio === dataname) {
+                midtest.splice(i, 5)
+                this.midtest.splice(i, 5)
+                break
+              }
+            }
+          }
+    
+          for (let i = 0; i < this.system_exams_mid.length; i++) {
+            if (this.system_exams_mid[i].name === data.name) {
+              this.system_exams_mid[i].display = true
+            }
+          }
+          this.$storage.set('midtest', midtest)
+          this.$storage.set('system_exams_mid', this.system_exams_mid)
         },
         cs() {
           console.log(this.$refs)

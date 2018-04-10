@@ -28,7 +28,7 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="success" @click="goTest(scope.row.id)" :disabled="scope.row.state === '已完成'">开始测试</el-button>
+                        <el-button type="success" @click="goTest(scope.row)" :disabled="scope.row.state === '已完成'">开始测试</el-button>
                     </template>
                 </el-table-column>
                 </el-table>
@@ -62,17 +62,26 @@
           this.midtest = this.$storage.get('midtest')
           console.log(this.midtest)
         },
-        goTest(id) {
-          console.log(id)
-          this.$router.push({ path: '/Exams/Exam/' + id })
+        goTest(row) {
+          if (row.id === null) {
+            if (row.name === '期中测试') {
+              this.$router.push({ path: '/systemTest/midTest/' })
+            } else {
+              const path = '/systemTest/lastTest' + row.name.split('')[5] + '/'
+              this.$router.push({ path: path })
+            }
+          } else {
+            this.$router.push({ path: '/Exams/Exam/' + row.id })
+          }
         }
       }
     }
 </script>
 
-<style>
+<style rel="stylesheet/scss" lang="scss">
   .midtest-index{
     padding:32px;
+    background-color: rgb(240, 242, 245);
   }
     .text-bottom{
     font-size: 24px;

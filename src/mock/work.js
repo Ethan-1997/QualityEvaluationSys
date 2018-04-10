@@ -42,7 +42,6 @@ export default {
     title: 'vue-element-admin'
   }),
   createWork: (data) => {
-    console.log()
     List.push(JSON.parse(data.body))
     storage.set('worklist', List)
     return {
