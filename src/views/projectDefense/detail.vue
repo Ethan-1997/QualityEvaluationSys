@@ -14,9 +14,6 @@
         <el-form-item label="简介" type="textarea" :autosize="{ minRows: 5, maxRows: 8}">
         <el-input v-model="temp.introduction"></el-input>
       </el-form-item>
-      <el-form-item label="项目标题">
-        <el-input v-model="temp.title"></el-input>
-      </el-form-item>
       <el-form-item label="起止日期">
         <br/>
          <el-date-picker
@@ -43,7 +40,7 @@
         </el-upload>
       </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">保存</el-button>
+          <el-button type="primary" @click="onSubmit">{{status==='update'?'保存':'新建'}}</el-button>
           <el-button >取消</el-button>
         </el-form-item>
     </el-form>
@@ -55,12 +52,19 @@
 
 <script>
 import { getToken } from '@/api/qiniu'
+import { createProjectDefense, updateProjectDefense } from '@/api/projectDefense'
 export default {
   created() {
-    this.temp = this.$storage.get('row')
+    this.status = this.$storage.get('status', [])
+    console.log(this.status)
+    if (this.$route.params.status === 'update') {
+      this.temp = this.$storage.get('row', [])
+    }
+    console.log(this.temp)
   },
   data() {
     return {
+      status: null,
       active: 0,
       uptoken: null,
       temp: {
@@ -96,7 +100,27 @@ export default {
       console.log(response, file, fileList)
     },
     onSubmit() {
-      this.$refs.form.submit()
+      // console.log(this.temp)
+      console.log(this.status)
+      if (this.status === 'create') {
+        console.log('in')
+        console.log(this.temp)
+        createProjectDefense(this.temp).then(response => {
+          this.$message({
+            message: '新建成功',
+            type: 'success'
+          })
+        })
+      } else {
+        updateProjectDefense(this.temp).then(response => {
+          this.$message({
+            message: '更新成功',
+            type: 'success'
+          })
+        })
+      }
+
+      this.$router.push('/projectDefense/index')
     }
   }
 }

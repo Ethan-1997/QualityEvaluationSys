@@ -300,6 +300,20 @@ export const asyncRouterMap = [
     }]
   },
   {
+    path: '/projectDefense',
+    component: Layout,
+    meta: {
+      roles: ['student']
+    },
+    hidden: true,
+    children: [{
+      path: 'detail',
+      component: _import('projectDefense/detail'),
+      name: 'projectDefenseDetail',
+      meta: { title: '项目详情', icon: 'dashboard', noCache: true }
+    }]
+  },
+  {
     path: '/firstEvaluationReport',
     component: Layout,
     name: 'firstEvaluationReport',

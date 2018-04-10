@@ -1,12 +1,13 @@
 <template>
   <el-card style="width:85%;margin:0 auto">
-      <el-table
-      :data="tableData"
-      style="width: 100%">
+    <el-button @click="handleCreate" type="success">新建</el-button>
+    <el-table
+    :data="tableData"
+    style="width: 100%">
       <el-table-column
         prop="id"
         label="编号"
-        width="180">
+        width="50">
       </el-table-column>
       <el-table-column
         prop="title"
@@ -14,8 +15,12 @@
         width="180">
       </el-table-column>
       <el-table-column
-        prop="date"
-        label="项目日期">
+        prop="startAndEndTime[0]"
+        label="开始日期">
+      </el-table-column>
+        <el-table-column
+        prop="startAndEndTime[1]"
+        label="结束日期">
       </el-table-column>
       <el-table-column
         prop="introduction"
@@ -32,20 +37,26 @@
 </template>
 
 <script>
+import { fetchList } from '@/api/projectDefense'
 export default {
   data() {
     return {
-      tableData: [{
-        id: '1',
-        startAndEndTime: '2016-05-02',
-        introduction: '基于B/S架构的素质评测系统',
-        title: '学生综合素质评测系统'
-      }]
+      tableData: null
     }
+  },
+  created() {
+    fetchList().then(response => {
+      this.tableData = response.data.items
+    })
   },
   methods: {
     handleClick(row) {
       this.$storage.set('row', row)
+      this.$storage.set('status', 'update')
+      this.$router.push('/projectDefense/detail')
+    },
+    handleCreate() {
+      this.$storage.set('status', 'create')
       this.$router.push('/projectDefense/detail')
     }
   }

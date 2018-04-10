@@ -18,28 +18,7 @@ import daliyTask from './daliyTask'
 import bulletin from './bulletin'
 import informationAPI from './information'
 import student from './student'
-
-Mock.mock(/\/student\/list/, 'get', student.getList)
-
-// Mock.setup({
-//   timeout: '350-600'
-// })
-// 点评页面学生信息
-
-// 日常任务
-Mock.mock(/\/daliyTask\/daliyTask/, 'post', daliyTask.daliyTask)
-
-Mock.mock(/\/studentTeam\/update/, 'post', informationAPI.updateStudentTeam)
-Mock.mock(/\/information\/getList/, 'post', informationAPI.getList)
-
-// 系统公告
-Mock.mock(/\/bulletin\/bulletin/, 'post', bulletin.bulletin)
-// Mock.setup({
-//   timeout: '350-600'
-// })
-
-// 文章相关
-Mock.mock(/\/role\/list/, 'get', roleAPI.getList)
+import projectDefenseAPI from './projectDefense'
 
 // 伟哥
 import characterAPI from './character'
@@ -51,6 +30,22 @@ import ThinkingAPI from './Thinking'
 import dailysummaryAPI from './dailysummary'
 
 import teacherinformationAPI from './teacherinformation'
+
+Mock.mock(/\/student\/list/, 'get', student.getList)
+
+// 点评页面学生信息
+
+// 日常任务
+Mock.mock(/\/daliyTask\/daliyTask/, 'post', daliyTask.daliyTask)
+
+Mock.mock(/\/studentTeam\/update/, 'post', informationAPI.updateStudentTeam)
+Mock.mock(/\/information\/getList/, 'post', informationAPI.getList)
+
+// 系统公告
+Mock.mock(/\/bulletin\/bulletin/, 'post', bulletin.bulletin)
+
+// 文章相关
+Mock.mock(/\/role\/list/, 'get', roleAPI.getList)
 
 Mock.mock(/\/api\/admissionTest\/Thinking\/getList/, 'post', ThinkingAPI.getList)
 
@@ -74,6 +69,11 @@ Mock.mock(/\/article\/detail/, 'get', articleAPI.getArticle)
 Mock.mock(/\/article\/pv/, 'get', articleAPI.getPv)
 Mock.mock(/\/article\/create/, 'post', articleAPI.createArticle)
 Mock.mock(/\/article\/update/, 'post', articleAPI.updateArticle)
+
+// 项目答辩相关
+Mock.mock(/\/projectDefense\/list/, 'get', projectDefenseAPI.getList)
+Mock.mock(/\/projectDefense\/create/, 'post', projectDefenseAPI.createProjectDefense)
+Mock.mock(/\/projectDefense\/update/, 'post', projectDefenseAPI.updateProjectDefense)
 
 // 老师相关
 Mock.mock(/\/teacher\/list/, 'get', teacherAPI.getList)
