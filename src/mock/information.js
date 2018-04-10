@@ -4,7 +4,7 @@ const List = {
   id: '9527',
   class: 'vue.js',
   signature: 'Rock Roll Rabbit',
-  time: '1998年5月20日',
+  time: '1998-05-10',
   home: '月球',
   phone: '6666666',
   company: '摇滚不死公司',

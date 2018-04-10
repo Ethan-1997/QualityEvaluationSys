@@ -127,7 +127,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">20/20</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.singleSuccess}}/{{midTest.singleTotal}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -139,7 +139,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">30/30</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.judgmentSuccess}}/{{midTest.judgmentTotal}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -289,7 +289,7 @@ export default {
       breakRuleNumber: 3,
       highLightingNumber: 10,
       majorIssuesNumber: 6,
-
+      midTest: [],
       classTeacherAssessment: [55, 66, 76, 88, 50],
       lecturerAssessment: [30, 40, 50, 70, 55],
       assistantAssessment: [55, 60, 70, 40, 55],
@@ -303,6 +303,9 @@ export default {
     TeacherReviewResults,
     DailyPerformanceSummary,
     ComprehensiveQualityModel
+  },
+  mounted() {
+    this.midTest = this.$storage.get('midTestSocre')
   }
 }
 
