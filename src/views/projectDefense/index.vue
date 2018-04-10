@@ -7,11 +7,6 @@
     :data="tableData"
     style="width: 100%">
       <el-table-column
-        prop="id"
-        label="编号"
-        width="50">
-      </el-table-column>
-      <el-table-column
         prop="title"
         label="项目标题"
         width="180">

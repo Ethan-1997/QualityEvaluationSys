@@ -10,7 +10,6 @@ for (let i = 0; i < count; i++) {
     Ssex: '@boolean',
     'Sclass|100-999': 999,
     Simage: Mock.Random.dataImage('200x200', '头像'),
-
     studyRate1: 0,
     studyRate2: 0,
     studyRate3: 0,

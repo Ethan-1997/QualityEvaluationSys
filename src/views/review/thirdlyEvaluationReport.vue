@@ -330,7 +330,7 @@ export default {
     this.y1 = this.$storage.get('daily_tenunarrived')
     this.z1 = this.$storage.get('daily_tenleave')
     this.f1 = this.$storage.get('daily_tenlater')
-
+  },
   created() {
     this.lastTestScore1 = this.$storage.get('lastTest1Score')
     this.lastTestScore2 = this.$storage.get('lastTest2Score')
@@ -338,7 +338,6 @@ export default {
     this.lastTestScore4 = this.$storage.get('lastTest4Score')
     this.lastTestScore5 = this.$storage.get('lastTest5Score')
     this.lastTestAvg = (this.lastTestScore1.score + this.lastTestScore2.score + this.lastTestScore3.score + this.lastTestScore4.score + this.lastTestScore5.score) / 5
-
   }
 }
 

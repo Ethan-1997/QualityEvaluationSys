@@ -18,6 +18,7 @@
         <br/>
          <el-date-picker
           v-model="temp.startAndEndTime"
+          value-format="yyyy年MM月dd日"
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
@@ -41,7 +42,7 @@
       </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">{{status==='update'?'保存':'新建'}}</el-button>
-          <el-button >取消</el-button>
+          <el-button @click="handleCancel">取消</el-button>
         </el-form-item>
     </el-form>
 
@@ -56,11 +57,9 @@ import { createProjectDefense, updateProjectDefense } from '@/api/projectDefense
 export default {
   created() {
     this.status = this.$storage.get('status', [])
-    console.log(this.status)
-    if (this.$route.params.status === 'update') {
-      this.temp = this.$storage.get('row', [])
+    if (this.status === 'update') {
+      this.temp = Object.assign({}, this.$storage.get('row', []))
     }
-    console.log(this.temp)
   },
   data() {
     return {
@@ -91,6 +90,9 @@ export default {
     },
     handlePreview(file) {
       window.open(file.url)
+    },
+    handleCancel() {
+      this.$router.push('/projectDefense/index')
     },
     handleUploadSuccess(response, file, fileList) {
       // p6k20rdt2.bkt.clouddn.com/FoiCdTJ3kxLZGCICyUZn7VlV9DiF?attname=123.exe
