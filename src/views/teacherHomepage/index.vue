@@ -53,10 +53,10 @@
                     <span><svg-icon icon-class="table" />&nbsp;系统公告</span>
                     <el-button style="float: right; padding: 3px 0" type="text" @click="goToAnnocument" >更多</el-button>
                 </div>
-                <el-table :data="bulletinData" style="width: 100%"  >
-                    <el-table-column prop="bulletin" label="公告"> 
+                <el-table :data="announcementDataData" style="width: 100%"  >
+                    <el-table-column prop="atitle" label="公告"> 
                     </el-table-column>
-                    <el-table-column fixed="right" prop="date" label="发布日期" width="100" align="center"> 
+                    <el-table-column fixed="right" prop="atime" label="发布日期" width="100" align="center"> 
                     </el-table-column>
                 </el-table>
             </el-card>
@@ -169,7 +169,7 @@
 </template>
 
 <script>
-    import { bulletin } from '@/api/bulletin'
+    import { fetchList } from '@/api/announcement'
     import { daliyTask } from '@/api/daliyTask'
     import { mapGetters } from 'vuex'
     export default {
@@ -177,7 +177,7 @@
       data() {
         return {
           active: null,
-          bulletinData: null,
+          announcementDataData: null,
           taskData: null,
 
           dynamicTags: ['今晚检查学生每日任务', '周五下午四点行政楼开会', '今天有5人迟到', '提醒课代表收作业', '前台使用的技术是Vue.js', '主要的组件是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
@@ -186,8 +186,15 @@
     
           signIn: false,
           signInText: '签到',
-          signInButton: false
+          signInButton: false,
 
+          listQuery: {
+            page: 1,
+            limit: 15,
+            sort: '+id',
+            title: undefined,
+            time: undefined
+          }
         }
       },
       computed: {
@@ -197,7 +204,7 @@
       },
       created() {
         this.getTaskData()
-        this.getBulletionData()
+        this.getAnnouncementData()
       },
       methods: {
         goToStudentBasic() {
@@ -247,26 +254,9 @@
           this.signInText = '已签到'
           this.signInButton = true
         },
-        getBulletionData() {
-          bulletin().then(response => {
-            this.bulletinData = [
-              response.data[0],
-              response.data[1],
-              response.data[2],
-              response.data[3],
-              response.data[4],
-              response.data[5],
-              response.data[6],
-              response.data[7],
-              response.data[8],
-              response.data[9],
-              response.data[10],
-              response.data[11],
-              response.data[12],
-              response.data[13],
-              response.data[14],
-              response.data[15]
-            ]
+        getAnnouncementData() {
+          fetchList(this.listQuery).then(response => {
+            this.announcementDataData = response.data.items
           })
         },
         getTaskData() {
