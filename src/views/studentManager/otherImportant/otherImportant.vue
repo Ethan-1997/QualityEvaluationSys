@@ -137,7 +137,7 @@ export default {
         ssex: '性别',
         sclass: '班级',
         title: '标题',
-        content: '内容',
+        content: '重大事项',
         time: '时间',
         operator: '操作',
         order: '排序规则'

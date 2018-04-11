@@ -47,7 +47,7 @@
           <span>{{scope.row.sno}}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="150px" :label="tableCol.title">
+      <el-table-column min-width="150px" label="违纪内容">
         <template slot-scope="scope">
           <el-alert type="error" :closable="false">{{scope.row.title}}</el-alert>
         </template>

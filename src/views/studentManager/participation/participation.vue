@@ -33,14 +33,14 @@
           <span>{{scope.row.date}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="80px" align="center" :label="tableCol.sclass">
-        <template slot-scope="scope">
-          <span>{{scope.row.sclass}}</span>
-        </template>
-      </el-table-column>
       <el-table-column width="80px" align="center" :label="tableCol.sname">
         <template slot-scope="scope">
           <span>{{scope.row.sname }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="80px" align="center" :label="tableCol.sclass">
+        <template slot-scope="scope">
+          <span>{{scope.row.sclass}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="tableCol.sno" width="80">
@@ -48,12 +48,12 @@
           <span>{{scope.row.sno}}</span>
         </template>
       </el-table-column>
-     <el-table-column align="center" :label="tableCol.time" width="100">
+     <el-table-column align="center" :label="tableCol.time" width="80">
         <template slot-scope="scope">
           <span>{{scope.row.time}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.status" width="95">
+      <el-table-column align="center" :label="tableCol.status" width="80">
         <template slot-scope="scope">
           <el-tag :type="scope.row.status === '已到' ? 'success' : scope.row.status === '未到' ? 'danger' : scope.row.status === '迟到' ? 'warning' : 'info'">{{scope.row.status}}</el-tag>
         </template>
