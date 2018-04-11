@@ -24,14 +24,14 @@
 
     <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column width="80px" align="center" :label="tableCol.sclass">
-        <template slot-scope="scope">
-          <span>{{scope.row.sclass}}</span>
-        </template>
-      </el-table-column>
       <el-table-column width="80px" align="center" :label="tableCol.sname">
         <template slot-scope="scope">
           <span>{{scope.row.sname }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="80px" align="center" :label="tableCol.sclass">
+        <template slot-scope="scope">
+          <span>{{scope.row.sclass}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="tableCol.sno" width="80">
@@ -44,14 +44,14 @@
           <span >{{scope.row.Lstart}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" align="center" :label="tableCol.Lend">
-        <template slot-scope="scope">
-          <span>{{scope.row.Lend}}</span>
-        </template>
-      </el-table-column>
       <el-table-column  :label="tableCol.Lreason" min-width="95">
         <template slot-scope="scope">
-          <span>{{scope.row.Lreason}}</span>
+          <el-alert type="info" :closable="false">{{scope.row.Lreason}}</el-alert>
+        </template>
+      </el-table-column>
+            <el-table-column width="100px" align="center" :label="tableCol.Lend">
+        <template slot-scope="scope">
+          <span>{{scope.row.Lend}}</span>
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" :label="tableCol.Laprover" width="80">

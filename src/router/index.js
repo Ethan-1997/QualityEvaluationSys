@@ -87,7 +87,7 @@ export const asyncRouterMap = [
       path: 'index',
       component: _import('Exams/Exam'),
       name: 'Exam',
-      meta: { title: '考试管理', icon: 'icon' }
+      meta: { title: '测试管理', icon: 'test' }
     }] },
   {
     path: '/Exams',
@@ -187,7 +187,7 @@ export const asyncRouterMap = [
   //   redirect: '/homework/daliyTask',
   //   alwaysShow: true,
   //   name: 'homework',
-  //   meta: { title: 'homework', icon: 'form' },
+  //   meta: { title: 'homework', icon: 'test' },
   //   children: [
   //     { path: 'daliyTask', component: _import('homework/daliyTask'), name: 'daliyTask', meta: { title: 'daliytask' }}
   //   ]
@@ -239,7 +239,7 @@ export const asyncRouterMap = [
     component: Layout,
     name: 'studentWork',
     meta: {
-      icon: 'form',
+      icon: 'homework',
       title: '学生作业/每日任务',
       roles: ['student']
     },
@@ -298,7 +298,7 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'votw', component: _import('studentTeam/index'), name: 'student-team', meta: { title: '点评小组投票', icon: 'vote' }},
-      { path: 'studentsReview', component: _import('review/teacherReview'), name: 'groupReview', meta: { title: '学生小组点评', icon: 'dashboard', noCache: true }
+      { path: 'studentsReview', component: _import('review/teacherReview'), name: 'groupReview', meta: { title: '学生小组点评', icon: 'review', noCache: true }
       }
     ]
   },
@@ -398,11 +398,11 @@ export const asyncRouterMap = [
     component: Layout,
     meta: {
       title: '学生信息',
-      icon: 'people',
+      icon: 'information',
       roles: ['student']
     },
     children: [
-      { path: 'information', component: _import('information/alter'), name: 'alter-information', meta: { title: '个人信息', icon: 'studentInformation' }},
+      { path: 'information', component: _import('information/alter'), name: 'alter-information', meta: { title: '个人信息', icon: 'information' }},
       { path: 'daliyReport', component: _import('information/dailysummary'), name: 'imformation', meta: { title: '日常表现汇总', icon: 'daliyreport', noCache: true }}
     ]
   },
@@ -412,7 +412,7 @@ export const asyncRouterMap = [
     name: 'evaluationReport',
     meta: {
       title: '学生测评报告',
-      icon: 'chart',
+      icon: 'report',
       roles: ['student']
     },
     children: [
@@ -435,7 +435,7 @@ export const asyncRouterMap = [
       name: 'workManager',
       meta: {
         title: '作业管理',
-        icon: 'work'
+        icon: 'homework'
       }
     }]
   },
@@ -454,14 +454,20 @@ export const asyncRouterMap = [
     meta: {
       roles: ['teacher']
     },
+    children: [{ path: 'index', component: _import('review/reviewIndex'), name: 'reviewIndex', meta: { title: '点评首页', icon: 'review' }
+    }]
+  },
+  {
+    path: '/basicInfo',
+    component: Layout,
+    meta: {
+      roles: ['schoolManager', 'teacher']
+    },
     children: [{
       path: 'index',
-      component: _import('review/reviewIndex'),
-      name: 'reviewIndex',
-      meta: {
-        title: '点评首页',
-        icon: 'work'
-      }
+      component: _import('studentManager/basicInfo/basicInfo'),
+      name: 'basicInfo',
+      meta: { title: '学生信息管理', icon: 'studentList', noCache: true }
     }]
   },
   {
@@ -475,28 +481,10 @@ export const asyncRouterMap = [
     children: [
       { path: 'participation', component: _import('studentManager/participation/participation'), name: 'participation', meta: { title: '出勤管理', icon: 'late' }},
       { path: 'breakTheRule', component: _import('studentManager/breakTheRule/breakTheRule'), name: 'breakTheRule', meta: { title: '违纪管理', icon: 'danger' }},
-      { path: 'highlighting', component: _import('studentManager/highlighting/highlighting'), name: 'highlighting', meta: { title: '突出表现', icon: 'good' }},
-      { path: 'otherImportant', component: _import('studentManager/otherImportant/otherImportant'), name: 'otherImportant', meta: { title: '重大事项管理', icon: 'warning' }}
+      { path: 'highlighting', component: _import('studentManager/highlighting/highlighting'), name: 'highlighting', meta: { title: '突出表现管理', icon: 'good' }},
+      { path: 'otherImportant', component: _import('studentManager/otherImportant/otherImportant'), name: 'otherImportant', meta: { title: '重大事项管理', icon: 'warning' }},
+      { path: 'index', component: _import('studentManager/leave/leave'), name: 'leave', meta: { title: '请假登记', icon: 'leave' }}
     ]
-  },
-  {
-    path: '/other',
-    component: Layout,
-    name: 'other',
-    meta: {
-      title: '其他',
-      icon: 'other',
-      roles: ['teacher', 'student']
-    },
-    children: [{ path: 'announcement', component: _import('system/announcementBrowsing/index'), name: 'announcementBrowsing', meta: { title: '系统公告', icon: 'announcement' }}]
-  },
-  {
-    path: '/leave',
-    component: Layout,
-    meta: {
-      roles: ['teacher']
-    },
-    children: [{ path: 'index', component: _import('studentManager/leave/leave'), name: 'leave', meta: { title: '请假登记', icon: 'leave' }}]
   },
   {
     path: '/technologyReview',
@@ -512,7 +500,18 @@ export const asyncRouterMap = [
     meta: {
       roles: ['teacher']
     },
-    children: [{ path: 'index', component: _import('teacherinformation/teacherinformation'), name: 'teacherinformation', meta: { title: '教师个人信息', icon: 'daily19' }}]
+    children: [{ path: 'index', component: _import('teacherinformation/teacherinformation'), name: 'teacherinformation', meta: { title: '教师信息', icon: 'information' }}]
+  },
+  {
+    path: '/other',
+    component: Layout,
+    name: 'other',
+    meta: {
+      title: '其他',
+      icon: 'other',
+      roles: ['teacher', 'student']
+    },
+    children: [{ path: 'announcement', component: _import('system/announcementBrowsing/index'), name: 'announcementBrowsing', meta: { title: '系统公告', icon: 'announcement' }}]
   },
   // 学校管理员的权限
   {
@@ -526,19 +525,6 @@ export const asyncRouterMap = [
       component: _import('system/teacherManager/index'),
       name: 'teacherManager',
       meta: { title: '教师管理', icon: 'dashboard', noCache: true }
-    }]
-  },
-  {
-    path: '/basicInfo',
-    component: Layout,
-    meta: {
-      roles: ['schoolManager', 'teacher']
-    },
-    children: [{
-      path: 'index',
-      component: _import('studentManager/basicInfo/basicInfo'),
-      name: 'basicInfo',
-      meta: { title: '学生管理', icon: 'dashboard', noCache: true }
     }]
   },
   {

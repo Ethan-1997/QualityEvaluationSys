@@ -68,12 +68,12 @@
                         <el-card>
                             <div slot="header" class="clearfix" style="align:center">
                                 <span><svg-icon icon-class="example" />&nbsp;出勤概况</span>
-                                <el-button @click="goToAttendance" style="float: right; padding: 3px 0" type="text">更多</el-button>
+                                <el-button @click="goToParticipation" style="float: right; padding: 3px 0" type="text">更多</el-button>
                             </div>
                             <el-row type="flex" justify="center" :gutter="20">
                                 <el-col :xs="24" :sm="24" :lg="11">
                                     <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="90" status="success"></el-progress></div>
-                                    <div style="width:126px;margin:30px auto 0px auto"><el-button @click="goToAttendance" type="primary">&nbsp;&nbsp;&nbsp;查看详情&nbsp;&nbsp;&nbsp;</el-button></div>
+                                    <div style="width:126px;margin:30px auto 0px auto"><el-button @click="goToParticipation" type="primary">&nbsp;&nbsp;&nbsp;查看详情&nbsp;&nbsp;&nbsp;</el-button></div>
                                 </el-col>
                                 <el-col :xs="24" :sm="24" :lg="13">
                                     <el-row :gutter="1">
@@ -219,8 +219,9 @@
         goToLeave() {
           this.$router.push({ path: '/leave/index' })
         },
-        goToAttendance() {
-          this.$router.push({ path: '/participation/index' })
+        goToParticipation() {
+          this.$router.push({ path: '/dailyPerformance/participation' })
+          console.log(888)
         },
         goToAnnocument() {
           this.$router.push({ path: '/other/announcement' })
