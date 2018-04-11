@@ -22,7 +22,7 @@
       <upload-excel-component class="filter-item" v-waves @on-selected-file='selected'></upload-excel-component>
     </div>
 
-    <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
+    <el-table  :key='tableKey' :data="list" border fit highlight-current-row
       style="width: 100%">
       <el-table-column align="center" :label="tableCol.sno" width="65">
         <template slot-scope="scope">
@@ -100,7 +100,14 @@
         <el-form-item :label="tableCol.sclass" prop="sclass">
           <el-input v-model="temp.sclass"></el-input>
         </el-form-item>
-        
+        <el-form-item :label="tableCol.time" prop="time">
+          <el-date-picker
+            v-model="temp.time"
+            type="datetime"
+            format="yyyy-MM-dd"
+            placeholder="选择日期时间">
+          </el-date-picker>
+        </el-form-item>
          <el-form-item :label="tableCol.sprofession" prop="sprofession">
            <el-select class="filter-item" v-model="temp.sprofession" placeholder="请选择">
             <el-option v-for="item in  courseOptions" :key="item" :label="item" :value="item">
@@ -112,13 +119,6 @@
               <el-option v-for="item in  statusOptions" :key="item" :label="item" :value="item">
               </el-option>
             </el-select>
-        </el-form-item>
-        <el-form-item :label="tableCol.time" prop="time">
-           <el-date-picker
-            v-model="temp.time"
-            type="datetime"
-            placeholder="选择日期时间">
-          </el-date-picker>
         </el-form-item>
         <el-form-item :label="tableCol.note" prop="note">
          <el-input
@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import { createParticipation, updateParticipation, fetchListDaily } from '@/api/participation'
+import { fetchListDaily } from '@/api/participation'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -204,6 +204,7 @@ export default {
         update: '编辑',
         create: '新建'
       },
+      oldtemp: null,
       dialogPvVisible: false,
       pvData: [],
       rules: {
@@ -237,7 +238,12 @@ export default {
 
   },
   created() {
-    this.getList()
+    if (this.$storage.get('dailyInit') === true) {
+      console.log(2)
+      this.list = this.$storage.get('dailyList')
+    } else {
+      this.getList()
+    }
   },
   methods: {
     selected(data) {
@@ -266,6 +272,8 @@ export default {
       this.listLoading = true
       fetchListDaily(this.listQuery).then(response => {
         this.list = response.data.items
+        this.$storage.set('dailyInit', true)
+        this.$storage.set('dailyList', response.data.items)
         this.total = response.data.total
         this.listLoading = false
       })
@@ -289,7 +297,6 @@ export default {
         ssex: undefined,
         sclass: undefined,
         sprofession: undefined,
-        time: undefined,
         status: undefined, // 已到、迟到、请假、未到
         note: undefined
       }
@@ -303,26 +310,38 @@ export default {
       })
     },
     createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createParticipation(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
+      console.log(this.temp)
+      if (this.temp.sname === undefined || this.temp.ssex === undefined || this.temp.sclass === undefined || this.temp.time === undefined || this.temp.status === undefined) {
+        this.$notify({
+          title: '失败',
+          message: '请填写完整',
+          duration: 2000
+        })
+      } else {
+        const months = this.temp.time.getMonth() + 1
+        const times = this.temp.time.getFullYear() + '.' + months + '.' + this.temp.time.getDate()
+        this.list.push({
+          sno: '101',
+          sname: this.temp.sname,
+          ssex: this.temp.ssex,
+          sclass: this.temp.sclass,
+          sprofession: this.temp.sprofession,
+          status: this.temp.status, // 已到、迟到、请假、未到
+          note: this.temp.note,
+          time: times
+        })
+        this.$storage.set('dailyList', this.list)
+        this.$notify({
+          title: '成功',
+          message: '创建成功',
+          type: 'success',
+          duration: 2000
+        })
+      }
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      console.log(this.temp)
+      this.oldtemp = row
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -332,27 +351,36 @@ export default {
     },
     updateData() {
       // debugger
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateParticipation(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
+      const tempData = Object.assign({}, this.temp)
+      tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+      const oldtempData = Object.assign({}, this.oldtemp)
+      let times
+      if (tempData.time !== oldtempData.time) {
+        const months = tempData.time.getMonth() + 1
+        times = tempData.time.getFullYear() + '.' + months + '.' + tempData.time.getDate()
+      } else {
+        times = oldtempData.time
+      }
+      for (let i = 0; i < this.list.length; i++) {
+        if (this.list[i].time === oldtempData.time && this.list[i].id === oldtempData.id) {
+          console.log(this.list[i])
+          this.list[i].sname = this.temp.sname
+          this.list[i].time = times
+          this.list[i].ssex = this.temp.ssex
+          this.list[i].sclass = this.temp.sclass
+          this.list[i].sprofession = this.temp.sprofession
+          this.list[i].status = this.temp.status // 已到、迟到、请假、未到
+          this.list[i].note = this.temp.note
+          this.$storage.set('dailyList', this.list)
+          break
         }
+      }
+      this.dialogFormVisible = false
+      this.$notify({
+        title: '成功',
+        message: '更新成功',
+        type: 'success',
+        duration: 2000
       })
     },
     handleDelete(index) {
@@ -362,6 +390,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.list.splice(index, 1)
+        this.$storage.set('dailyList', this.list)
         this.$message({
           type: 'success',
           message: '删除成功!'
