@@ -1,19 +1,23 @@
 <template>
   <div class="app-container calendar-list-container">
+    <el-card>
+    <div slot="header" class="clearfix">
+      <span style="font-size:25px">出勤管理</span>
+    </div>
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
-      </el-input>
       <el-date-picker class="filter-item"
         v-model="listQuery.time"
         type="date"
         placeholder="选择日期">
       </el-date-picker>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
-        <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
-        </el-option>
-      </el-select>
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
+      </el-input>
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
+        </el-option>
+      </el-select>
+      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
+        <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
@@ -24,29 +28,24 @@
 
     <el-table  :key='tableKey' :data="list" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.sno" width="65">
+      <el-table-column align="center" :label="tableCol.date" width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.sno}}</span>
+          <span>{{scope.row.date}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" align="center" :label="tableCol.sname">
-        <template slot-scope="scope">
-          <span>{{scope.row.sname }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="50px" :label="tableCol.ssex">
-        <template slot-scope="scope">
-         <span>{{scope.row.ssex}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="50px" align="center" :label="tableCol.sclass">
+      <el-table-column width="80px" align="center" :label="tableCol.sclass">
         <template slot-scope="scope">
           <span>{{scope.row.sclass}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.sprofession" width="95">
+      <el-table-column width="80px" align="center" :label="tableCol.sname">
         <template slot-scope="scope">
-          <span>{{scope.row.sprofession}}</span>
+          <span>{{scope.row.sname }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="tableCol.sno" width="80">
+        <template slot-scope="scope">
+          <span>{{scope.row.sno}}</span>
         </template>
       </el-table-column>
      <el-table-column align="center" :label="tableCol.time" width="100">
@@ -56,12 +55,12 @@
       </el-table-column>
       <el-table-column align="center" :label="tableCol.status" width="95">
         <template slot-scope="scope">
-          <span>{{scope.row.status}}</span>
+          <el-tag :type="scope.row.status === '已到' ? 'success' : scope.row.status === '未到' ? 'danger' : scope.row.status === '迟到' ? 'warning' : 'info'">{{scope.row.status}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.note" min-width="95">
+      <el-table-column :label="tableCol.note" min-width="95">
         <template slot-scope="scope">
-          <span>{{scope.row.note}}</span>
+          <el-alert type="info" :closable="false">{{scope.row.note}}</el-alert>
         </template>
       </el-table-column>
 
@@ -120,6 +119,14 @@
               </el-option>
             </el-select>
         </el-form-item>
+
+        <el-form-item :label="tableCol.time" prop="time">
+           <el-time-picker
+            v-model="temp.time"
+            type="datetime"
+            placeholder="选择日期时间">
+          </el-time-picker>
+        </el-form-item>
         <el-form-item :label="tableCol.note" prop="note">
          <el-input
             type="textarea"
@@ -138,7 +145,7 @@
       
     </el-dialog>
 
-
+    </el-card>
   </div>
 </template>
 
@@ -161,6 +168,7 @@ export default {
     return {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
+        date: '日期',
         sno: '学号',
         sname: '姓名',
         ssex: '性别',
@@ -384,7 +392,7 @@ export default {
       })
     },
     handleDelete(index) {
-      this.$confirm('此操作将永久删除用户, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

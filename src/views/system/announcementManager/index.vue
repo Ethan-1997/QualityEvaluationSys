@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { fetchList, updateAnnouncement } from '@/api/announcement'
+import { fetchList } from '@/api/announcement'
 import waves from '@/directive/waves' // 水波纹指令
 import storage from '@/utils/storage'
 import { parseTime } from '@/utils'
@@ -102,6 +102,7 @@ export default {
     return {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
+        ano: '序号',
         atitle: '标题',
         acontent: '内容',
         atime: '时间',
@@ -127,6 +128,7 @@ export default {
 
       showReviewer: false,
       temp: {
+        ano: '序号',
         atitle: '标题',
         acontent: '内容',
         atime: '时间'
@@ -148,7 +150,9 @@ export default {
       tableData: null,
       tableHeader: null,
 
-      tHeader: ['atitle', 'acontent', 'atime']
+      tHeader: ['ano', 'atitle', 'acontent', 'atime'],
+
+      updataIndex: 0
     }
   },
   filters: {
@@ -236,6 +240,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.temp.ano = this.list[0].ano + 1
           this.list.unshift(this.temp)
           storage.set('announcementList', this.list)
           console.log(this.list)
@@ -264,21 +269,20 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateAnnouncement(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
+          for (const v of this.list) {
+            if (v.ano === this.temp.ano) {
+              const index = this.list.indexOf(v)
+              this.list.splice(index, 1, this.temp)
+              storage.set('announcementList', this.list)
+              break
             }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
+          }
+          this.dialogFormVisible = false
+          this.$notify({
+            title: '成功',
+            message: '更新成功',
+            type: 'success',
+            duration: 2000
           })
         }
       })

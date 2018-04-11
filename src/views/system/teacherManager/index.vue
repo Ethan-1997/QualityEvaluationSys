@@ -264,7 +264,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp.tno = parseInt(Math.random() * 100) + 1024 // mock a id
           this.temp.author = 'vue-element-admin'
           createTeacher(this.temp).then(() => {
             this.list.unshift(this.temp)
@@ -314,12 +314,13 @@ export default {
       })
     },
     handleDelete(index) {
-      this.$confirm('此操作将永久删除用户, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该职工, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.list.splice(index, 1)
+        this.$storage.set('teacherlist', this.list)
         this.$message({
           type: 'success',
           message: '删除成功!'

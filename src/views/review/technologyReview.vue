@@ -138,7 +138,7 @@ import KnowledgeTestGrade from './components/KnowledgeTestGrade'
 export default {
   data() {
     return {
-      studentFormData: [],
+      studentFormData: [{ Simage: null }],
 
       signInData: 10,
       lateSignInData: 8,
@@ -178,7 +178,7 @@ export default {
     },
     getStudentData() {
       getStudentData(this.studentQuery).then(response => {
-        this.studentFormData = response.data
+        this.studentFormData = response.data.items
         console.log(response.data)
         this.$nextTick(() => {
           this.$refs.gradeTabsOne.chart.resize()

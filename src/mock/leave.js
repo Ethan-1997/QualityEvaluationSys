@@ -10,9 +10,9 @@ for (let i = 0; i < count; i++) {
     sno: '@increment',
     sname: '@cname',
     'ssex|1': ['男', '女'],
-    Lstart: '@datetime',
-    Lend: '@datetime',
-    Lreason: '@cparagraph',
+    Lstart: '@date',
+    Lend: '@date',
+    Lreason: '@cparagraph(2)',
     Laprover: '@cname'
   }))
 }

@@ -331,6 +331,7 @@ export default {
     ProjectManagerReviewResults,
     HRReviewResults
   },
+
   methods: {
     getList() {
       fetchListDaily().then(response => {
@@ -341,6 +342,7 @@ export default {
   },
   mounted() {
     this.getList()
+
   },
   created() {
     if (this.$storage.get('lastTest1Score') !== null) {

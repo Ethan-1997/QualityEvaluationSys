@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <el-card>
     <div slot="header" class="clearfix">
-      <span style="font-size:25px">违纪管理</span>
+      <span style="font-size:25px">突出表现管理</span>
     </div>
     <div class="filter-container">
       <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
@@ -11,10 +11,6 @@
       </el-select>
       <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
       </el-input>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.status" :placeholder="tableCol.status">
-        <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item">
-        </el-option>
-      </el-select>
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
         </el-option>
@@ -25,11 +21,11 @@
       <upload-excel-component class="filter-item" v-waves @on-selected-file='selected'></upload-excel-component>
     </div>
 
-    <el-table  :key='tableKey' :data="list" border fit highlight-current-row
+    <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column width="100px"  align="center" :label="tableCol.time">
+      <el-table-column align="center" :label="tableCol.time" width="100">
         <template slot-scope="scope">
-          <span >{{scope.row.time}}</span>
+          <span>{{scope.row.time}}</span>
         </template>
       </el-table-column>
       <el-table-column width="80px" align="center" :label="tableCol.sname">
@@ -47,20 +43,16 @@
           <span>{{scope.row.sno}}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="150px" :label="tableCol.title">
+      <el-table-column min-width="150px" :label="tableCol.content">
         <template slot-scope="scope">
-          <el-alert type="error" :closable="false">{{scope.row.title}}</el-alert>
+          <el-alert type="success" :closable="false">{{scope.row.content}}</el-alert>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.status" width="95">
-        <template slot-scope="scope">
-          <el-tag type="danger">{{scope.row.status}}</el-tag>
-        </template>
-      </el-table-column>
+      
      
       <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUptime(scope.row)">{{$t('table.edit')}}</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
           <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.$index)">{{$t('table.delete')}}
           </el-button>
         </template>
@@ -74,7 +66,12 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-       
+        <!-- <el-form-item :label="tableCol[0]" prop="sno">
+          <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
+            <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
+            </el-option>
+          </el-select>
+        </el-form-item> -->
         <el-form-item :label="tableCol.sname" prop="sname">
           <el-input v-model="temp.sname"></el-input>
         </el-form-item>
@@ -88,37 +85,26 @@
         <el-form-item :label="tableCol.sclass" prop="sclass">
           <el-input v-model="temp.sclass"></el-input>
         </el-form-item>
+         <el-form-item :label="tableCol.time" prop="time">
+          <el-date-picker v-model="temp.time"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" placeholder="请选择时间">
+          </el-date-picker>
+        </el-form-item>
         <el-form-item :label="tableCol.title" prop="title">
           <el-input v-model="temp.title"></el-input>
         </el-form-item>
-         <el-form-item :label="tableCol.status" prop="status">
-           <el-select class="filter-item" v-model="temp.status" placeholder="请选择">
-            <el-option v-for="item in  statusOptions" :key="item" :label="item" :value="item">
-            </el-option>
-          </el-select>
-        </el-form-item>
-         <el-form-item :label="tableCol.time" prop="time">
-          <el-date-picker
-            v-model="temp.time"
-            type="datetime"
-            format="yyyy-MM-dd"
-            placeholder="选择日期时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item :label="tableCol.reason" prop="reason">
-          <el-input v-model="temp.reason"></el-input>
-        </el-form-item>
         <el-form-item :label="tableCol.content" prop="content">
-          <el-input v-model="temp.content"
+          <el-input
             type="textarea"
-            :autosize="{ minRows: 2, maxRows: 4}">
+            :autosize="{ minRows: 5, maxRows: 6}"
+            placeholder="请输入内容"
+            v-model="temp.content">
           </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
         <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" @click="uptimeData">{{$t('table.confirm')}}</el-button>
+        <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
       </div>
       
     </el-dialog>
@@ -128,7 +114,7 @@
 </template>
 
 <script>
-import { fetchListBreakRule } from '@/api/breakRole'
+import { createHighlighting, updateHighlighting, fetchList } from '@/api/highlighting'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -150,13 +136,12 @@ export default {
         sname: '姓名',
         ssex: '性别',
         sclass: '班级',
-        title: '备注',
-        time: '时间',
-        reason: '原因',
+        title: '标题',
         content: '内容',
-        status: '处分程度'
+        time: '时间',
+        operator: '操作',
+        order: '排序规则'
       },
-      oldtemp: null,
       tableKey: 0,
       list: null,
       total: null,
@@ -165,13 +150,13 @@ export default {
         page: 1,
         limit: 20,
         sname: undefined,
-        status: undefined,
         order: '+id',
         sclass: undefined
       },
       classOptions: ['101', '102', '103', '104', '105', '106', '107', '108', '109'],
       sexOptions: ['男', '女'],
-      statusOptions: ['警告', '严重警告', '处分', '严重处分'],
+      deptOptions: ['javaweb', '大数据', '前端工程师'],
+
       sortOptions: [{ label: '升序排序', key: '+id' }, { label: '降序排序', key: '-id' }],
 
       showReviewer: false,
@@ -180,37 +165,34 @@ export default {
         sname: undefined,
         ssex: undefined,
         sclass: undefined,
-        time: undefined,
-        reason: undefined,
+        title: undefined,
         content: undefined,
-        status: undefined,
-        titile: undefined
+        time: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        uptime: '编辑',
+        update: '编辑',
         create: '新建'
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
         type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'time', required: true, message: 'timestamp is required', trigger: 'change' }],
+        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
       // sno: undefined,
-      // sname: undefined,
-      // ssex: undefined,
-      // sclass: undefined,
-      // time: undefined,
-      // reason: undefined,
-      // content: undefined,
-      // status: undefined
-      tHeader: ['sno', 'sname', 'ssex', 'sclass', 'time', 'reason', 'content', 'status', 'title']
+      //   sname: undefined,
+      //   ssex: undefined,
+      //   sclass: undefined,
+      //   title: undefined,
+      //   content: undefined,
+      //   time: undefined
+      tHeader: ['sno', 'sname', 'ssex', 'sclass', 'title', 'content', 'time']
     }
   },
   filters: {
@@ -225,12 +207,7 @@ export default {
 
   },
   created() {
-    if (this.$storage.get('breakRuleInit') === true) {
-      console.log(2)
-      this.list = this.$storage.get('breakRuleList')
-    } else {
-      this.getList()
-    }
+    this.getList()
   },
   methods: {
     selected(data) {
@@ -248,18 +225,21 @@ export default {
           message: '操作成功',
           type: 'success'
         })
+        console.log(this.list)
+        console.log(this.tableData)
+        console.log(this.list.length)
         let j, len
         for (j = 0, len = this.tableData.length; j < len; j++) {
           this.list.push(this.tableData[j])
         }
         this.list.concat(this.tableData)
+        console.log(this.list.length)
       }
     },
     getList() {
-      fetchListBreakRule(this.listQuery).then(response => {
+      this.listLoading = true
+      fetchList(this.listQuery).then(response => {
         this.list = response.data.items
-        this.$storage.set('breakRuleInit', true)
-        this.$storage.set('breakRuleList', response.data.items)
         this.total = response.data.total
         this.listLoading = false
       })
@@ -276,18 +256,15 @@ export default {
       this.listQuery.page = val
       this.getList()
     },
-
     resetTemp() {
       this.temp = {
         sno: undefined,
         sname: undefined,
         ssex: undefined,
         sclass: undefined,
-        time: undefined,
-        reason: undefined,
+        title: undefined,
         content: undefined,
-        status: undefined,
-        titile: undefined
+        time: undefined
       }
     },
     handleCreate() {
@@ -295,91 +272,68 @@ export default {
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValitime()
+        this.$refs['dataForm'].clearValidate()
       })
     },
     createData() {
-      if (this.temp.sname === undefined || this.temp.ssex === undefined || this.temp.sclass === undefined || this.temp.time === undefined || this.temp.status === undefined) {
-        this.$notify({
-          title: '失败',
-          message: '请填写完整',
-          duration: 2000
-        })
-      } else {
-        const months = this.temp.time.getMonth() + 1
-        const times = this.temp.time.getFullYear() + '.' + months + '.' + this.temp.time.getDate()
-        this.list.push({
-          sno: '101',
-          sname: this.temp.sname,
-          ssex: this.temp.ssex,
-          sclass: this.temp.sclass,
-          sprofession: this.temp.sprofession,
-          status: this.temp.status,
-          note: this.temp.note,
-          time: times
-        })
-        this.$storage.set('breakRuleList', this.list)
-        this.$notify({
-          title: '成功',
-          message: '创建成功',
-          type: 'success',
-          duration: 2000
-        })
-      }
-    },
-    handleUptime(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.oldtemp = row
-      console.log(this.oldtemp)
-      console.log(this.temp)
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'uptime'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValitime()
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp.author = 'vue-element-admin'
+          createHighlighting(this.temp).then(() => {
+            this.list.unshift(this.temp)
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
       })
     },
-    uptimeData() {
-      const tempData = Object.assign({}, this.temp)
-      const oldtempData = Object.assign({}, this.oldtemp)
-      let times
-      if (tempData.time !== oldtempData.time) {
-        const months = tempData.time.getMonth() + 1
-        times = tempData.time.getFullYear() + '.' + months + '.' + tempData.time.getDate()
-      } else {
-        times = oldtempData.time
-      }
-      for (let i = 0; i < this.list.length; i++) {
-        if (this.list[i].time === oldtempData.time && this.list[i].id === oldtempData.id) {
-          this.list[i].sname = tempData.sname
-          this.list[i].time = times
-          this.list[i].ssex = tempData.ssex
-          this.list[i].sclass = tempData.sclass
-          this.list[i].reason = tempData.reason
-          this.list[i].status = tempData.status // 已到、迟到、请假、未到
-          this.list[i].note = tempData.note
-          this.list[i].content = tempData.content // 已到、迟到、请假、未到
-          this.list[i].title = tempData.title
-          this.$storage.set('breakRuleList', this.list)
-          break
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      console.log(this.temp)
+      this.temp.timestamp = new Date(this.temp.timestamp)
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          updateHighlighting(tempData).then(() => {
+            for (const v of this.list) {
+              if (v.id === this.temp.id) {
+                const index = this.list.indexOf(v)
+                this.list.splice(index, 1, this.temp)
+                break
+              }
+            }
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
         }
-      }
-      this.dialogFormVisible = false
-      this.$notify({
-        title: '成功',
-        message: '更新成功',
-        type: 'success',
-        duration: 2000
       })
     },
     handleDelete(index) {
-      this.$confirm('此操作将永久删除该违纪记录, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.list.splice(index, 1)
-        this.$storage.set('breakRuleList', this.list)
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -392,18 +346,10 @@ export default {
       })
     },
 
-    // sno: undefined,
-    //     sname: undefined,
-    //     ssex: undefined,
-    //     sclass: undefined,
-    //     birth: undefined,
-    //     saddress: undefined,
-    //     sprofession: undefined,
-    //     stime: undefined
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const filterVal = ['sno', 'sname', 'ssex', 'sclass', 'time', 'reason', 'content', 'status', 'title']
+        const filterVal = ['sno', 'sname', 'ssex', 'sclass', 'title', 'content', 'time']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel(this.tHeader, data, 'table-list')
         this.downloadLoading = false

@@ -1,35 +1,50 @@
-import Mock from 'mockjs'
+import { param2Obj } from '@/utils'
+import storage from '@/utils/storage'
+let List = []
 
-const List = []
-const count = 5
-const uploadtime = Mock.mock('@time')
-
-for (let i = 0; i < count; i++) {
-  List.push(Mock.mock({
-    id: i + 1,
-    task: '@ctitle',
-    author: '@cname',
-    date: uploadtime,
-    detail: '@paragraph',
-    'rate|1-20': 20,
-    status: '@boolean'
-  }))
-  List[i].status = List[i].status ? '已提交' : '未提交'
-  if (List[i].status === '已提交') {
-    List[i].rowFileList = [{
-      name: '演示.docx',
-      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
-      status: 'finished'
-    }]
-  } else {
-    List[i].rowFileList = []
-  }
-}
 export default {
-  daliyTask: () => {
-    return List
+  getList: config => {
+    List = storage.get('tasklist', [])
+    const { page = 1, limit = 20, sort, author, status, sclass } = param2Obj(config.url)
+
+    let mockList = List.filter(item => {
+      if (author && item.author.indexOf(author) < 0) return false
+      if (status && item.status !== status) return false
+      if (sclass && item.sclass !== sclass) return false
+      return true
+    })
+
+    if (sort === '-id') {
+      mockList = mockList.reverse()
+    }
+
+    const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+
+    return {
+      total: mockList.length,
+      items: pageList
+    }
+  },
+  createDailyTask: (data) => {
+    List.push(JSON.parse(data.body))
+    storage.set('tasklist', List)
+    return {
+      data: 'success'
+    }
+  },
+  updateDailyTask: (data) => {
+    const temp = JSON.parse(data.body)
+    for (const v of List) {
+      if (v.id === temp.id) {
+        const index = List.indexOf(v)
+        console.log(temp)
+        List.splice(index, 1, temp)
+        break
+      }
+    }
+    storage.set('tasklist', List)
+    return {
+      data: 'success'
+    }
   }
-  // taskUpdata: function(index,detail){
-  //   List[index]=
-  // }
 }
