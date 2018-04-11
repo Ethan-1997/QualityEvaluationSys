@@ -52,7 +52,7 @@
       </el-table-column>
       <el-table-column width="50px"  align="center" :label="tableCol.status">
         <template slot-scope="scope">
-          <span >{{scope.row.status=='draft'?'草稿':'发布'}}</span>
+          <span >{{scope.row.status}}</span>
         </template>
       </el-table-column>
       <el-table-column width="100px" :label="tableCol.author">
@@ -60,8 +60,9 @@
           <span>{{scope.row.author}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
+      <el-table-column align="center" :label="tableCol.operator" width="250" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+          <el-button type="info" size="mini" @click="handledatail(scope.row)">详情</el-button>
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
           <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.$index)">{{$t('table.delete')}}
           </el-button>
@@ -336,9 +337,8 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp.id = parseInt(Math.random() * 1) + 1029 // mock a id
           createWork(this.temp).then(() => {
-            this.list.unshift(this.temp)
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -349,6 +349,20 @@ export default {
           })
         }
       })
+      this.list.push({
+        id: this.temp.id,
+        title: this.temp.title,
+        startTime: this.temp.startTime,
+        endTime: this.temp.endTime,
+        sclass: this.temp.sclass,
+        status: this.temp.status,
+        author: this.temp.author
+      })
+      this.$storage.set('worklist', this.list)
+    },
+    handledatail(row) {
+      this.$storage.set('workCol', row)
+      this.$router.push({ path: '/workdetail/index' })
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj

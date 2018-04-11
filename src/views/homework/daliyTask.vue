@@ -7,22 +7,22 @@
           <div slot="header" class="clearfix">
             <span><svg-icon icon-class="form" />&nbsp;每日任务</span>
           </div>
-           <el-table :data="taskData" style="width:94%;margin:0px auto;font-size:16px" :row-class-name="tableRowClassName" ref="daliyTask">
-                <el-table-column align="center" label="序号" width="65"  :index="indexMethod">  
+           <el-table :data="taskData" style="width:94%;margin:0px auto;font-size:16px" :row-class-name="tableRowClassName">
+                <el-table-column align="center" label="序号" width="65"  :index="indexMethod" prop="id">  
                   <template slot-scope="scope">
                       <span> {{scope.row.id}}</span>
                   </template> 
                 </el-table-column>
-                <el-table-column label="任务">
+                <el-table-column label="任务" prop="title">
                   <template slot-scope="scope">
-                      <span>{{scope.row.task}}</span>&nbsp;
+                      <span>{{scope.row.title}}</span>&nbsp;
                       <el-button type="primary" plain size="mini" @click="openTaskDetail(scope.row)">{{'详情'}}</el-button>
                   </template> 
                 </el-table-column>
-                <el-table-column label="截止时间" width="200" align="center"> 
+                <el-table-column label="截止时间" width="200" align="center" prop="endTime"> 
                   <template slot-scope="scope">
                     <i class="el-icon-time"></i>
-                      <span>{{scope.row.date}}</span>
+                      <span>{{scope.row.endTime}}</span>
                   </template>      
                 </el-table-column>
                 <el-table-column  prop="status" label="提交状态" width="120" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
@@ -81,12 +81,12 @@
   </div>
 </template>
 <script>
-import { daliyTask } from '@/api/daliyTask'
+import { fetchList } from '@/api/work'
 export default {
 
   data() {
     return {
-      taskData: null,
+      taskData: [],
       activeNames: ['1'],
       temp: null,
       fileList: [],
@@ -99,12 +99,19 @@ export default {
     }
   },
   created() {
-    this.getTaskData()
+    if (this.$storage.get('worklist') !== null) {
+      this.taskData = this.$storage.get('worklist')
+      console.log(2)
+      console.log(this.$storage.get('worklist'))
+    } else {
+      this.getList()
+    }
   },
   methods: {
-    getTaskData() {
-      daliyTask().then(response => {
-        this.taskData = response.data
+    getList() {
+      fetchList().then(Response => {
+        this.taskData = Response.data.taskData
+        console.log(this.taskData)
       })
     },
     filterTaskTag(value, row) {
@@ -120,10 +127,10 @@ export default {
 
     openTaskDetail(row) {
       this.temp = Object.assign({}, row) // copy obj
-      this.taskTitle = this.temp.task
+      this.taskTitle = this.temp.title
       this.taskAuthor = this.temp.author
-      this.taskFinishedTime = this.temp.date
-      this.taskDetailText = this.temp.detail
+      this.taskFinishedTime = this.temp.endTime
+      this.taskDetailText = this.temp.content
       this.taskDetail = true
     },
     closeTaskDetail() {

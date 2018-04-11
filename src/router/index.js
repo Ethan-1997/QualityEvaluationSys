@@ -665,5 +665,14 @@ export const asyncRouterMap = [
       meta: { title: '日志管理（待定）', icon: 'dashboard', noCache: true }
     }]
   },
+  {
+    path: '/workdetail',
+    component: Layout,
+    hidden: true,
+    meta: {
+      roles: ['teacher']
+    },
+    children: [{ path: 'index', component: _import('studentManager/workManager/workdetail'), name: 'workdetail', meta: { title: '作业详情', icon: '2' }}]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
