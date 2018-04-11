@@ -298,7 +298,7 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'votw', component: _import('studentTeam/index'), name: 'student-team', meta: { title: '点评小组投票', icon: 'vote' }},
-      { path: 'studentsReview', component: _import('review/teacherReview'), name: 'groupReview', meta: { title: '学生小组点评', icon: 'review', noCache: true }
+      { path: 'studentsReview', component: _import('review/studentGroupReview'), name: 'groupReview', meta: { title: '学生小组点评', icon: 'review', noCache: true }
       }
     ]
   },
