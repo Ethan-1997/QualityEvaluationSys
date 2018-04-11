@@ -131,11 +131,6 @@ export default {
     play() {
       console.log('play callback')
     },
-    switchHandle() {
-      this.player.switchVideo({
-        url: 'http://static.smartisanos.cn/common/video/video-jgpro.mp4'
-      })
-    },
     getStudentData() {
       getStudentData(this.studentQuery).then(response => {
         this.studentFormData = response.data

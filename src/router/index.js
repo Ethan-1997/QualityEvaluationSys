@@ -522,12 +522,12 @@ export const asyncRouterMap = [
     children: [{ path: 'index', component: _import('studentManager/leave/leave'), name: 'leave', meta: { title: '请假登记', icon: 'leave' }}]
   },
   {
-    path: '/technologyReview',
+    path: '/projectManagerReview',
     component: Layout,
     meta: {
       roles: ['teacher']
     },
-    children: [{ path: 'index', component: _import('review/technologyReview'), name: 'technologyReview', meta: { title: '技术经理面试', icon: 'Interview' }}]
+    children: [{ path: 'index', component: _import('review/projectManagerReview'), name: 'technologyReview', meta: { title: '项目经理面试', icon: 'Interview' }}]
   },
 
   {
