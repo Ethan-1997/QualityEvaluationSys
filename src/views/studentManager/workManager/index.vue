@@ -60,8 +60,9 @@
           <span>{{scope.row.author}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
+      <el-table-column align="center" :label="tableCol.operator" width="250" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+          <el-button type="info" size="mini" @click="handledatail(row)">详情</el-button>
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
           <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.$index)">{{$t('table.delete')}}
           </el-button>
@@ -349,6 +350,9 @@ export default {
           })
         }
       })
+    },
+    handledatail(row) {
+      this.$router.push({ path: '/workdetail/index' })
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
