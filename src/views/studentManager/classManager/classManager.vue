@@ -23,44 +23,29 @@
 
     <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.sno" width="65">
+      <el-table-column align="center" :label="tableCol.id" width="65">
         <template slot-scope="scope">
-          <span>{{scope.row.sno}}</span>
+          <span>{{scope.row.id}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" align="center" :label="tableCol.sname">
+      <el-table-column min-width="100px" align="center" :label="tableCol.name">
         <template slot-scope="scope">
-          <span>{{scope.row.sname }}</span>
+          <span>{{scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="50px" :label="tableCol.ssex">
+      <el-table-column width="100px" :label="tableCol.profession">
         <template slot-scope="scope">
-         <span>{{scope.row.ssex}}</span>
+         <span>{{scope.row.profession}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="50px" align="center" :label="tableCol.sclass">
+      <el-table-column width="100px" align="center" :label="tableCol.tname">
         <template slot-scope="scope">
-          <span>{{scope.row.sclass}}</span>
+          <span>{{scope.row.tname}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="110px"  align="center" :label="tableCol.birth">
+      <el-table-column width="100px" align="center" :label="tableCol.time">
         <template slot-scope="scope">
-          <span >{{scope.row.birth}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="150px" :label="tableCol.saddress">
-        <template slot-scope="scope">
-          <span>{{scope.row.saddress}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" :label="tableCol.sprofession" width="95">
-        <template slot-scope="scope">
-          <span>{{scope.row.sprofession}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" :label="tableCol.stime" width="150">
-        <template slot-scope="scope">
-          <el-tag>{{scope.row.stime}}</el-tag>
+          <span>{{scope.row.time}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
@@ -85,34 +70,35 @@
             </el-option>
           </el-select>
         </el-form-item> -->
-        <el-form-item :label="tableCol.sname" prop="sname">
-          <el-input v-model="temp.sname"></el-input>
+        <el-form-item :label="tableCol.name" prop="name">
+          <el-input v-model="temp.name"></el-input>
         </el-form-item>
        
-        <el-form-item :label="tableCol.ssex" prop="sex">
-           <el-select class="filter-item" v-model="temp.ssex" placeholder="请选择">
-            <el-option v-for="item in  sexOptions" :key="item" :label="item" :value="item">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="tableCol.sclass" prop="sclass">
-          <el-input v-model="temp.sclass"></el-input>
-        </el-form-item>
-         <el-form-item :label="tableCol.birth" prop="birth">
-          <el-date-picker v-model="temp.birth"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" placeholder="请选择生日">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item :label="tableCol.saddress" prop="saddress">
-          <el-input v-model="temp.saddress"></el-input>
-        </el-form-item>
-         <el-form-item :label="tableCol.sprofession" prop="sprofession">
-           <el-select class="filter-item" v-model="temp.sprofession" placeholder="请选择">
+        <el-form-item :label="tableCol.profession" prop="profession">
+           <el-select class="filter-item" v-model="temp.profession" placeholder="请选择">
             <el-option v-for="item in  deptOptions" :key="item" :label="item" :value="item">
             </el-option>
           </el-select>
         </el-form-item>
-         <el-form-item :label="tableCol.stime" prop="stime">
-          <el-input v-model="temp.stime"></el-input>
+          
+        <el-form-item :label="tableCol.tname" prop="tname">
+          <el-autocomplete
+            v-model="temp.tname"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入内容"
+            :trigger-on-focus="true"
+            @select="handleSelect"
+          ></el-autocomplete>
+        </el-form-item>
+        
+         <el-form-item :label="tableCol.time" prop="time">
+            <el-date-picker
+              v-model="temp.time"
+              type="date"
+              format="yyyy"
+              value-format="yyyy"
+              placeholder="选择日期">
+            </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -128,8 +114,8 @@
 </template>
 
 <script>
-import { fetchPv, createArticle, updateArticle } from '@/api/article'
-import { fetchList } from '@/api/student'
+import { createClass, updateClass, fetchList } from '@/api/class'
+
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -147,16 +133,12 @@ export default {
     return {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
-        sno: '学号',
-        sname: '姓名',
-        ssex: '性别',
-        sclass: '班级',
-        birth: '生日',
-        saddress: '地址',
-        sprofession: '专业',
-        stime: '入学时间',
-        operator: '操作',
-        order: '排序规则'
+        id: '编号',
+        name: '班级名称',
+        profession: '班级专业',
+        tname: '班主任',
+        time: '学年',
+        operator: '操作'
       },
       tableKey: 0,
       list: null,
@@ -178,14 +160,11 @@ export default {
 
       showReviewer: false,
       temp: {
-        sno: undefined,
-        sname: undefined,
-        ssex: undefined,
-        sclass: undefined,
-        birth: undefined,
-        saddress: undefined,
-        sprofession: undefined,
-        stime: undefined
+        id: undefined,
+        name: undefined,
+        profession: undefined,
+        tname: undefined,
+        time: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -203,7 +182,8 @@ export default {
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
-      tHeader: ['sno', 'sname', 'ssex', 'sclass', 'birth', 'saddress', 'sprofession', 'stime']
+
+      tHeader: ['id', 'name', 'profession', 'tname', 'time']
     }
   },
   filters: {
@@ -221,6 +201,26 @@ export default {
     this.getList()
   },
   methods: {
+    querySearch(queryString, cb) {
+      const teacherlist = this.$storage.get('teacherlist', [])
+      const teachers = []
+      teacherlist.forEach(element => {
+        teachers.push({
+          'value': element.tname
+        })
+      })
+      var results = queryString ? teachers.filter(this.createFilter(queryString)) : teachers
+      // 调用 callback 返回建议列表的数据
+      cb(results)
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      }
+    },
+    handleSelect(item) {
+      console.log(item)
+    },
     selected(data) {
       this.tableData = data.results
       this.tableHeader = data.header
@@ -251,6 +251,7 @@ export default {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
+        console.log(this.list)
         this.total = response.data.total
         this.listLoading = false
       })
@@ -269,14 +270,11 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        sno: undefined,
-        sname: undefined,
-        ssex: undefined,
-        sclass: undefined,
-        birth: undefined,
-        saddress: undefined,
-        sprofession: undefined,
-        stime: undefined
+        id: undefined,
+        name: undefined,
+        profession: undefined,
+        tname: undefined,
+        time: undefined
       }
     },
     handleCreate() {
@@ -292,7 +290,7 @@ export default {
         if (valid) {
           this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
           this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
+          createClass(this.temp).then(() => {
             this.list.unshift(this.temp)
             this.dialogFormVisible = false
             this.$notify({
@@ -320,7 +318,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
+          updateClass(tempData).then(() => {
             for (const v of this.list) {
               if (v.id === this.temp.id) {
                 const index = this.list.indexOf(v)
@@ -346,6 +344,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.list.splice(index, 1)
+        this.$storage.set('classlist', [])
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -355,12 +354,6 @@ export default {
           type: 'info',
           message: '已取消删除'
         })
-      })
-    },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
       })
     },
 
@@ -375,7 +368,7 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const filterVal = ['sno', 'sname', 'ssex', 'sclass', 'birth', 'saddress', 'sprofession', 'stime']
+        const filterVal = ['id', 'name', 'profession', 'tname', 'time']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel(this.tHeader, data, 'table-list')
         this.downloadLoading = false

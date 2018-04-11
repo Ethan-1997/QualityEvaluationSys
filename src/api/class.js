@@ -1,25 +1,25 @@
 import request from '@/utils/request'
 
-export function getStudentData(query) {
+export function fetchList(query) {
   return request({
-    url: '/student/list',
+    url: '/class/list',
     method: 'get',
     params: query
   })
 }
-export function createStudent(data) {
+
+export function createClass(data) {
   return request({
-    url: '/student/create',
+    url: '/class/create',
     method: 'post',
     data
   })
 }
 
-export function updateStudent(data) {
+export function updateClass(data) {
   return request({
-    url: '/student/update',
+    url: '/class/update',
     method: 'post',
     data
   })
 }
-

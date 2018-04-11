@@ -96,7 +96,13 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="tableCol.sclass" prop="sclass">
-          <el-input v-model="temp.sclass"></el-input>
+           <el-autocomplete
+            v-model="temp.sclass"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入内容"
+            :trigger-on-focus="true"
+            @select="handleSelect"
+          ></el-autocomplete>
         </el-form-item>
          <el-form-item :label="tableCol.birth" prop="birth">
           <el-date-picker v-model="temp.birth"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" placeholder="请选择生日">
@@ -112,7 +118,9 @@
           </el-select>
         </el-form-item>
          <el-form-item :label="tableCol.stime" prop="stime">
-          <el-input v-model="temp.stime"></el-input>
+           <el-date-picker v-model="temp.stime" format="yyyy年" value-format="yyyy">
+             
+           </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -128,8 +136,7 @@
 </template>
 
 <script>
-import { fetchPv, createArticle, updateArticle } from '@/api/article'
-import { fetchList } from '@/api/student'
+import { getStudentData, createStudent, updateStudent } from '@/api/student'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -221,6 +228,26 @@ export default {
     this.getList()
   },
   methods: {
+    querySearch(queryString, cb) {
+      const classlist = this.$storage.get('classlist', [])
+      const classes = []
+      classlist.forEach(element => {
+        classes.push({
+          'value': element.name
+        })
+      })
+      var results = queryString ? classes.filter(this.createFilter(queryString)) : classes
+      // 调用 callback 返回建议列表的数据
+      cb(results)
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      }
+    },
+    handleSelect(item) {
+      console.log(item)
+    },
     selected(data) {
       this.tableData = data.results
       this.tableHeader = data.header
@@ -249,7 +276,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      getStudentData(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
@@ -290,9 +317,10 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp.sno = parseInt(Math.random() * 100) + 1024 // mock a id
           this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
+          createStudent(this.temp).then(() => {
+            console.log('in')
             this.list.unshift(this.temp)
             this.dialogFormVisible = false
             this.$notify({
@@ -320,7 +348,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
+          updateStudent(tempData).then(() => {
             for (const v of this.list) {
               if (v.id === this.temp.id) {
                 const index = this.list.indexOf(v)
@@ -346,6 +374,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.list.splice(index, 1)
+        this.$storage.set('studentlist', this.list)
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -357,13 +386,6 @@ export default {
         })
       })
     },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
-
     // sno: undefined,
     //     sname: undefined,
     //     ssex: undefined,

@@ -18,6 +18,7 @@ import daliyTask from './daliyTask'
 import informationAPI from './information'
 import student from './student'
 import projectDefenseAPI from './projectDefense'
+import classAPI from './class'
 
 // 伟哥
 import characterAPI from './character'
@@ -30,9 +31,16 @@ import dailysummaryAPI from './dailysummary'
 
 import teacherinformationAPI from './teacherinformation'
 
+// 学生
 Mock.mock(/\/student\/list/, 'get', student.getList)
+Mock.mock(/\/student\/create/, 'post', student.createStudent)
+Mock.mock(/\/student\/update/, 'post', student.updateStudent)
 
-// 点评页面学生信息
+// 班级
+
+Mock.mock(/\/class\/list/, 'get', classAPI.getList)
+Mock.mock(/\/class\/create/, 'post', classAPI.createClass)
+Mock.mock(/\/class\/update/, 'post', classAPI.updateClass)
 
 // 日常任务
 Mock.mock(/\/daliyTask\/daliyTask/, 'post', daliyTask.daliyTask)
@@ -118,12 +126,6 @@ Mock.mock(/\/leave\/detail/, 'get', leaveAPI.getLeave)
 Mock.mock(/\/leave\/pv/, 'get', leaveAPI.getPv)
 Mock.mock(/\/leave\/create/, 'post', leaveAPI.createLeave)
 Mock.mock(/\/leave\/update/, 'post', leaveAPI.updateLeave)
-
-// 学生相关
-Mock.mock(/\/student\/list/, 'get', studentAPI.getList)
-Mock.mock(/\/student\/detail/, 'get', studentAPI.getArticle)
-Mock.mock(/\/student\/create/, 'post', studentAPI.createArticle)
-Mock.mock(/\/student\/update/, 'post', studentAPI.updateArticle)
 
 // 出勤相关
 Mock.mock(/\/participation\/list/, 'get', participationAPI.getList)

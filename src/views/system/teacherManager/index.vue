@@ -264,7 +264,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp.tno = parseInt(Math.random() * 100) + 1024 // mock a id
           this.temp.author = 'vue-element-admin'
           createTeacher(this.temp).then(() => {
             this.list.unshift(this.temp)
@@ -320,6 +320,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.list.splice(index, 1)
+        this.$storage.set('teacherlist', this.list)
         this.$message({
           type: 'success',
           message: '删除成功!'
