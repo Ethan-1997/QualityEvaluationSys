@@ -110,7 +110,7 @@ export default {
         ]
       },
       player: null,
-      studentFormData: [],
+      studentFormData: [{ Simage: null }],
       index: null,
       loading: true,
       activeNames: ['1'],
@@ -124,17 +124,14 @@ export default {
     this.getStudentData()
     this.index = 0
   },
-  mounted() {
-    this.player = this.$refs.player.dp
-  },
   methods: {
     play() {
       console.log('play callback')
     },
     getStudentData() {
       getStudentData(this.studentQuery).then(response => {
-        this.studentFormData = response.data
-        console.log(response.data)
+        this.studentFormData = response.data.items
+        console.log(response.data.items)
       })
     },
     setCarouselItem(buttonIndex) {

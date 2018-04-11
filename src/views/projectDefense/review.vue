@@ -110,7 +110,7 @@ export default {
         ]
       },
       player: null,
-      studentFormData: [],
+      studentFormData: [{ Simage: null }],
       index: null,
       loading: true,
       activeNames: ['1'],
@@ -138,7 +138,7 @@ export default {
     },
     getStudentData() {
       getStudentData(this.studentQuery).then(response => {
-        this.studentFormData = response.data
+        this.studentFormData = response.data.items
         console.log(response.data)
       })
     },

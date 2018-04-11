@@ -487,14 +487,7 @@ export const asyncRouterMap = [
       }
     }]
   },
-  {
-    path: '/participation',
-    component: Layout,
-    meta: {
-      roles: ['teacher']
-    },
-    children: [{ path: 'index', component: _import('studentManager/participation/participation'), name: 'participation', meta: { title: '出勤管理', icon: '1' }}]
-  },
+
   {
     path: '/announcementBrowsing',
 
