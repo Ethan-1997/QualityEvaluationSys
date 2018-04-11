@@ -1,25 +1,79 @@
 import { param2Obj } from '@/utils'
 import storage from '@/utils/storage'
+
+const workList = [
+  {
+    id: 1061,
+    title: 'vue.js第一讲',
+    startTime: '2018-09-01',
+    endTime: '2018-09-05',
+    sclass: 'vue',
+    status: '发布',
+    author: '曹老师'
+  },
+  {
+    id: 1062,
+    title: 'vue.js第二讲',
+    startTime: '2018-09-05',
+    endTime: '2018-09-08',
+    sclass: 'vue',
+    status: '发布',
+    author: '曹老师'
+  },
+  {
+    id: 1063,
+    title: 'vue.js第三讲',
+    startTime: '2018-09-5',
+    endTime: '2018-09-10',
+    sclass: 'vue',
+    status: '发布',
+    author: '曹老师'
+  },
+  {
+    id: 1064,
+    title: 'vue.js第四讲',
+    startTime: '2018-09-10',
+    endTime: '2018-09-15',
+    sclass: 'vue',
+    status: '发布',
+    author: '王老师'
+  },
+  {
+    id: 1065,
+    title: 'vue.js第五讲',
+    startTime: '2018-09-15',
+    endTime: '2018-09-20',
+    sclass: 'vue',
+    status: '发布',
+    author: '应老师'
+  }
+]
 let List = []
 
 export default {
   getList: config => {
-    List = storage.get('worklist', [])
-    const { page = 1, limit = 20, sort, author, status, sclass } = param2Obj(config.url)
-
+    const { page = 1, limit = 20, sort, author, sclass, status } = param2Obj(config.url)
+    const workTemp = storage.get('workTemp')
+    if (workTemp !== 1) {
+      storage.set('worklist', workList)
+      storage.set('workTemp', 1)
+    }
+    List = storage.get('worklist')
+    console.log(List)
     let mockList = List.filter(item => {
+      console.log(List)
       if (author && item.author.indexOf(author) < 0) return false
-      if (status && item.status !== status) return false
       if (sclass && item.sclass !== sclass) return false
+      if (status && item.status !== status) return false
       return true
     })
-
+    console.log(mockList)
     if (sort === '-id') {
       mockList = mockList.reverse()
     }
 
     const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
-
+    console.log(pageList)
     return {
       total: mockList.length,
       items: pageList
@@ -48,19 +102,22 @@ export default {
       data: 'success'
     }
   },
-  updateWork: (data) => {
-    const temp = JSON.parse(data.body)
-    for (const v of List) {
-      if (v.id === temp.id) {
-        const index = List.indexOf(v)
-        console.log(temp)
-        List.splice(index, 1, temp)
-        break
-      }
-    }
-    storage.set('worklist', List)
-    return {
-      data: 'success'
-    }
-  }
+  updateWork: () => ({
+    data: 'success'
+  })
+  // updateWork: (data) => {
+  //   const temp = JSON.parse(data.body)
+  //   for (const v of List) {
+  //     if (v.id === temp.id) {
+  //       const index = List.indexOf(v)
+  //       console.log(temp)
+  //       List.splice(index, 1, temp)
+  //       break
+  //     }
+  //   }
+  //   storage.set('worklist', List)
+  //   return {
+  //     data: 'success'
+  //   }
+  // }
 }
