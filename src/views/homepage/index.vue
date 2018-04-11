@@ -189,6 +189,7 @@
     import BarChart from './components/BarChart'
     import { fetchListDaily } from '@/api/participation'
     import { fetchListBreakRule } from '@/api/breakRole'
+    import { fetchListGreat } from '@/api/otherImportant'
     export default {
     
       data() {
@@ -350,17 +351,17 @@
           })
         },
         getListGreat() {
-          fetchListBreakRule(this.listQuery).then(response => {
+          fetchListGreat(this.listQuery).then(response => {
             this.greatList = response.data.items
             const length = this.greatList.length
-            this.breakRuleData = []
+            this.bigThingData = []
             if (length > 5) {
               for (let i = 1; i <= 5; i++) {
-                this.breakRuleData[i - 1] = this.greatList[length - i]
+                this.bigThingData[i - 1] = this.greatList[length - i]
               }
             } else {
               for (let i = 1; i <= length; i++) {
-                this.breakRuleData[i - 1] = this.greatList[length - i]
+                this.bigThingData[i - 1] = this.greatList[length - i]
               }
             }
           })
