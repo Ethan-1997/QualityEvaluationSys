@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     goToDeatil(row) {
-      this.$router.push('/teacherReview/index')
+      this.$router.push({ name: 'finalTeacherReview' })
     }
   }
 }
