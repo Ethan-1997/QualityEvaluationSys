@@ -465,12 +465,19 @@ export const asyncRouterMap = [
     }]
   },
   {
-    path: '/participation',
+    path: '/dailyPerformance',
     component: Layout,
     meta: {
+      title: '学生日常管理',
+      icon: 'daliy',
       roles: ['teacher']
     },
-    children: [{ path: 'index', component: _import('studentManager/participation/participation'), name: 'participation', meta: { title: '出勤管理', icon: '1' }}]
+    children: [
+      { path: 'participation', component: _import('studentManager/participation/participation'), name: 'participation', meta: { title: '出勤管理', icon: 'late' }},
+      { path: 'breakTheRule', component: _import('studentManager/breakTheRule/breakTheRule'), name: 'breakTheRule', meta: { title: '违纪管理', icon: 'danger' }},
+      { path: 'highlighting', component: _import('studentManager/highlighting/highlighting'), name: 'highlighting', meta: { title: '突出表现', icon: 'good' }},
+      { path: 'otherImportant', component: _import('studentManager/otherImportant/otherImportant'), name: 'otherImportant', meta: { title: '重大事项管理', icon: 'warning' }}
+    ]
   },
   {
     path: '/other',
@@ -498,23 +505,6 @@ export const asyncRouterMap = [
       roles: ['teacher']
     },
     children: [{ path: 'index', component: _import('review/technologyReview'), name: 'technologyReview', meta: { title: '技术经理面试', icon: 'Interview' }}]
-  },
-
-  {
-    path: '/breakTheRule',
-    component: Layout,
-    meta: {
-      roles: ['teacher']
-    },
-    children: [{ path: 'index', component: _import('studentManager/breakTheRule/breakTheRule'), name: 'breakTheRule', meta: { title: '违纪管理', icon: 'breakheart' }}]
-  },
-  {
-    path: '/otherImportant',
-    component: Layout,
-    meta: {
-      roles: ['teacher']
-    },
-    children: [{ path: 'index', component: _import('studentManager/otherImportant/otherImportant'), name: 'otherImportant', meta: { title: '重大事项管理', icon: 'daily19' }}]
   },
   {
     path: '/teacherinformation',

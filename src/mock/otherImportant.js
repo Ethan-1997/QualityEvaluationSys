@@ -12,7 +12,7 @@ for (let i = 0; i < count; i++) {
     sclass: '10' + Mock.Random.integer(1, 9),
     title: '@ctitle',
     content: '@cparagraph',
-    time: '@datetime'
+    time: '@date'
   }))
 }
 

@@ -12,7 +12,7 @@ for (let i = 0; i < count; i++) {
     sno: '@increment',
     sname: '@cname',
     'ssex|1': ['男', '女'],
-    time: '@datetime',
+    time: '@date',
     reason: '@cparagraph',
     'status|1': ['警告', '严重警告', '处分', '严重处分']
   }))
