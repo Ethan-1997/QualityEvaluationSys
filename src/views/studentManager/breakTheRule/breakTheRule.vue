@@ -25,7 +25,7 @@
       <upload-excel-component class="filter-item" v-waves @on-selected-file='selected'></upload-excel-component>
     </div>
 
-    <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
+    <el-table  :key='tableKey' :data="list" border fit highlight-current-row
       style="width: 100%">
       <el-table-column width="100px"  align="center" :label="tableCol.time">
         <template slot-scope="scope">
@@ -101,6 +101,7 @@
           <el-date-picker
             v-model="temp.time"
             type="datetime"
+            format="yyyy-MM-dd"
             placeholder="选择日期时间">
           </el-date-picker>
         </el-form-item>
@@ -127,8 +128,7 @@
 </template>
 
 <script>
-import { createBreakRole, updateBreakRole } from '@/api/breakRole'
-import { fetchList } from '@/api/breakRole'
+import { fetchListBreakRule } from '@/api/breakRole'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -150,12 +150,13 @@ export default {
         sname: '姓名',
         ssex: '性别',
         sclass: '班级',
-        title: '标题',
+        title: '备注',
         time: '时间',
         reason: '原因',
         content: '内容',
         status: '处分程度'
       },
+      oldtemp: null,
       tableKey: 0,
       list: null,
       total: null,
@@ -224,7 +225,12 @@ export default {
 
   },
   created() {
-    this.getList()
+    if (this.$storage.get('breakRuleInit') === true) {
+      console.log(2)
+      this.list = this.$storage.get('breakRuleList')
+    } else {
+      this.getList()
+    }
   },
   methods: {
     selected(data) {
@@ -250,9 +256,10 @@ export default {
       }
     },
     getList() {
-      this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchListBreakRule(this.listQuery).then(response => {
         this.list = response.data.items
+        this.$storage.set('breakRuleInit', true)
+        this.$storage.set('breakRuleList', response.data.items)
         this.total = response.data.total
         this.listLoading = false
       })
@@ -292,25 +299,38 @@ export default {
       })
     },
     createData() {
-      this.$refs['dataForm'].valitime((valid) => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createBreakRole(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
+      if (this.temp.sname === undefined || this.temp.ssex === undefined || this.temp.sclass === undefined || this.temp.time === undefined || this.temp.status === undefined) {
+        this.$notify({
+          title: '失败',
+          message: '请填写完整',
+          duration: 2000
+        })
+      } else {
+        const months = this.temp.time.getMonth() + 1
+        const times = this.temp.time.getFullYear() + '.' + months + '.' + this.temp.time.getDate()
+        this.list.push({
+          sno: '101',
+          sname: this.temp.sname,
+          ssex: this.temp.ssex,
+          sclass: this.temp.sclass,
+          sprofession: this.temp.sprofession,
+          status: this.temp.status,
+          note: this.temp.note,
+          time: times
+        })
+        this.$storage.set('breakRuleList', this.list)
+        this.$notify({
+          title: '成功',
+          message: '创建成功',
+          type: 'success',
+          duration: 2000
+        })
+      }
     },
     handleUptime(row) {
       this.temp = Object.assign({}, row) // copy obj
+      this.oldtemp = row
+      console.log(this.oldtemp)
       console.log(this.temp)
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'uptime'
@@ -320,27 +340,36 @@ export default {
       })
     },
     uptimeData() {
-      this.$refs['dataForm'].valitime((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateBreakRole(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
+      const tempData = Object.assign({}, this.temp)
+      const oldtempData = Object.assign({}, this.oldtemp)
+      let times
+      if (tempData.time !== oldtempData.time) {
+        const months = tempData.time.getMonth() + 1
+        times = tempData.time.getFullYear() + '.' + months + '.' + tempData.time.getDate()
+      } else {
+        times = oldtempData.time
+      }
+      for (let i = 0; i < this.list.length; i++) {
+        if (this.list[i].time === oldtempData.time && this.list[i].id === oldtempData.id) {
+          this.list[i].sname = tempData.sname
+          this.list[i].time = times
+          this.list[i].ssex = tempData.ssex
+          this.list[i].sclass = tempData.sclass
+          this.list[i].reason = tempData.reason
+          this.list[i].status = tempData.status // 已到、迟到、请假、未到
+          this.list[i].note = tempData.note
+          this.list[i].content = tempData.content // 已到、迟到、请假、未到
+          this.list[i].title = tempData.title
+          this.$storage.set('breakRuleList', this.list)
+          break
         }
+      }
+      this.dialogFormVisible = false
+      this.$notify({
+        title: '成功',
+        message: '更新成功',
+        type: 'success',
+        duration: 2000
       })
     },
     handleDelete(index) {
@@ -350,6 +379,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.list.splice(index, 1)
+        this.$storage.set('breakRuleList', this.list)
         this.$message({
           type: 'success',
           message: '删除成功!'
