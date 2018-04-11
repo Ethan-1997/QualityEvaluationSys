@@ -1,5 +1,9 @@
 <template>
-  <div class="app-container calendar-list-container">
+  <div class="dashboard-editor-container">
+    <el-card>
+      <div slot="header" class="clearfix">
+        <span style="font-size:25px">系统公告</span>
+      </div>
     <!-- <div class="filter-container">
       <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.aname" v-model="listQuery.atitle">
       </el-input>
@@ -78,7 +82,7 @@
       
     </el-dialog>
 
-
+    </el-card>
   </div>
 </template>
 
@@ -286,7 +290,7 @@ export default {
       })
     },
     handleDelete(index) {
-      this.$confirm('此操作将永久删除用户, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该公告, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -333,3 +337,10 @@ export default {
   }
 }
 </script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.dashboard-editor-container {
+  padding: 32px;
+  background-color: rgb(240, 242, 245);
+}
+</style>

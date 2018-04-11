@@ -7,7 +7,7 @@
                     <el-card>
                         <div slot="header" class="clearfix">
                             <span><svg-icon icon-class="table" />&nbsp;系统公告</span>
-                            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+                            <el-button style="float: right; padding: 3px 0" type="text" @click="goToAnnocument">更多</el-button>
                         </div>
                         <el-table :data="announcementData" style="width: 100%"  >
                             <el-table-column fit prop="atitle" label="公告">
@@ -54,36 +54,46 @@
                     <el-card>
                         <div slot="header" class="clearfix">
                             <span><svg-icon icon-class="example" />&nbsp;日常表现</span>
-                            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+                            <el-button style="float: right; padding: 3px 0" type="text" @click="goToDaliyReport">更多</el-button>
                         </div>
                         <el-tabs tab-position="left" style="height: 264px;"><!-- tip:静态数据 -->
                             <el-tab-pane label="日常出勤">
                                 <div style="padding: 4px 0">
-                                    <el-alert title="已到" type="success" show-icon :closable="false"> 2018-01-26
+                                    <el-alert :title="firstDaily.status" 
+                                    :type="firstDaily.status | statusFilter"
+                                    show-icon :closable="false"> {{firstDaily.time}}
                                     </el-alert>
                                 </div>
                                 <div style="padding: 4px 0">
-                                    <el-alert title="迟到" type="warning" show-icon :closable="false"> 2018-01-25
+                                    <el-alert :title="secondDaily.status"
+                                      :type="secondDaily.status | statusFilter" 
+                                      show-icon :closable="false"> {{secondDaily.time}}
                                     </el-alert>
                                 </div>
                                 <div style="padding: 4px 0">
-                                    <el-alert title="请假" type="info" show-icon :closable="false"> 2018-01-24
+                                    <el-alert :title="thirdDaily.status"
+                                      :type="thirdDaily.status | statusFilter" 
+                                      show-icon :closable="false"> {{thirdDaily.time}}
                                     </el-alert>
                                 </div>
                                 <div style="padding: 4px 0">
-                                    <el-alert title="未到" type="error" show-icon :closable="false"> 2018-01-23
+                                    <el-alert :title="fourthDaily.status"
+                                      :type="fourthDaily.status | statusFilter" 
+                                      show-icon :closable="false"> {{fourthDaily.time}}
                                     </el-alert>
                                 </div>
                                 <div style="padding: 4px 0">
-                                    <el-alert title="已到" type="success" show-icon :closable="false"> 2018-01-22
+                                    <el-alert :title="fifthDaily.status"
+                                      :type="fifthDaily.status | statusFilter" 
+                                      show-icon :closable="false"> {{fifthDaily.time}}
                                     </el-alert>
                                 </div>
                             </el-tab-pane>
                             <el-tab-pane label="违纪情况">
                                 <template>
                                         <el-table :data="breakRuleData" style="width:100%" :row-class-name="breakRuleTable">
-                                            <el-table-column prop="item" label="违纪情况" > </el-table-column>
-                                            <el-table-column prop="date" label="日期" width="100" align="center"> </el-table-column>
+                                            <el-table-column prop="status" label="违纪情况" > </el-table-column>
+                                            <el-table-column prop="time" label="日期" width="100" align="center"> </el-table-column>
                                         </el-table>
                                 </template>
                             </el-tab-pane>
@@ -98,8 +108,8 @@
                             <el-tab-pane label="重大事项">
                                 <template>
                                         <el-table :data="bigThingData" style="width:100%" :row-class-name="bigThingTable">
-                                            <el-table-column prop="item" label="重大事件" > </el-table-column>
-                                            <el-table-column prop="date" label="日期" width="100" align="center"> </el-table-column>
+                                            <el-table-column prop="title" label="重大事件" > </el-table-column>
+                                            <el-table-column prop="time" label="日期" width="100" align="center"> </el-table-column>
                                         </el-table>
                                 </template>
                             </el-tab-pane>
@@ -112,7 +122,7 @@
                     <el-card>
                         <div slot="header" class="clearfix">
                             <span><svg-icon icon-class="chart" />&nbsp;评测报告</span>
-                            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+                            <el-button style="float: right; padding: 3px 0" type="text" @click="goToReport">更多</el-button>
                         </div>
                         <el-tabs tab-position="left" style="height:300px" @tab-click="clickTab" >
                             <el-tab-pane label="入学测评" style="width:100%">
@@ -135,7 +145,7 @@
                     <el-card>
                         <div slot="header" class="clearfix">
                             <span><svg-icon icon-class="user" />&nbsp;学生信息</span>
-                            <el-button style="float: right; padding: 3px 0" type="text">修改个人信息</el-button>
+                            <el-button style="float: right; padding: 3px 0" type="text" @click="goToInformation">修改个人信息</el-button>
                         </div>
                         <el-row type="flex" justify="center" :gutter="20">
                         <el-col :span="24">
@@ -177,6 +187,9 @@
     import RaddarChart from './components/RaddarChart'
     import PieChart from './components/PieChart'
     import BarChart from './components/BarChart'
+    import { fetchListDaily } from '@/api/participation'
+    import { fetchListBreakRule } from '@/api/breakRole'
+    import { fetchListGreat } from '@/api/otherImportant'
     export default {
     
       data() {
@@ -188,7 +201,10 @@
           dynamicTags: ['晚上前提交布置的任务', '13：30理工楼101开会', '数据结构作业', '选修课作业', '前台使用的是Vue.js', '主要的是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
           inputVisible: false,
           inputValue: '',
-    
+          dailyList: null,
+          breakRuleList: null,
+          dailyListCount: 0,
+          dailyCount: null,
           signIn: false,
           signInText: '签到',
           signInButton: false,
@@ -199,22 +215,7 @@
             title: undefined,
             time: undefined
           },
-          breakRuleData: [{
-            item: '违纪情况',
-            date: '2016-05-02'
-          }, {
-            item: '违纪情况',
-            date: '2016-05-02'
-          }, {
-            item: '违纪情况',
-            date: '2016-05-02'
-          }, {
-            item: '违纪情况',
-            date: '2016-05-02'
-          }, {
-            item: '违纪情况',
-            date: '2016-05-02'
-          }],
+          breakRuleData: [],
           highlightData: [{
             item: '突出表现',
             date: '2016-05-02'
@@ -231,24 +232,27 @@
             item: '突出表现',
             date: '2016-05-02'
           }],
-          bigThingData: [{
-            item: '重大事件',
-            date: '2016-05-02'
-          }, {
-            item: '重大事件',
-            date: '2016-05-02'
-          }, {
-            item: '重大事件',
-            date: '2016-05-02'
-          }, {
-            item: '重大事件',
-            date: '2016-05-02'
-          }, {
-            item: '重大事件',
-            date: '2016-05-02'
-          }]
+          bigThingData: [],
+          firstDaily: null,
+          secondDaily: null,
+          thirdDaily: null,
+          fourthDaily: null,
+          fifthDaily: null,
+          greatList: null
         }
       },
+
+  filters: {
+        statusFilter(status) {
+          const statusMap = {
+            已到: 'success',
+            请假: 'info',
+            迟到: 'warning',
+            未到: 'error'
+          }
+          return statusMap[status]
+        }
+  },
       components: {
         RaddarChart,
         PieChart,
@@ -273,8 +277,95 @@
           this.$refs.gradeTabsTwo.chart.resize()
           this.$refs.gradeTabsThree.chart.resize()
         })
+        if (this.$storage.get('dailyList') !== null) {
+          this.dailyList = this.$storage.get('dailyList')
+          const length = this.dailyList.length
+          this.firstDaily = this.dailyList[length - 1]
+          this.secondDaily = this.dailyList[length - 2]
+          this.thirdDaily = this.dailyList[length - 3]
+          this.fourthDaily = this.dailyList[length - 4]
+          this.fifthDaily = this.dailyList[length - 5]
+        } else {
+          this.getListDaily()
+        }
+        if (this.$storage.get('breakRuleList') !== null) {
+          this.breakRuleList = this.$storage.get('breakRuleList')
+          const length = this.breakRuleList.length
+          this.breakRuleData = []
+          if (length > 5) {
+            for (let i = 1; i <= 5; i++) {
+              this.breakRuleData[i - 1] = this.breakRuleList[length - i]
+            }
+          } else {
+            for (let i = 1; i <= length; i++) {
+              this.breakRuleData[i - 1] = this.breakRuleList[length - i]
+            }
+          }
+    
+          console.log(this.breakRuleData)
+        } else {
+          this.getListBreakRule()
+        }
+        if (this.$storage.get('greatList') !== null) {
+          this.greatList = this.$storage.get('greatList')
+          const length = this.greatList.length
+          this.bigThingData = []
+          if (length > 5) {
+            for (let i = 1; i <= 5; i++) {
+              this.bigThingData[i - 1] = this.greatList[length - i]
+            }
+          } else {
+            for (let i = 1; i <= length; i++) {
+              this.bigThingData[i - 1] = this.greatList[length - i]
+            }
+          }
+        } else {
+          this.getListGreat()
+        }
       },
       methods: {
+        getListDaily() {
+          fetchListDaily().then(response => {
+            this.dailyList = response.data.item
+            this.firstDaily = this.dailyList[0]
+            this.secondDaily = this.dailyList[1]
+            this.thirdDaily = this.dailyList[2]
+            this.fourthDaily = this.dailyList[3]
+            this.fifthDaily = this.dailyList[4]
+          })
+        },
+        getListBreakRule() {
+          fetchListBreakRule(this.listQuery).then(response => {
+            this.breakRuleList = response.data.items
+            const length = this.breakRuleList.length
+            this.breakRuleData = []
+            if (length > 5) {
+              for (let i = 1; i <= 5; i++) {
+                this.breakRuleData[i - 1] = this.breakRuleList[length - i]
+              }
+            } else {
+              for (let i = 1; i <= length; i++) {
+                this.breakRuleData[i - 1] = this.breakRuleList[length - i]
+              }
+            }
+          })
+        },
+        getListGreat() {
+          fetchListGreat(this.listQuery).then(response => {
+            this.greatList = response.data.items
+            const length = this.greatList.length
+            this.bigThingData = []
+            if (length > 5) {
+              for (let i = 1; i <= 5; i++) {
+                this.bigThingData[i - 1] = this.greatList[length - i]
+              }
+            } else {
+              for (let i = 1; i <= length; i++) {
+                this.bigThingData[i - 1] = this.greatList[length - i]
+              }
+            }
+          })
+        },
         clickTab() {
           this.$nextTick(() => {
             this.$refs.gradeTabsOne.chart.resize()
@@ -285,6 +376,18 @@
 
         showDaliyTask() {
           this.$router.push({ name: 'daliyTask' })
+        },
+        goToAnnocument() {
+          this.$router.push({ path: '/other/announcement' })
+        },
+        goToDaliyReport() {
+          this.$router.push({ path: '/studentInformation/daliyReport' })
+        },
+        goToReport() {
+          this.$router.push({ path: '/evaluationReport/admissionAssessment' })
+        },
+        goToInformation() {
+          this.$router.push({ path: '/studentInformation/information' })
         },
 
         handleClose(tag) { // 动态编辑标签

@@ -1,19 +1,23 @@
 <template>
   <div class="app-container calendar-list-container">
+    <el-card>
+    <div slot="header" class="clearfix">
+      <span style="font-size:25px">出勤管理</span>
+    </div>
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
-      </el-input>
       <el-date-picker class="filter-item"
         v-model="listQuery.time"
         type="date"
         placeholder="选择日期">
       </el-date-picker>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
-        <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
-        </el-option>
-      </el-select>
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
+      </el-input>
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
+        </el-option>
+      </el-select>
+      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
+        <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
@@ -22,31 +26,26 @@
       <upload-excel-component class="filter-item" v-waves @on-selected-file='selected'></upload-excel-component>
     </div>
 
-    <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
+    <el-table  :key='tableKey' :data="list" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.sno" width="65">
+      <el-table-column align="center" :label="tableCol.date" width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.sno}}</span>
+          <span>{{scope.row.date}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" align="center" :label="tableCol.sname">
-        <template slot-scope="scope">
-          <span>{{scope.row.sname }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="50px" :label="tableCol.ssex">
-        <template slot-scope="scope">
-         <span>{{scope.row.ssex}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="50px" align="center" :label="tableCol.sclass">
+      <el-table-column width="80px" align="center" :label="tableCol.sclass">
         <template slot-scope="scope">
           <span>{{scope.row.sclass}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.sprofession" width="95">
+      <el-table-column width="80px" align="center" :label="tableCol.sname">
         <template slot-scope="scope">
-          <span>{{scope.row.sprofession}}</span>
+          <span>{{scope.row.sname }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="tableCol.sno" width="80">
+        <template slot-scope="scope">
+          <span>{{scope.row.sno}}</span>
         </template>
       </el-table-column>
      <el-table-column align="center" :label="tableCol.time" width="100">
@@ -56,12 +55,12 @@
       </el-table-column>
       <el-table-column align="center" :label="tableCol.status" width="95">
         <template slot-scope="scope">
-          <span>{{scope.row.status}}</span>
+          <el-tag :type="scope.row.status === '已到' ? 'success' : scope.row.status === '未到' ? 'danger' : scope.row.status === '迟到' ? 'warning' : 'info'">{{scope.row.status}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.note" min-width="95">
+      <el-table-column :label="tableCol.note" min-width="95">
         <template slot-scope="scope">
-          <span>{{scope.row.note}}</span>
+          <el-alert type="info" :closable="false">{{scope.row.note}}</el-alert>
         </template>
       </el-table-column>
 
@@ -100,7 +99,14 @@
         <el-form-item :label="tableCol.sclass" prop="sclass">
           <el-input v-model="temp.sclass"></el-input>
         </el-form-item>
-        
+        <el-form-item :label="tableCol.date" prop="date">
+          <el-date-picker
+            v-model="temp.date"
+            type="datetime"
+            format="yyyy-MM-dd"
+            placeholder="选择日期">
+          </el-date-picker>
+        </el-form-item>
          <el-form-item :label="tableCol.sprofession" prop="sprofession">
            <el-select class="filter-item" v-model="temp.sprofession" placeholder="请选择">
             <el-option v-for="item in  courseOptions" :key="item" :label="item" :value="item">
@@ -113,12 +119,15 @@
               </el-option>
             </el-select>
         </el-form-item>
+
         <el-form-item :label="tableCol.time" prop="time">
-           <el-date-picker
+           <el-time-picker
             v-model="temp.time"
             type="datetime"
-            placeholder="选择日期时间">
-          </el-date-picker>
+            format="HH:mm:ss"
+            value-format="HH:mm:ss"
+            placeholder="选择时间">
+          </el-time-picker>
         </el-form-item>
         <el-form-item :label="tableCol.note" prop="note">
          <el-input
@@ -138,12 +147,12 @@
       
     </el-dialog>
 
-
+    </el-card>
   </div>
 </template>
 
 <script>
-import { createParticipation, updateParticipation, fetchList } from '@/api/participation'
+import { fetchListDaily } from '@/api/participation'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -161,6 +170,7 @@ export default {
     return {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
+        date: '日期',
         sno: '学号',
         sname: '姓名',
         ssex: '性别',
@@ -196,7 +206,8 @@ export default {
         sprofession: undefined,
         time: undefined,
         status: undefined, // 已到、迟到、请假、未到
-        note: undefined
+        note: undefined,
+        date: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -204,6 +215,7 @@ export default {
         update: '编辑',
         create: '新建'
       },
+      oldtemp: null,
       dialogPvVisible: false,
       pvData: [],
       rules: {
@@ -237,7 +249,13 @@ export default {
 
   },
   created() {
-    this.getList()
+    if (this.$storage.get('dailyInit') === true) {
+      console.log(2)
+      this.list = this.$storage.get('dailyList')
+    } else {
+      this.getList()
+    }
+    console.log(this.list)
   },
   methods: {
     selected(data) {
@@ -264,8 +282,10 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchListDaily(this.listQuery).then(response => {
         this.list = response.data.items
+        this.$storage.set('dailyInit', true)
+        this.$storage.set('dailyList', response.data.items)
         this.total = response.data.total
         this.listLoading = false
       })
@@ -289,7 +309,6 @@ export default {
         ssex: undefined,
         sclass: undefined,
         sprofession: undefined,
-        time: undefined,
         status: undefined, // 已到、迟到、请假、未到
         note: undefined
       }
@@ -303,26 +322,40 @@ export default {
       })
     },
     createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createParticipation(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
+      console.log(this.temp)
+      if (this.temp.sname === undefined || this.temp.ssex === undefined || this.temp.sclass === undefined || this.temp.time === undefined || this.temp.status === undefined) {
+        this.$notify({
+          title: '失败',
+          message: '请填写完整',
+          duration: 2000
+        })
+      } else {
+        const months = this.temp.date.getMonth() + 1
+        const dates = this.temp.date.getFullYear() + '.' + months + '.' + this.temp.date.getDate()
+        this.list.push({
+          sno: '101',
+          sname: this.temp.sname,
+          ssex: this.temp.ssex,
+          sclass: this.temp.sclass,
+          sprofession: this.temp.sprofession,
+          status: this.temp.status, // 已到、迟到、请假、未到
+          note: this.temp.note,
+          time: this.temp.time,
+          date: dates
+        })
+        this.$storage.set('dailyList', this.list)
+        this.$notify({
+          title: '成功',
+          message: '创建成功',
+          type: 'success',
+          duration: 2000
+        })
+      }
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       console.log(this.temp)
+      this.oldtemp = row
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -332,36 +365,47 @@ export default {
     },
     updateData() {
       // debugger
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateParticipation(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
+      const tempData = Object.assign({}, this.temp)
+      tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+      const oldtempData = Object.assign({}, this.oldtemp)
+      let dates
+      if (tempData.date !== oldtempData.date) {
+        const months = tempData.date.getMonth() + 1
+        dates = tempData.date.getFullYear() + '.' + months + '.' + tempData.date.getDate()
+      } else {
+        dates = oldtempData.date
+      }
+      for (let i = 0; i < this.list.length; i++) {
+        if (this.list[i].date === oldtempData.date && this.list[i].id === oldtempData.id) {
+          console.log(this.list[i].date)
+          this.list[i].sname = this.temp.sname
+          this.list[i].time = this.temp.time
+          this.list[i].ssex = this.temp.ssex
+          this.list[i].sclass = this.temp.sclass
+          this.list[i].sprofession = this.temp.sprofession
+          this.list[i].status = this.temp.status // 已到、迟到、请假、未到
+          this.list[i].note = this.temp.note
+          this.list[i].date = dates
+          this.$storage.set('dailyList', this.list)
+          break
         }
+      }
+      this.dialogFormVisible = false
+      this.$notify({
+        title: '成功',
+        message: '更新成功',
+        type: 'success',
+        duration: 2000
       })
     },
     handleDelete(index) {
-      this.$confirm('此操作将永久删除用户, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         this.list.splice(index, 1)
+        this.$storage.set('dailyList', this.list)
         this.$message({
           type: 'success',
           message: '删除成功!'

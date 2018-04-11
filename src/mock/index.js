@@ -3,12 +3,13 @@ import loginAPI from './login'
 import articleAPI from './article'
 import remoteSearchAPI from './remoteSearch'
 import transactionAPI from './transaction'
-import studentAPI from './student'
+// import studentAPI from './student'
 import workAPI from './work'
 import participationAPI from './participation'
 import breakRoleAPI from './breakrole'
 import leaveAPI from './leave'
 import otherImportantAPI from './otherImportant'
+import highlightingAPI from './highlighting'
 import teacherAPI from './teacher'
 import announcementAPI from './announcement'
 import parameterAPI from './parameter'
@@ -18,6 +19,7 @@ import daliyTask from './daliyTask'
 import informationAPI from './information'
 import student from './student'
 import projectDefenseAPI from './projectDefense'
+import classAPI from './class'
 
 // 伟哥
 import characterAPI from './character'
@@ -30,9 +32,16 @@ import dailysummaryAPI from './dailysummary'
 
 import teacherinformationAPI from './teacherinformation'
 
+// 学生
 Mock.mock(/\/student\/list/, 'get', student.getList)
+Mock.mock(/\/student\/create/, 'post', student.createStudent)
+Mock.mock(/\/student\/update/, 'post', student.updateStudent)
 
-// 点评页面学生信息
+// 班级
+
+Mock.mock(/\/class\/list/, 'get', classAPI.getList)
+Mock.mock(/\/class\/create/, 'post', classAPI.createClass)
+Mock.mock(/\/class\/update/, 'post', classAPI.updateClass)
 
 // 日常任务
 Mock.mock(/\/daliyTask\/daliyTask/, 'post', daliyTask.daliyTask)
@@ -100,6 +109,12 @@ Mock.mock(/\/otherImportant\/detail/, 'get', otherImportantAPI.getImportant)
 Mock.mock(/\/otherImportant\/create/, 'post', otherImportantAPI.createImportant)
 Mock.mock(/\/otherImportant\/update/, 'post', otherImportantAPI.updateImportant)
 
+// 突出表现相关
+Mock.mock(/\/highlighting\/list/, 'get', highlightingAPI.getList)
+Mock.mock(/\/otherImportant\/detail/, 'get', highlightingAPI.getImportant)
+Mock.mock(/\/otherImportant\/create/, 'post', highlightingAPI.createImportant)
+Mock.mock(/\/otherImportant\/update/, 'post', highlightingAPI.updateImportant)
+
 // 系统参数相关
 Mock.mock(/\/parameter\/list/, 'get', parameterAPI.getList)
 Mock.mock(/\/parameter\/detail/, 'get', parameterAPI.getParameter)
@@ -119,17 +134,11 @@ Mock.mock(/\/leave\/pv/, 'get', leaveAPI.getPv)
 Mock.mock(/\/leave\/create/, 'post', leaveAPI.createLeave)
 Mock.mock(/\/leave\/update/, 'post', leaveAPI.updateLeave)
 
-// 学生相关
-Mock.mock(/\/student\/list/, 'get', studentAPI.getList)
-Mock.mock(/\/student\/detail/, 'get', studentAPI.getArticle)
-Mock.mock(/\/student\/create/, 'post', studentAPI.createArticle)
-Mock.mock(/\/student\/update/, 'post', studentAPI.updateArticle)
-
 // 出勤相关
 Mock.mock(/\/participation\/list/, 'get', participationAPI.getList)
 Mock.mock(/\/participation\/detail/, 'get', participationAPI.getArticle)
 Mock.mock(/\/participation\/create/, 'post', participationAPI.createArticle)
-Mock.mock(/\/participation\/update/, 'post', participationAPI.updateArticle)
+Mock.mock(/\/participation\/update/, 'post', participationAPI.updateParticipation)
 
 // 作业相关
 Mock.mock(/\/work\/list/, 'get', workAPI.getList)
