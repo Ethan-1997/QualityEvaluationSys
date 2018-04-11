@@ -310,7 +310,9 @@ export default {
         sclass: undefined,
         sprofession: undefined,
         status: undefined, // 已到、迟到、请假、未到
-        note: undefined
+        note: undefined,
+        time: undefined,
+        date: undefined
       }
     },
     handleCreate() {
@@ -322,8 +324,7 @@ export default {
       })
     },
     createData() {
-      console.log(this.temp)
-      if (this.temp.sname === undefined || this.temp.ssex === undefined || this.temp.sclass === undefined || this.temp.time === undefined || this.temp.status === undefined) {
+      if (this.temp.sname === undefined || this.temp.ssex === undefined || this.temp.sclass === undefined || this.temp.time === undefined || this.temp.status === undefined || this.temp.date === undefined) {
         this.$notify({
           title: '失败',
           message: '请填写完整',
@@ -351,6 +352,7 @@ export default {
           duration: 2000
         })
       }
+      this.dialogFormVisible = false
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
