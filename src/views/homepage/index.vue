@@ -92,8 +92,8 @@
                             <el-tab-pane label="违纪情况">
                                 <template>
                                         <el-table :data="breakRuleData" style="width:100%" :row-class-name="breakRuleTable">
-                                            <el-table-column prop="item" label="违纪情况" > </el-table-column>
-                                            <el-table-column prop="date" label="日期" width="100" align="center"> </el-table-column>
+                                            <el-table-column prop="status" label="违纪情况" > </el-table-column>
+                                            <el-table-column prop="time" label="日期" width="100" align="center"> </el-table-column>
                                         </el-table>
                                 </template>
                             </el-tab-pane>
@@ -108,8 +108,8 @@
                             <el-tab-pane label="重大事项">
                                 <template>
                                         <el-table :data="bigThingData" style="width:100%" :row-class-name="bigThingTable">
-                                            <el-table-column prop="item" label="重大事件" > </el-table-column>
-                                            <el-table-column prop="date" label="日期" width="100" align="center"> </el-table-column>
+                                            <el-table-column prop="title" label="重大事件" > </el-table-column>
+                                            <el-table-column prop="time" label="日期" width="100" align="center"> </el-table-column>
                                         </el-table>
                                 </template>
                             </el-tab-pane>
@@ -188,6 +188,7 @@
     import PieChart from './components/PieChart'
     import BarChart from './components/BarChart'
     import { fetchListDaily } from '@/api/participation'
+    import { fetchListBreakRule } from '@/api/breakRole'
     export default {
     
       data() {
@@ -200,6 +201,7 @@
           inputVisible: false,
           inputValue: '',
           dailyList: null,
+          breakRuleList: null,
           dailyListCount: 0,
           dailyCount: null,
           signIn: false,
@@ -212,22 +214,7 @@
             title: undefined,
             time: undefined
           },
-          breakRuleData: [{
-            item: '违纪情况',
-            date: '2016-05-02'
-          }, {
-            item: '违纪情况',
-            date: '2016-05-02'
-          }, {
-            item: '违纪情况',
-            date: '2016-05-02'
-          }, {
-            item: '违纪情况',
-            date: '2016-05-02'
-          }, {
-            item: '违纪情况',
-            date: '2016-05-02'
-          }],
+          breakRuleData: [],
           highlightData: [{
             item: '突出表现',
             date: '2016-05-02'
@@ -244,27 +231,13 @@
             item: '突出表现',
             date: '2016-05-02'
           }],
-          bigThingData: [{
-            item: '重大事件',
-            date: '2016-05-02'
-          }, {
-            item: '重大事件',
-            date: '2016-05-02'
-          }, {
-            item: '重大事件',
-            date: '2016-05-02'
-          }, {
-            item: '重大事件',
-            date: '2016-05-02'
-          }, {
-            item: '重大事件',
-            date: '2016-05-02'
-          }],
+          bigThingData: [],
           firstDaily: null,
           secondDaily: null,
           thirdDaily: null,
           fourthDaily: null,
-          fifthDaily: null
+          fifthDaily: null,
+          greatList: null
         }
       },
 
@@ -303,19 +276,93 @@
           this.$refs.gradeTabsTwo.chart.resize()
           this.$refs.gradeTabsThree.chart.resize()
         })
-        this.getlist()
+        if (this.$storage.get('dailyList') !== null) {
+          this.dailyList = this.$storage.get('dailyList')
+          const length = this.dailyList.length
+          this.firstDaily = this.dailyList[length - 1]
+          this.secondDaily = this.dailyList[length - 2]
+          this.thirdDaily = this.dailyList[length - 3]
+          this.fourthDaily = this.dailyList[length - 4]
+          this.fifthDaily = this.dailyList[length - 5]
+        } else {
+          this.getListDaily()
+        }
+        if (this.$storage.get('breakRuleList') !== null) {
+          this.breakRuleList = this.$storage.get('breakRuleList')
+          const length = this.breakRuleList.length
+          this.breakRuleData = []
+          if (length > 5) {
+            for (let i = 1; i <= 5; i++) {
+              this.breakRuleData[i - 1] = this.breakRuleList[length - i]
+            }
+          } else {
+            for (let i = 1; i <= length; i++) {
+              this.breakRuleData[i - 1] = this.breakRuleList[length - i]
+            }
+          }
+    
+          console.log(this.breakRuleData)
+        } else {
+          this.getListBreakRule()
+        }
+        if (this.$storage.get('greatList') !== null) {
+          this.greatList = this.$storage.get('greatList')
+          const length = this.greatList.length
+          this.bigThingData = []
+          if (length > 5) {
+            for (let i = 1; i <= 5; i++) {
+              this.bigThingData[i - 1] = this.greatList[length - i]
+            }
+          } else {
+            for (let i = 1; i <= length; i++) {
+              this.bigThingData[i - 1] = this.greatList[length - i]
+            }
+          }
+        } else {
+          this.getListGreat()
+        }
       },
       methods: {
-        getlist() {
+        getListDaily() {
           fetchListDaily().then(response => {
             this.dailyList = response.data.item
-            console.log(response.data.item)
             this.firstDaily = this.dailyList[0]
             this.secondDaily = this.dailyList[1]
-            console.log(this.secondDaily)
             this.thirdDaily = this.dailyList[2]
             this.fourthDaily = this.dailyList[3]
             this.fifthDaily = this.dailyList[4]
+          })
+        },
+        getListBreakRule() {
+          fetchListBreakRule(this.listQuery).then(response => {
+            this.breakRuleList = response.data.items
+            const length = this.breakRuleList.length
+            this.breakRuleData = []
+            if (length > 5) {
+              for (let i = 1; i <= 5; i++) {
+                this.breakRuleData[i - 1] = this.breakRuleList[length - i]
+              }
+            } else {
+              for (let i = 1; i <= length; i++) {
+                this.breakRuleData[i - 1] = this.breakRuleList[length - i]
+              }
+            }
+          })
+        },
+        getListGreat() {
+          fetchListBreakRule(this.listQuery).then(response => {
+            this.greatList = response.data.items
+            const length = this.greatList.length
+            this.breakRuleData = []
+            if (length > 5) {
+              for (let i = 1; i <= 5; i++) {
+                this.breakRuleData[i - 1] = this.greatList[length - i]
+              }
+            } else {
+              for (let i = 1; i <= length; i++) {
+                this.breakRuleData[i - 1] = this.greatList[length - i]
+              }
+            }
           })
         },
         clickTab() {
