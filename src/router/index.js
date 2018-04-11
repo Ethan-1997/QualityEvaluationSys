@@ -98,7 +98,7 @@ export const asyncRouterMap = [
       path: 'ExamAdd',
       component: _import('Exams/ExamAdd'),
       name: 'ExamAdd',
-      meta: { title: 'ExamAdd', icon: 'icon', noCache: true }
+      meta: { title: '制作试卷', icon: 'icon', noCache: true }
     }]
   },
   {
@@ -110,7 +110,7 @@ export const asyncRouterMap = [
       path: ':id',
       component: _import('Exams/ExamDetail'),
       name: 'ExamDetail',
-      meta: { title: 'ExamDetail', icon: 'icon', noCache: true }
+      meta: { title: '试卷详情', icon: 'icon', noCache: true }
     }]
   },
   {
@@ -122,7 +122,7 @@ export const asyncRouterMap = [
       path: ':id/edit',
       component: _import('Exams/ExamAdd'),
       name: 'ExamAdd',
-      meta: { title: 'ExamAdd', icon: 'icon', noCache: true }
+      meta: { title: '制作试卷', icon: 'icon', noCache: true }
     }]
   },
 
@@ -496,7 +496,7 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/announcementBrowsing',
+    path: '/studentsInformation',
     component: Layout,
     meta: {
       roles: ['schoolManager', 'teacher']

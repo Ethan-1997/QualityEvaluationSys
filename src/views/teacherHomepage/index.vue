@@ -208,7 +208,7 @@
       },
       methods: {
         goToStudentBasic() {
-          this.$router.push({ path: '/basicInfo/index' })
+          this.$router.push({ path: '/studentsInformation/index' })
         },
         goToDailyWork() {
           this.$router.push({ path: '/workManager/index' })

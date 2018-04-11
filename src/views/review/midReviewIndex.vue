@@ -39,36 +39,8 @@ export default {
         {
           name: 'vue一班',
           number: 20,
-          haveEvaluation: 12,
-          notEvaluation: 8,
-          routerButton: 'router'
-        },
-        {
-          name: 'vue二班',
-          number: 20,
-          haveEvaluation: 12,
-          notEvaluation: 8,
-          routerButton: 'router'
-        },
-        {
-          name: 'vue三班',
-          number: 15,
-          haveEvaluation: 6,
-          notEvaluation: 9,
-          routerButton: 'router'
-        },
-        {
-          name: 'vue四班',
-          number: 15,
-          haveEvaluation: 6,
-          notEvaluation: 9,
-          routerButton: 'router'
-        },
-        {
-          name: 'vue五班',
-          number: 15,
-          haveEvaluation: 6,
-          notEvaluation: 9,
+          haveEvaluation: 0,
+          notEvaluation: 20,
           routerButton: 'router'
         }
       ]
