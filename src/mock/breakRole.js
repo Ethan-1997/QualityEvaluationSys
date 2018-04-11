@@ -2,19 +2,20 @@ import Mock from 'mockjs'
 import { param2Obj } from '@/utils'
 
 const List = []
-const count = 100
+const count = 3
 
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
-    title: '@ctitle(15, 20)', // 文章题目
-    content: '@cparagraph', // 文章内容
-    sclass: '10' + Mock.Random.integer(1, 9),
-    sno: '@increment',
-    sname: '@cname',
-    'ssex|1': ['男', '女'],
-    time: '@datetime',
-    reason: '@cparagraph',
-    'status|1': ['警告', '严重警告', '处分', '严重处分']
+    title: '无', // 文章题目
+    content: '', // 文章内容
+    sno: '101',
+    sname: '摇滚兔子',
+    reason: '',
+    'status|1': ['警告', '严重警告', '处分', '严重处分'],
+    ssex: '男',
+    sclass: '101',
+    time: '2018.9.' + +(i + 1),
+    note: '无'
   }))
 }
 

@@ -2,17 +2,18 @@ import Mock from 'mockjs'
 import { param2Obj } from '@/utils'
 
 const List = []
-const count = 100
-
+const count = 2
+const title = ['休学一学期', '解决社会问题']
+const content = ['因为身体患了重病，申请休学一学期', '好人好事：捡到一部手机并上交']
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
-    sno: '@increment',
-    sname: '@cname',
-    'ssex|1': ['男', '女'],
-    sclass: '10' + Mock.Random.integer(1, 9),
-    title: '@ctitle',
-    content: '@cparagraph',
-    time: '@datetime'
+    sno: '101',
+    sname: '摇滚兔子',
+    ssex: '男',
+    sclass: '101',
+    title: title[i],
+    content: content[i],
+    time: '2018.9.' + +(i + 1)
   }))
 }
 
