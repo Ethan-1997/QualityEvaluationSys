@@ -3,49 +3,54 @@ import storage from '@/utils/storage'
 
 const workList = [
   {
-    id: 1061,
+    id: 1024,
     title: 'vue.js第一讲',
     startTime: '2018-09-01',
     endTime: '2018-09-05',
     sclass: 'vue',
     status: '发布',
-    author: '曹老师'
+    author: '曹老师',
+    content: 'vue.js基础'
   },
   {
-    id: 1062,
+    id: 1025,
     title: 'vue.js第二讲',
     startTime: '2018-09-05',
     endTime: '2018-09-08',
     sclass: 'vue',
-    status: '发布',
-    author: '曹老师'
+    status: '草稿',
+    author: '曹老师',
+    content: 'vue.js初级'
   },
   {
-    id: 1063,
+    id: 1026,
     title: 'vue.js第三讲',
     startTime: '2018-09-5',
     endTime: '2018-09-10',
     sclass: 'vue',
     status: '发布',
-    author: '曹老师'
+    author: '曹老师',
+    content: 'vue.js中级'
   },
   {
-    id: 1064,
+    id: 1027,
     title: 'vue.js第四讲',
     startTime: '2018-09-10',
     endTime: '2018-09-15',
     sclass: 'vue',
     status: '发布',
-    author: '王老师'
+    author: '王老师',
+    content: 'vue.js高级'
   },
   {
-    id: 1065,
+    id: 1028,
     title: 'vue.js第五讲',
     startTime: '2018-09-15',
     endTime: '2018-09-20',
     sclass: 'vue',
     status: '发布',
-    author: '应老师'
+    author: '应老师',
+    content: 'vue.js终级'
   }
 ]
 let List = []
@@ -76,7 +81,8 @@ export default {
     console.log(pageList)
     return {
       total: mockList.length,
-      items: pageList
+      items: pageList,
+      taskData: workList
     }
   },
   getWork: () => ({

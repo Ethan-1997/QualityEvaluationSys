@@ -2,12 +2,29 @@
   <div class="dashboard-editor-container">
     <el-card>
       <div slot="header">
-        <span>ID title teacher</span>
+        <div slot="header" style="font-size:25px">作业提交详情</div>
       </div>
-      <el-row>
-        <el-col>workcontent</el-col>
-      </el-row>
-      <div>
+      <el-card>
+        <div>
+          <el-row>
+            <el-col :span="2">作业ID：</el-col>
+            <el-col :span="21">{{workCol.id}}</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="2">标题：</el-col>
+            <el-col :span="21">{{workCol.title}}</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="2">发布老师：</el-col>
+            <el-col :span="21">{{workCol.author}}</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="2">作业内容：</el-col>
+            <el-col :span="21">{{workCol.content}}</el-col>
+          </el-row>
+        </div>
+      </el-card>
+      <div style="margin-top:20px">
         <el-table :data="workTable" border style="width: 100%">
             <el-table-column prop="studentID" label="学号" align="center">
               
@@ -34,6 +51,7 @@
 export default {
   data() {
     return {
+      workCol: null,
       workTable: [
         {
           studentID: 101,
@@ -65,6 +83,9 @@ export default {
         }
       ]
     }
+  },
+  created() {
+    this.workCol = this.$storage.get('workCol')
   }
 }
 </script>
