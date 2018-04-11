@@ -59,23 +59,33 @@
                         <el-tabs tab-position="left" style="height: 264px;"><!-- tip:静态数据 -->
                             <el-tab-pane label="日常出勤">
                                 <div style="padding: 4px 0">
-                                    <el-alert title="已到" type="success" show-icon :closable="false"> 2018-01-26
+                                    <el-alert :title="firstDaily.status" 
+                                    :type="firstDaily.status | statusFilter"
+                                    show-icon :closable="false"> {{firstDaily.time}}
                                     </el-alert>
                                 </div>
                                 <div style="padding: 4px 0">
-                                    <el-alert title="迟到" type="warning" show-icon :closable="false"> 2018-01-25
+                                    <el-alert :title="secondDaily.status"
+                                      :type="secondDaily.status | statusFilter" 
+                                      show-icon :closable="false"> {{secondDaily.time}}
                                     </el-alert>
                                 </div>
                                 <div style="padding: 4px 0">
-                                    <el-alert title="请假" type="info" show-icon :closable="false"> 2018-01-24
+                                    <el-alert :title="thirdDaily.status"
+                                      :type="thirdDaily.status | statusFilter" 
+                                      show-icon :closable="false"> {{thirdDaily.time}}
                                     </el-alert>
                                 </div>
                                 <div style="padding: 4px 0">
-                                    <el-alert title="未到" type="error" show-icon :closable="false"> 2018-01-23
+                                    <el-alert :title="fourthDaily.status"
+                                      :type="fourthDaily.status | statusFilter" 
+                                      show-icon :closable="false"> {{fourthDaily.time}}
                                     </el-alert>
                                 </div>
                                 <div style="padding: 4px 0">
-                                    <el-alert title="已到" type="success" show-icon :closable="false"> 2018-01-22
+                                    <el-alert :title="fifthDaily.status"
+                                      :type="fifthDaily.status | statusFilter" 
+                                      show-icon :closable="false"> {{fifthDaily.time}}
                                     </el-alert>
                                 </div>
                             </el-tab-pane>
@@ -177,6 +187,7 @@
     import RaddarChart from './components/RaddarChart'
     import PieChart from './components/PieChart'
     import BarChart from './components/BarChart'
+    import { fetchListDaily } from '@/api/participation'
     export default {
     
       data() {
@@ -188,7 +199,9 @@
           dynamicTags: ['晚上前提交布置的任务', '13：30理工楼101开会', '数据结构作业', '选修课作业', '前台使用的是Vue.js', '主要的是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
           inputVisible: false,
           inputValue: '',
-    
+          dailyList: null,
+          dailyListCount: 0,
+          dailyCount: null,
           signIn: false,
           signInText: '签到',
           signInButton: false,
@@ -246,9 +259,26 @@
           }, {
             item: '重大事件',
             date: '2016-05-02'
-          }]
+          }],
+          firstDaily: null,
+          secondDaily: null,
+          thirdDaily: null,
+          fourthDaily: null,
+          fifthDaily: null
         }
       },
+
+  filters: {
+        statusFilter(status) {
+          const statusMap = {
+            已到: 'success',
+            请假: 'info',
+            迟到: 'warning',
+            未到: 'error'
+          }
+          return statusMap[status]
+        }
+  },
       components: {
         RaddarChart,
         PieChart,
@@ -273,8 +303,21 @@
           this.$refs.gradeTabsTwo.chart.resize()
           this.$refs.gradeTabsThree.chart.resize()
         })
+        this.getlist()
       },
       methods: {
+        getlist() {
+          fetchListDaily().then(response => {
+            this.dailyList = response.data.item
+            console.log(response.data.item)
+            this.firstDaily = this.dailyList[0]
+            this.secondDaily = this.dailyList[1]
+            console.log(this.secondDaily)
+            this.thirdDaily = this.dailyList[2]
+            this.fourthDaily = this.dailyList[3]
+            this.fifthDaily = this.dailyList[4]
+          })
+        },
         clickTab() {
           this.$nextTick(() => {
             this.$refs.gradeTabsOne.chart.resize()
