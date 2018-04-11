@@ -39,10 +39,10 @@
                     </el-row>
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>正常出勤：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="x1/10*100" color="#67c23a"></el-progress></div><div>&nbsp;{{x1}}/20</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>迟到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="y1/10*100" color="#e6a23c"></el-progress></div><div>&nbsp;{{y1}}/20</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>未到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="f1/10*100" color="#F56C6C"></el-progress></div><div>&nbsp;{{f1}}/20</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>请假：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="z1/10*100" color="#909399"></el-progress></div><div>&nbsp;{{z1}}/20</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>正常出勤：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="dailyCount.arrived/10*100" color="#67c23a"></el-progress></div><div>&nbsp;{{dailyCount.arrived}}/20</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>迟到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="dailyCount.later/10*100" color="#e6a23c"></el-progress></div><div>&nbsp;{{dailyCount.later}}/20</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>未到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="dailyCount.unarrived/10*100" color="#F56C6C"></el-progress></div><div>&nbsp;{{dailyCount.unarrived}}/20</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>请假：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="dailyCount.askForLeave/10*100" color="#909399"></el-progress></div><div>&nbsp;{{dailyCount.askForLeave}}/20</div></div>
                       </el-col>
                     </el-row>
                   </el-col>
@@ -57,7 +57,7 @@
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
                         <div>
-                          <daily-performance-summary :first-data="breakRuleNumber" :second-data="highLightingNumber" :thirdly-data="majorIssuesNumber" ref="barchart1"></daily-performance-summary>
+                          <daily-performance-summary :first-data="dailyCount.breakRule" :second-data="dailyCount.extrude" :thirdly-data="dailyCount.great" ref="barchart1"></daily-performance-summary>
                         </div>
                       </el-col>
                     </el-row>
@@ -287,6 +287,7 @@ import DailyPerformanceSummary from './components/DailyPerformanceSummary'
 import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
 import ProjectManagerReviewResults from './components/ProjectManagerReviewResults'
 import HRReviewResults from './components/HRReviewResults'
+import { fetchListDaily } from '@/api/participation'
 export default {
   data() {
     return {
@@ -294,26 +295,32 @@ export default {
       highLightingNumber: 5,
       majorIssuesNumber: 2,
 
-      lastTestScore1: '',
-      lastTestScore2: '',
-      lastTestScore3: '',
-      lastTestScore4: '',
-      lastTestScore5: '',
-      lastTestAvg: '',
+      lastTestScore1: {
+        score: 0
+      },
+      lastTestScore2: {
+        score: 0
+      },
+      lastTestScore3: {
+        score: 0
+      },
+      lastTestScore4: {
+        score: 0
+      },
+      lastTestScore5: {
+        score: 0
+      },
+      lastTestAvg: 0,
       classTeacherAssessment: [55, 66, 76, 88, 50],
       lecturerAssessment: [30, 40, 50, 70, 55],
       assistantAssessment: [55, 60, 70, 40, 55],
       studentAssessment: [80, 55, 75, 44, 77],
       selfAssessment: [60, 75, 60, 80, 50],
-
+      dailyCount: null,
       projectManagerReviewResults: [55, 60, 70, 40, 55],
       HRReviewResults: [55, 66, 76, 88, 50, 90],
 
-      comprehensiveQualityData: [60, 75, 60, 80, 50],
-      x1: 0,
-      y1: 0,
-      z1: 0,
-      f1: 0
+      comprehensiveQualityData: [60, 75, 60, 80, 50]
 
     }
   },
@@ -324,21 +331,34 @@ export default {
     ProjectManagerReviewResults,
     HRReviewResults
   },
-
+  methods: {
+    getList() {
+      fetchListDaily().then(response => {
+        this.dailyCount = response.data.dailyCount
+        console.log(response.data.dailyCount)
+      })
+    }
+  },
   mounted() {
-    this.x1 = this.$storage.get('daily_tenarrived')
-    this.y1 = this.$storage.get('daily_tenunarrived')
-    this.z1 = this.$storage.get('daily_tenleave')
-    this.f1 = this.$storage.get('daily_tenlater')
-
+    this.getList()
+  },
   created() {
-    this.lastTestScore1 = this.$storage.get('lastTest1Score')
-    this.lastTestScore2 = this.$storage.get('lastTest2Score')
-    this.lastTestScore3 = this.$storage.get('lastTest3Score')
-    this.lastTestScore4 = this.$storage.get('lastTest4Score')
-    this.lastTestScore5 = this.$storage.get('lastTest5Score')
+    if (this.$storage.get('lastTest1Score') !== null) {
+      this.lastTestScore1 = this.$storage.get('lastTest1Score')
+    }
+    if (this.$storage.get('lastTest2Score') !== null) {
+      this.lastTestScore2 = this.$storage.get('lastTest2Score')
+    }
+    if (this.$storage.get('lastTest3Score') !== null) {
+      this.lastTestScore3 = this.$storage.get('lastTest3Score')
+    }
+    if (this.$storage.get('lastTest4Score') !== null) {
+      this.lastTestScore4 = this.$storage.get('lastTest4Score')
+    }
+    if (this.$storage.get('lastTest5Score') !== null) {
+      this.lastTestScore5 = this.$storage.get('lastTest5Score')
+    }
     this.lastTestAvg = (this.lastTestScore1.score + this.lastTestScore2.score + this.lastTestScore3.score + this.lastTestScore4.score + this.lastTestScore5.score) / 5
-
   }
 }
 

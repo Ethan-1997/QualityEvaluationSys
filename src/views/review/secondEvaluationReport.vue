@@ -39,10 +39,10 @@
                     </el-row>
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>正常出勤：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="x/10*100" color="#67c23a"></el-progress></div><div>&nbsp;{{x}}/10</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>迟到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="y/10*100" color="#e6a23c"></el-progress></div><div>&nbsp;{{y}}/10</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>未到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="f/10*100" color="#F56C6C"></el-progress></div><div>&nbsp;{{f}}/10</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>请假：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="z/10*100" color="#909399"></el-progress></div><div>&nbsp;{{z}}/10</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>正常出勤：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="dailyCount.arrivedMid/10*100" color="#67c23a"></el-progress></div><div>&nbsp;{{dailyCount.arrivedMid}}/10</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>迟到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="dailyCount.laterMid/10*100" color="#e6a23c"></el-progress></div><div>&nbsp;{{dailyCount.laterMid}}/10</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>未到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="dailyCount.unarrivedMid/10*100" color="#F56C6C"></el-progress></div><div>&nbsp;{{dailyCount.unarrivedMid}}/10</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>请假：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="dailyCount.askForLeaveMid/10*100" color="#909399"></el-progress></div><div>&nbsp;{{dailyCount.askForLeaveMid}}/10</div></div>
                       </el-col>
                     </el-row>
                   </el-col>
@@ -57,7 +57,7 @@
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
                         <div>
-                          <daily-performance-summary :first-data="breakRuleNumber" :second-data="highLightingNumber" :thirdly-data="majorIssuesNumber" ref="barchart1"></daily-performance-summary>
+                          <daily-performance-summary :first-data="dailyCount.breakRuleMid" :second-data="dailyCount.extrudeMid" :thirdly-data="dailyCount.greatMid" ref="barchart1"></daily-performance-summary>
                         </div>
                       </el-col>
                     </el-row>
@@ -283,38 +283,51 @@
 import TeacherReviewResults from './components/TeacherReviewResults'
 import DailyPerformanceSummary from './components/DailyPerformanceSummary'
 import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
+import { fetchListDaily } from '@/api/participation'
 export default {
   data() {
     return {
-      breakRuleNumber: 1,
-      highLightingNumber: 2,
+      breakRuleNumber: 8,
+      highLightingNumber: 8,
       majorIssuesNumber: 1,
+      dailyCount: null,
 
       classTeacherAssessment: [55, 66, 76, 88, 50],
       lecturerAssessment: [30, 40, 50, 70, 55],
       assistantAssessment: [55, 60, 70, 40, 55],
       studentAssessment: [80, 55, 75, 44, 77],
       selfAssessment: [60, 75, 60, 80, 50],
-
-      comprehensiveQualityData: [60, 75, 60, 80, 50],
-      x: 0,
-      y: 0,
-      z: 0,
-      f: 0
+      midTest: {
+        singleSuccess: 0,
+        singleTotal: 0,
+        judgmentSuccess: 0,
+        judgmentTotal: 0
+      },
+      comprehensiveQualityData: [60, 75, 60, 80, 50]
     }
+  },
+  created() {
+    if (this.$storage.get('midTestSocre') !== null) {
+      this.midTest = this.$storage.get('midTestSocre')
+    }
+  },
+  mounted() {
+    this.getList()
   },
   components: {
     TeacherReviewResults,
     DailyPerformanceSummary,
     ComprehensiveQualityModel
   },
-  mounted() {
+  methods: {
+    getList() {
+      console.log(this.dailyCount)
 
-    this.x = this.$storage.get('daily_arrived')
-    this.y = this.$storage.get('daily_unarrived')
-    this.z = this.$storage.get('daily_leave')
-    this.f = this.$storage.get('daily_later')
-
+      fetchListDaily().then(response => {
+        this.dailyCount = response.data.dailyCount
+        console.log(response.data.dailyCount)
+      })
+    }
   }
 }
 
