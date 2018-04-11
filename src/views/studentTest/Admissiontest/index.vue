@@ -1,8 +1,6 @@
 <template>
   <div class="dashboard-editor-container-sti">
-    <el-row>
-      <el-col :xl="5" class="fill-height"></el-col>
-      <el-col :xl="14">
+    <div style="margin-bottom:5px">
         <el-card>
           <el-row>
             <el-col :span="24">
@@ -33,13 +31,12 @@
             </el-col>
           </el-row>
         </el-card>
-        <el-row>
-          <el-col :span="24" style="height:10px;"></el-col>
-        </el-row>
-        <el-row>
-          <el-col :md="18">
+    </div>
+    <el-row>
+      <el-col :span="18">
+        <el-row style="margin-right:5px">
             <el-card>
-            <el-row>
+              <el-row>
                 <el-col :span="24">
                     <el-collapse v-model="activeName" accordion>
                       <el-collapse-item title="性格测试" name="character">
@@ -72,9 +69,10 @@
                 </el-col>
               </el-row>
             </el-card>
-          </el-col>
-          <el-col :md="6">
-            <el-col :span="1" class="fill-height"></el-col>
+        </el-row>
+      </el-col>
+      <el-col :span="6">
+        <el-row>
             <el-card>
               <el-col :span="23" style="background:#fff;">
                 <el-row style="padding:32px;">
@@ -97,10 +95,8 @@
                 </el-row>
               </el-col>
             </el-card>
-          </el-col>
         </el-row>
       </el-col>
-      <el-col :xl="5" class="fill-height"></el-col>
     </el-row>
     </div>
 </template>
@@ -193,9 +189,6 @@ export default {
   margin-left:20px;
   margin-top:40px;
   border-radius: 90px;
-}
-.fill-height{
-  height:1px;
 }
 .infor-name1{
   font-weight: bold;

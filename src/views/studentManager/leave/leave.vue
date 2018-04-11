@@ -1,8 +1,6 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
-      </el-input>
       <el-date-picker class="filter-item"
         v-model="listQuery.time"
         type="datetime"
@@ -12,6 +10,8 @@
         <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
+      </el-input>
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
         </el-option>
@@ -24,42 +24,37 @@
 
     <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.sno" width="65">
-        <template slot-scope="scope">
-          <span>{{scope.row.sno}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="100px" align="center" :label="tableCol.sname">
+      <el-table-column width="80px" align="center" :label="tableCol.sname">
         <template slot-scope="scope">
           <span>{{scope.row.sname }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="50px" align="center" :label="tableCol.ssex">
-        <template slot-scope="scope">
-         <span>{{scope.row.ssex}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="50px" align="center" :label="tableCol.sclass">
+      <el-table-column width="80px" align="center" :label="tableCol.sclass">
         <template slot-scope="scope">
           <span>{{scope.row.sclass}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px"  align="center" :label="tableCol.Lstart">
+      <el-table-column align="center" :label="tableCol.sno" width="80">
+        <template slot-scope="scope">
+          <span>{{scope.row.sno}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="100px"  align="center" :label="tableCol.Lstart">
         <template slot-scope="scope">
           <span >{{scope.row.Lstart}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150px" align="center" :label="tableCol.Lend">
+      <el-table-column  :label="tableCol.Lreason" min-width="95">
+        <template slot-scope="scope">
+          <el-alert type="info" :closable="false">{{scope.row.Lreason}}</el-alert>
+        </template>
+      </el-table-column>
+            <el-table-column width="100px" align="center" :label="tableCol.Lend">
         <template slot-scope="scope">
           <span>{{scope.row.Lend}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.Lreason" min-width="95">
-        <template slot-scope="scope">
-          <span>{{scope.row.Lreason}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" :label="tableCol.Laprover" width="150">
+      <el-table-column class-name="status-col" :label="tableCol.Laprover" width="80">
         <template slot-scope="scope">
           <el-tag>{{scope.row.Laprover}}</el-tag>
         </template>
@@ -349,7 +344,7 @@ export default {
       })
     },
     handleDelete(index) {
-      this.$confirm('此操作将永久删除用户, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

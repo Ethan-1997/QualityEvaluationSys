@@ -9,6 +9,7 @@ import participationAPI from './participation'
 import breakRoleAPI from './breakrole'
 import leaveAPI from './leave'
 import otherImportantAPI from './otherImportant'
+import highlightingAPI from './highlighting'
 import teacherAPI from './teacher'
 import announcementAPI from './announcement'
 import parameterAPI from './parameter'
@@ -107,6 +108,12 @@ Mock.mock(/\/otherImportant\/list/, 'get', otherImportantAPI.getList)
 Mock.mock(/\/otherImportant\/detail/, 'get', otherImportantAPI.getImportant)
 Mock.mock(/\/otherImportant\/create/, 'post', otherImportantAPI.createImportant)
 Mock.mock(/\/otherImportant\/update/, 'post', otherImportantAPI.updateImportant)
+
+// 突出表现相关
+Mock.mock(/\/highlighting\/list/, 'get', highlightingAPI.getList)
+Mock.mock(/\/otherImportant\/detail/, 'get', highlightingAPI.getImportant)
+Mock.mock(/\/otherImportant\/create/, 'post', highlightingAPI.createImportant)
+Mock.mock(/\/otherImportant\/update/, 'post', highlightingAPI.updateImportant)
 
 // 系统参数相关
 Mock.mock(/\/parameter\/list/, 'get', parameterAPI.getList)

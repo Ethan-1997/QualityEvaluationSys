@@ -6,28 +6,24 @@ const count = 100
 
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
-    sclass: '10' + Mock.Random.integer(1, 9),
     sno: '@increment',
     sname: '@cname',
     'ssex|1': ['男', '女'],
-    Lstart: '@date',
-    Lend: '@date',
-    Lreason: '@cparagraph(2)',
-    Laprover: '@cname'
+    sclass: '10' + Mock.Random.integer(1, 9),
+    title: '@ctitle',
+    content: '@cparagraph',
+    time: '@date'
   }))
 }
 
 export default {
   getList: config => {
-    const { page = 1, limit = 20, sort, time, sname, sclass } = param2Obj(config.url)
+    const { page = 1, limit = 20, sort, sname, status, sclass } = param2Obj(config.url)
 
     let mockList = List.filter(item => {
       if (sname && item.sname.indexOf(sname) < 0) return false
+      if (status && item.status !== status) return false
       if (sclass && item.sclass !== sclass) return false
-      const start = new Date(item.Lstart)
-      const end = new Date(item.Lstart)
-      const now = new Date(time)
-      if (now < start || now > end) return false
       return true
     })
 
@@ -42,10 +38,7 @@ export default {
       items: pageList
     }
   },
-  getPv: () => ({
-    pvData: [{ key: 'PC', pv: 1024 }, { key: 'mobile', pv: 1024 }, { key: 'ios', pv: 1024 }, { key: 'android', pv: 1024 }]
-  }),
-  getLeave: () => ({
+  getHighlighting: () => ({
     id: 120000000001,
     author: { key: 'mockPan' },
     source_name: '原创作者',
@@ -61,10 +54,10 @@ export default {
     tags: [],
     title: 'vue-element-admin'
   }),
-  createLeave: () => ({
+  createHighlighting: () => ({
     data: 'success'
   }),
-  updateLeave: () => ({
+  updateHighlighting: () => ({
     data: 'success'
   })
 }

@@ -11,7 +11,8 @@ for (let i = 0; i < count; i++) {
     'ssex|1': ['男', '女'],
     sclass: '10' + Mock.Random.integer(1, 9),
     'sprofession|1': ['javaweb', '大数据', '前端工程师'],
-    time: Mock.Random.date('yyyy-MM-dd'),
+    date: '@date',
+    time: '@time',
     'status|1': ['已到', '迟到', '请假', '未到'],
     note: '@csentence'
   }))

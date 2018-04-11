@@ -324,7 +324,6 @@ export default {
     ProjectManagerReviewResults,
     HRReviewResults
   },
-
   mounted() {
     this.x1 = this.$storage.get('daily_tenarrived')
     this.y1 = this.$storage.get('daily_tenunarrived')
