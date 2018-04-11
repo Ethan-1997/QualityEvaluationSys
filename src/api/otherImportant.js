@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function fetchListGreat(query) {
   return request({
     url: '/otherImportant/list',
     method: 'get',
