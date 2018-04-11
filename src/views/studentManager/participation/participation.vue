@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import { createParticipation, updateParticipation, fetchList } from '@/api/participation'
+import { createParticipation, updateParticipation, fetchListDaily } from '@/api/participation'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -264,7 +264,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchListDaily(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
