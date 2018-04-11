@@ -39,10 +39,10 @@
                     </el-row>
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>正常出勤：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="dailyCount.arrived/10*100" color="#67c23a"></el-progress></div><div>&nbsp;{{dailyCount.arrived}}/20</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>迟到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="dailyCount.later/10*100" color="#e6a23c"></el-progress></div><div>&nbsp;{{dailyCount.later}}/20</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>未到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="dailyCount.unarrived/10*100" color="#F56C6C"></el-progress></div><div>&nbsp;{{dailyCount.unarrived}}/20</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>请假：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="dailyCount.askForLeave/10*100" color="#909399"></el-progress></div><div>&nbsp;{{dailyCount.askForLeave}}/20</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>正常出勤：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="arrived/parseInt(dailyList.length)*100" color="#67c23a"></el-progress></div><div>&nbsp;{{arrived}}/{{parseInt(dailyList.length)}}</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>迟到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="later/parseInt(dailyList.length)*100" color="#e6a23c"></el-progress></div><div>&nbsp;{{later}}/{{parseInt(dailyList.length)}}</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>未到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="unarrived/parseInt(dailyList.length)*100" color="#F56C6C"></el-progress></div><div>&nbsp;{{unarrived}}/{{parseInt(dailyList.length)}}</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>请假：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="askForLeave/parseInt(dailyList.length)*100" color="#909399"></el-progress></div><div>&nbsp;{{askForLeave}}/{{parseInt(dailyList.length)}}</div></div>
                       </el-col>
                     </el-row>
                   </el-col>
@@ -57,7 +57,7 @@
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
                         <div>
-                          <daily-performance-summary :first-data="dailyCount.breakRule" :second-data="dailyCount.extrude" :thirdly-data="dailyCount.great" ref="barchart1"></daily-performance-summary>
+                          <daily-performance-summary :first-data="parseInt(breakRuleList.length)" :second-data="parseInt(highLightList.length)" :thirdly-data="parseInt(greatList.length)" ref="barchart1"></daily-performance-summary>
                         </div>
                       </el-col>
                     </el-row>
@@ -288,9 +288,20 @@ import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
 import ProjectManagerReviewResults from './components/ProjectManagerReviewResults'
 import HRReviewResults from './components/HRReviewResults'
 import { fetchListDaily } from '@/api/participation'
+import { fetchListBreakRule } from '@/api/breakRole'
+import { fetchListGreat } from '@/api/otherImportant'
+import { fetchListHighLight } from '@/api/highlighting'
 export default {
   data() {
     return {
+      greatList: null,
+      highLightList: null,
+      dailyList: null,
+      breakRuleList: null,
+      askForLeave: 0,
+      arrived: 0,
+      unarrived: 0,
+      later: 0,
       breakRuleNumber: 3,
       highLightingNumber: 5,
       majorIssuesNumber: 2,
@@ -333,15 +344,102 @@ export default {
   },
 
   methods: {
-    getList() {
+    init() {
+      if (this.$storage.get('dailyList') !== null) {
+        this.dailyList = this.$storage.get('dailyList')
+        for (let i = 0; i < this.dailyList.length; i++) {
+          switch (this.dailyList[i].status) {
+            case '请假':
+              this.askForLeave = this.askForLeave + 1
+              break
+            case '未到':
+              this.unarrived = this.unarrived + 1
+              break
+            case '已到':
+              this.arrived = this.arrived + 1
+              break
+            case '迟到':
+              this.later = this.later + 1
+              break
+          }
+        }
+        this.askForLeave = parseInt(this.askForLeave)
+        this.unarrived = parseInt(this.unarrived)
+        this.arrived = parseInt(this.arrived)
+        this.later = parseInt(this.later)
+        const length = this.dailyList.length
+        this.firstDaily = this.dailyList[length - 1]
+        this.secondDaily = this.dailyList[length - 2]
+        this.thirdDaily = this.dailyList[length - 3]
+        this.fourthDaily = this.dailyList[length - 4]
+        this.fifthDaily = this.dailyList[length - 5]
+      } else {
+        this.getListDaily()
+      }
+      if (this.$storage.get('breakRuleList') !== null) {
+        this.breakRuleList = this.$storage.get('breakRuleList')
+      } else {
+        this.getListBreakRule()
+      }
+      if (this.$storage.get('greatList') !== null) {
+        this.greatList = this.$storage.get('greatList')
+      } else {
+        this.getListGreat()
+      }
+      if (this.$storage.get('highLightList') !== null) {
+        this.highLightList = this.$storage.get('highLightList')
+      } else {
+        this.getListHighLight()
+      }
+    },
+    getListDaily() {
       fetchListDaily().then(response => {
-        this.dailyCount = response.data.dailyCount
-        console.log(response.data.dailyCount)
+        this.dailyList = response.data.items
+        for (let i = 0; i < this.dailyList.length; i++) {
+          switch (this.dailyList[i].status) {
+            case '请假':
+              this.askForLeave = this.askForLeave + 1
+              break
+            case '未到':
+              this.unarrived = this.unarrived + 1
+              break
+            case '已到':
+              this.arrived = this.arrived + 1
+              break
+            case '迟到':
+              this.later = this.later + 1
+              break
+          }
+        }
+        this.askForLeave = parseInt(this.askForLeave)
+        this.unarrived = parseInt(this.unarrived)
+        this.arrived = parseInt(this.arrived)
+        this.later = parseInt(this.later)
+        const length = this.dailyList.length
+        this.firstDaily = this.dailyList[length - 1]
+        this.secondDaily = this.dailyList[length - 2]
+        this.thirdDaily = this.dailyList[length - 3]
+        this.fourthDaily = this.dailyList[length - 4]
+        this.fifthDaily = this.dailyList[length - 5]
+        console.log(1)
+        console.log(this.firstDaily)
+      })
+    },
+    getListBreakRule() {
+      fetchListBreakRule(this.listQuery).then(response => {
+        this.breakRuleList = response.data.items
+      })
+    },
+    getListGreat() {
+      fetchListGreat(this.listQuery).then(response => {
+        this.greatList = response.data.items
+      })
+    },
+    getListHighLight() {
+      fetchListHighLight(this.listQuery).then(response => {
+        this.highLightList = response.data.items
       })
     }
-  },
-  mounted() {
-    this.getList()
   },
   created() {
     if (this.$storage.get('lastTest1Score') !== null) {
@@ -360,6 +458,7 @@ export default {
       this.lastTestScore5 = this.$storage.get('lastTest5Score')
     }
     this.lastTestAvg = (this.lastTestScore1.score + this.lastTestScore2.score + this.lastTestScore3.score + this.lastTestScore4.score + this.lastTestScore5.score) / 5
+    this.init()
   }
 }
 
