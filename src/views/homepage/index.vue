@@ -7,7 +7,7 @@
                     <el-card>
                         <div slot="header" class="clearfix">
                             <span><svg-icon icon-class="table" />&nbsp;系统公告</span>
-                            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+                            <el-button style="float: right; padding: 3px 0" type="text" @click="goToAnnocument">更多</el-button>
                         </div>
                         <el-table :data="announcementData" style="width: 100%"  >
                             <el-table-column fit prop="atitle" label="公告">
@@ -54,7 +54,7 @@
                     <el-card>
                         <div slot="header" class="clearfix">
                             <span><svg-icon icon-class="example" />&nbsp;日常表现</span>
-                            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+                            <el-button style="float: right; padding: 3px 0" type="text" @click="goToDaliyReport">更多</el-button>
                         </div>
                         <el-tabs tab-position="left" style="height: 264px;"><!-- tip:静态数据 -->
                             <el-tab-pane label="日常出勤">
@@ -112,7 +112,7 @@
                     <el-card>
                         <div slot="header" class="clearfix">
                             <span><svg-icon icon-class="chart" />&nbsp;评测报告</span>
-                            <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+                            <el-button style="float: right; padding: 3px 0" type="text" @click="goToReport">更多</el-button>
                         </div>
                         <el-tabs tab-position="left" style="height:300px" @tab-click="clickTab" >
                             <el-tab-pane label="入学测评" style="width:100%">
@@ -135,7 +135,7 @@
                     <el-card>
                         <div slot="header" class="clearfix">
                             <span><svg-icon icon-class="user" />&nbsp;学生信息</span>
-                            <el-button style="float: right; padding: 3px 0" type="text">修改个人信息</el-button>
+                            <el-button style="float: right; padding: 3px 0" type="text" @click="goToInformation">修改个人信息</el-button>
                         </div>
                         <el-row type="flex" justify="center" :gutter="20">
                         <el-col :span="24">
@@ -285,6 +285,18 @@
 
         showDaliyTask() {
           this.$router.push({ name: 'daliyTask' })
+        },
+        goToAnnocument() {
+          this.$router.push({ path: '/other/announcement' })
+        },
+        goToDaliyReport() {
+          this.$router.push({ path: '/studentInformation/daliyReport' })
+        },
+        goToReport() {
+          this.$router.push({ path: '/evaluationReport/admissionAssessment' })
+        },
+        goToInformation() {
+          this.$router.push({ path: '/studentInformation/information' })
         },
 
         handleClose(tag) { // 动态编辑标签

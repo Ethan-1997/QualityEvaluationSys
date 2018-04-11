@@ -223,7 +223,7 @@
           this.$router.push({ path: '/participation/index' })
         },
         goToAnnocument() {
-          this.$router.push({ path: '/announcementBrowsing/index' })
+          this.$router.push({ path: '/other/announcement' })
         },
         handleClose(tag) { // 动态编辑标签
           this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
