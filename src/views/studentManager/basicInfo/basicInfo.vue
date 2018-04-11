@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
       </el-input>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sprofession" :placeholder="tableCol.sprofession">
+      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.Sprofession" :placeholder="tableCol.Sprofession">
         <el-option v-for="item in deptOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
@@ -23,24 +23,24 @@
 
     <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.sno" width="65">
+      <el-table-column align="center" :label="tableCol.Sno" width="65">
         <template slot-scope="scope">
-          <span>{{scope.row.sno}}</span>
+          <span>{{scope.row.Sno}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" align="center" :label="tableCol.sname">
+      <el-table-column width="100px" align="center" :label="tableCol.Sname">
         <template slot-scope="scope">
-          <span>{{scope.row.sname }}</span>
+          <span>{{scope.row.Sname }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="50px" :label="tableCol.ssex">
+      <el-table-column width="50px" :label="tableCol.Ssex">
         <template slot-scope="scope">
-         <span>{{scope.row.ssex}}</span>
+         <span>{{scope.row.Ssex}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="50px" align="center" :label="tableCol.sclass">
+      <el-table-column width="50px" align="center" :label="tableCol.Sclass">
         <template slot-scope="scope">
-          <span>{{scope.row.sclass}}</span>
+          <span>{{scope.row.Sclass}}</span>
         </template>
       </el-table-column>
       <el-table-column width="110px"  align="center" :label="tableCol.birth">
@@ -48,19 +48,19 @@
           <span >{{scope.row.birth}}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="150px" :label="tableCol.saddress">
+      <el-table-column min-width="150px" :label="tableCol.Saddress">
         <template slot-scope="scope">
-          <span>{{scope.row.saddress}}</span>
+          <span>{{scope.row.Saddress}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.sprofession" width="95">
+      <el-table-column align="center" :label="tableCol.Sprofession" width="95">
         <template slot-scope="scope">
-          <span>{{scope.row.sprofession}}</span>
+          <span>{{scope.row.Sprofession}}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" :label="tableCol.stime" width="150">
+      <el-table-column class-name="status-col" :label="tableCol.Stime" width="150">
         <template slot-scope="scope">
-          <el-tag>{{scope.row.stime}}</el-tag>
+          <el-tag>{{scope.row.Stime}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
@@ -85,19 +85,19 @@
             </el-option>
           </el-select>
         </el-form-item> -->
-        <el-form-item :label="tableCol.sname" prop="sname">
-          <el-input v-model="temp.sname"></el-input>
+        <el-form-item :label="tableCol.Sname" prop="Sname">
+          <el-input v-model="temp.Sname"></el-input>
         </el-form-item>
        
-        <el-form-item :label="tableCol.ssex" prop="sex">
-           <el-select class="filter-item" v-model="temp.ssex" placeholder="请选择">
+        <el-form-item :label="tableCol.Ssex" prop="Ssex">
+           <el-select class="filter-item" v-model="temp.Ssex" placeholder="请选择">
             <el-option v-for="item in  sexOptions" :key="item" :label="item" :value="item">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="tableCol.sclass" prop="sclass">
+        <el-form-item :label="tableCol.Sclass" prop="Sclass">
            <el-autocomplete
-            v-model="temp.sclass"
+            v-model="temp.Sclass"
             :fetch-suggestions="querySearch"
             placeholder="请输入内容"
             :trigger-on-focus="true"
@@ -108,18 +108,17 @@
           <el-date-picker v-model="temp.birth"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" placeholder="请选择生日">
           </el-date-picker>
         </el-form-item>
-        <el-form-item :label="tableCol.saddress" prop="saddress">
-          <el-input v-model="temp.saddress"></el-input>
+        <el-form-item :label="tableCol.Saddress" prop="Saddress">
+          <el-input v-model="temp.Saddress"></el-input>
         </el-form-item>
-         <el-form-item :label="tableCol.sprofession" prop="sprofession">
-           <el-select class="filter-item" v-model="temp.sprofession" placeholder="请选择">
+         <el-form-item :label="tableCol.Sprofession" prop="Sprofession">
+           <el-select class="filter-item" v-model="temp.Sprofession" placeholder="请选择">
             <el-option v-for="item in  deptOptions" :key="item" :label="item" :value="item">
             </el-option>
           </el-select>
         </el-form-item>
-         <el-form-item :label="tableCol.stime" prop="stime">
-           <el-date-picker v-model="temp.stime" format="yyyy年" value-format="yyyy">
-             
+        <el-form-item :label="tableCol.Stime" prop="Stime">
+           <el-date-picker v-model="temp.Stime" format="yyyy年" value-format="yyyy">
            </el-date-picker>
         </el-form-item>
       </el-form>
@@ -141,7 +140,7 @@ import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
 import compare from '@/utils/compare'
-
+import Mock from 'mockjs'
 export default {
   name: 'complexTable',
   directives: {
@@ -154,14 +153,14 @@ export default {
     return {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
-        sno: '学号',
-        sname: '姓名',
-        ssex: '性别',
-        sclass: '班级',
+        Sno: '学号',
+        Sname: '姓名',
+        Ssex: '性别',
+        Sclass: '班级',
         birth: '生日',
-        saddress: '地址',
-        sprofession: '专业',
-        stime: '入学时间',
+        Saddress: '地址',
+        Sprofession: '专业',
+        Stime: '入学时间',
         operator: '操作',
         order: '排序规则'
       },
@@ -173,7 +172,7 @@ export default {
         page: 1,
         limit: 20,
         sname: undefined,
-        sprofession: undefined,
+        Sprofession: undefined,
         order: '+id',
         sclass: undefined
       },
@@ -185,14 +184,14 @@ export default {
 
       showReviewer: false,
       temp: {
-        sno: undefined,
-        sname: undefined,
-        ssex: undefined,
-        sclass: undefined,
+        Sno: undefined,
+        Sname: undefined,
+        Ssex: undefined,
+        Sclass: undefined,
         birth: undefined,
-        saddress: undefined,
-        sprofession: undefined,
-        stime: undefined
+        Saddress: undefined,
+        Sprofession: undefined,
+        Stime: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -210,7 +209,7 @@ export default {
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
-      tHeader: ['sno', 'sname', 'ssex', 'sclass', 'birth', 'saddress', 'sprofession', 'stime']
+      tHeader: ['Sno', 'Sname', 'Ssex', 'Sclass', 'birth', 'Saddress', 'profession', 'Stime']
     }
   },
   filters: {
@@ -296,14 +295,14 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        sno: undefined,
-        sname: undefined,
-        ssex: undefined,
-        sclass: undefined,
+        Sno: undefined,
+        Sname: undefined,
+        Ssex: undefined,
+        Sclass: undefined,
         birth: undefined,
-        saddress: undefined,
-        sprofession: undefined,
-        stime: undefined
+        Saddress: undefined,
+        Sprofession: undefined,
+        Stime: undefined
       }
     },
     handleCreate() {
@@ -317,8 +316,19 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.sno = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp.Sno = parseInt(Math.random() * 100) + 1024 // mock a id
           this.temp.author = 'vue-element-admin'
+          this.temp.Simage = Mock.Random.dataImage('200x200', '头像')
+          this.temp.studyRate1 = 0
+          this.temp.studyRate2 = 0
+          this.temp.studyRate3 = 0
+          this.temp.developRate1 = 0
+          this.temp.developRate2 = 0
+          this.temp.developRate3 = 0
+          this.temp.daliyRate1 = 0
+          this.temp.daliyRate2 = 0
+          this.temp.daliyRate3 = 0
+          this.temp.remark = ''
           createStudent(this.temp).then(() => {
             console.log('in')
             this.list.unshift(this.temp)
@@ -392,12 +402,12 @@ export default {
     //     sclass: undefined,
     //     birth: undefined,
     //     saddress: undefined,
-    //     sprofession: undefined,
+    //     Sprofession: undefined,
     //     stime: undefined
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const filterVal = ['sno', 'sname', 'ssex', 'sclass', 'birth', 'saddress', 'sprofession', 'stime']
+        const filterVal = ['Sno', 'Sname', 'Ssex', 'Sclass', 'birth', 'Saddress', 'Sprofession', 'Stime']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel(this.tHeader, data, 'table-list')
         this.downloadLoading = false
