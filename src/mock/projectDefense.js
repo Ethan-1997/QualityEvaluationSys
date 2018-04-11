@@ -5,12 +5,8 @@ let List = []
 
 export default {
   getList: config => {
-    // const temp = storage.get('temp')
-    // if (temp === 1) {
-    //   storage.set('projectDefenseList', [])
-    //   storage.set('temp',1)
-    // }
-    List = storage.get('projectDefenseList', [])
+    console.log(List)
+    if (storage.get('projectDefenseList', []) instanceof Array) { List = storage.get('projectDefenseList', []) }
     console.log(List)
     const { importance, type, title, page = 1, limit = 20, sort } = param2Obj(config.url)
 
@@ -33,8 +29,8 @@ export default {
     }
   },
   createProjectDefense: (data) => {
-    data = JSON.parse(data.body)
-    List = List.push(data)
+    debugger
+    List.push(JSON.parse(data.body))
     storage.set('projectDefenseList', List)
     return {
       data: 'success'

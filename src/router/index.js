@@ -452,6 +452,19 @@ export const asyncRouterMap = [
     children: [{ path: 'index', component: _import('review/teacherReview'), name: 'teacherReview', meta: { title: '点评管理', icon: '2' }}]
   },
   {
+    path: '/projectDefense',
+    component: Layout,
+    meta: {
+      roles: ['teacher']
+    },
+    children: [{
+      path: 'review',
+      component: _import('projectDefense/review'),
+      name: 'projectDefenseReview',
+      meta: { title: '项目答辩点评', icon: 'dashboard', noCache: true }
+    }]
+  },
+  {
     path: '/reviewIndex',
     component: Layout,
     meta: {
@@ -463,6 +476,22 @@ export const asyncRouterMap = [
       name: 'reviewIndex',
       meta: {
         title: '点评首页',
+        icon: 'work'
+      }
+    }]
+  },
+  {
+    path: '/HRReview',
+    component: Layout,
+    meta: {
+      roles: ['teacher']
+    },
+    children: [{
+      path: 'index',
+      component: _import('review/HRReview'),
+      name: 'HRReview',
+      meta: {
+        title: '人事经理面试',
         icon: 'work'
       }
     }]
@@ -493,12 +522,12 @@ export const asyncRouterMap = [
     children: [{ path: 'index', component: _import('studentManager/leave/leave'), name: 'leave', meta: { title: '请假登记', icon: 'leave' }}]
   },
   {
-    path: '/technologyReview',
+    path: '/projectManagerReview',
     component: Layout,
     meta: {
       roles: ['teacher']
     },
-    children: [{ path: 'index', component: _import('review/technologyReview'), name: 'technologyReview', meta: { title: '技术经理面试', icon: 'Interview' }}]
+    children: [{ path: 'index', component: _import('review/projectManagerReview'), name: 'technologyReview', meta: { title: '项目经理面试', icon: 'Interview' }}]
   },
 
   {

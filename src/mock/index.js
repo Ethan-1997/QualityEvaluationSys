@@ -36,6 +36,8 @@ Mock.mock(/\/student\/list/, 'get', student.getList)
 
 // 日常任务
 Mock.mock(/\/daliyTask\/daliyTask/, 'post', daliyTask.daliyTask)
+Mock.mock(/\/daliyTask\/create/, 'post', daliyTask.createDailyTask)
+Mock.mock(/\/daliyTask\/update/, 'post', daliyTask.updateDailyTask)
 
 Mock.mock(/\/studentTeam\/update/, 'post', informationAPI.updateStudentTeam)
 Mock.mock(/\/information\/getList/, 'post', informationAPI.getList)
