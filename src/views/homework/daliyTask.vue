@@ -7,9 +7,7 @@
           <div slot="header" class="clearfix">
             <span><svg-icon icon-class="form" />&nbsp;每日任务</span>
           </div>
-          <el-collapse v-model="activeNames" >
-            <el-collapse-item title="2018-02-28" name="1">
-              <el-table :data="taskData" style="width:94%;margin:0px auto;font-size:16px" :row-class-name="tableRowClassName" ref="daliyTask">
+           <el-table :data="taskData" style="width:94%;margin:0px auto;font-size:16px" :row-class-name="tableRowClassName" ref="daliyTask">
                 <el-table-column align="center" label="序号" width="65"  :index="indexMethod">  
                   <template slot-scope="scope">
                       <span> {{scope.row.id}}</span>
@@ -33,41 +31,6 @@
                   </template>   
                 </el-table-column>
               </el-table>
-            </el-collapse-item>
-            <el-collapse-item title="2018-02-27" name="2">
-
-            </el-collapse-item>
-            <el-collapse-item title="2018-02-26" name="3">
-
-            </el-collapse-item>
-            <el-collapse-item title="2018-02-25" name="4">
-
-            </el-collapse-item>
-            <el-collapse-item title="2018-02-24" name="5">
-
-            </el-collapse-item>
-            <el-collapse-item title="2018-02-23" name="6">
-
-            </el-collapse-item>
-            <el-collapse-item title="2018-02-22" name="7">
-
-            </el-collapse-item>
-            <el-collapse-item title="2018-02-21" name="8">
-
-            </el-collapse-item>
-            <el-collapse-item title="2018-02-20" name="9">
-
-            </el-collapse-item>
-            <el-collapse-item title="2018-02-19" name="10">
-
-            </el-collapse-item>
-            <el-collapse-item title="2018-02-18" name="11">
-
-            </el-collapse-item>
-            <el-collapse-item title="2018-02-17" name="12">
-
-            </el-collapse-item>
-          </el-collapse>
         </el-card>
     </el-col>
   </el-row>
@@ -124,9 +87,7 @@ export default {
   data() {
     return {
       taskData: null,
-
       activeNames: ['1'],
-
       temp: null,
       fileList: [],
       taskTitle: null,

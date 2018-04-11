@@ -1,28 +1,16 @@
-
 import { param2Obj } from '@/utils'
 import storage from '@/utils/storage'
-
 let List = []
-
-// for (let i = 0; i < count; i++) {
-//   List.push(Mock.mock({
-//     tno: '@increment',
-//     tname: '@cname',
-//     ttime: '@datetime',
-//     tintroduce: '@cparagraph',
-//     'tsex|1': ['男', '女'],
-//     'twage|4000-5000': 1000
-//   }))
-// }
 
 export default {
   getList: config => {
-    List = storage.get('teacherlist', [])
-    const { page = 1, limit = 20, sort, tname, tsex } = param2Obj(config.url)
+    List = storage.get('classlist', [])
+    const { page = 1, limit = 20, sort, author, status, sclass } = param2Obj(config.url)
 
     let mockList = List.filter(item => {
-      if (tname && item.tname.indexOf(tname) < 0) return false
-      if (tsex && item.tsex !== tsex) return false
+      if (author && item.author.indexOf(author) < 0) return false
+      if (status && item.status !== status) return false
+      if (sclass && item.sclass !== sclass) return false
       return true
     })
 
@@ -37,14 +25,15 @@ export default {
       items: pageList
     }
   },
-  createTeacher: (data) => {
+  createClass: (data) => {
+    debugger
     List.push(JSON.parse(data.body))
-    storage.set('teacherlist', List)
+    storage.set('classlist', List)
     return {
       data: 'success'
     }
   },
-  updateTeacher: (data) => {
+  updateClass: (data) => {
     const temp = JSON.parse(data.body)
     for (const v of List) {
       if (v.id === temp.id) {
@@ -54,7 +43,7 @@ export default {
         break
       }
     }
-    storage.set('teacherlist', List)
+    storage.set('classlist', List)
     return {
       data: 'success'
     }
