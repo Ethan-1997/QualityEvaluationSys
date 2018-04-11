@@ -461,47 +461,7 @@ export const asyncRouterMap = [
       meta: { title: '项目答辩点评', icon: 'dashboard', noCache: true }
     }]
   },
-  {
-    path: '/reviewIndex',
-    component: Layout,
-    meta: {
-      roles: ['teacher']
-    },
-    children: [{ path: 'index', component: _import('review/reviewIndex'), name: 'reviewIndex', meta: { title: '点评首页', icon: 'review' }
-    }]
-  },
-  {
 
-    path: '/HRReview',
-    component: Layout,
-    meta: {
-      roles: ['teacher']
-    },
-    children: [{
-      path: 'index',
-      component: _import('review/HRReview'),
-      name: 'HRReview',
-      meta: {
-        title: '人事经理面试',
-        icon: 'work'
-      }
-    }]
-  },
-
-  {
-    path: '/announcementBrowsing',
-
-    component: Layout,
-    meta: {
-      roles: ['schoolManager', 'teacher']
-    },
-    children: [{
-      path: 'index',
-      component: _import('studentManager/basicInfo/basicInfo'),
-      name: 'basicInfo',
-      meta: { title: '学生信息管理', icon: 'studentList', noCache: true }
-    }]
-  },
   {
     path: '/dailyPerformance',
     component: Layout,
@@ -519,12 +479,29 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/projectManagerReview',
+    path: '/reviewSystem',
     component: Layout,
     meta: {
+      title: '点评系统',
+      icon: 'review',
       roles: ['teacher']
     },
-    children: [{ path: 'index', component: _import('review/projectManagerReview'), name: 'technologyReview', meta: { title: '项目经理面试', icon: 'Interview' }}]
+    children: [
+      { path: 'midReviewIndex', component: _import('review/midReviewIndex'), name: 'midReviewIndex', meta: { title: '学中综合评定', icon: 'review' }},
+      { path: 'finalReviewIndex', component: _import('review/finalReviewIndex'), name: 'finalReviewIndex', meta: { title: '学末综合评定', icon: 'review' }},
+      { path: 'HRReview', component: _import('review/HRReview'), name: 'HRReview', meta: { title: '人事经理面试', icon: 'Interview' }},
+      { path: 'technologyReview', component: _import('review/projectManagerReview'), name: 'technologyReview', meta: { title: '项目经理面试', icon: 'Interview' }}
+    ]
+  },
+  {
+    path: '/announcementBrowsing',
+    component: Layout,
+    meta: {
+      roles: ['schoolManager', 'teacher']
+    },
+    children: [
+      { path: 'index', component: _import('studentManager/basicInfo/basicInfo'), name: 'basicInfo', meta: { title: '学生信息', icon: 'studentList', noCache: true }}
+    ]
   },
   {
     path: '/teacherinformation',
