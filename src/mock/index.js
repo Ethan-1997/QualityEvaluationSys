@@ -138,7 +138,7 @@ Mock.mock(/\/leave\/update/, 'post', leaveAPI.updateLeave)
 Mock.mock(/\/participation\/list/, 'get', participationAPI.getList)
 Mock.mock(/\/participation\/detail/, 'get', participationAPI.getArticle)
 Mock.mock(/\/participation\/create/, 'post', participationAPI.createArticle)
-Mock.mock(/\/participation\/update/, 'post', participationAPI.updateArticle)
+Mock.mock(/\/participation\/update/, 'post', participationAPI.updateParticipation)
 
 // 作业相关
 Mock.mock(/\/work\/list/, 'get', workAPI.getList)
