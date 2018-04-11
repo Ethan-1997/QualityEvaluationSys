@@ -10,7 +10,13 @@ const workList = [
     sclass: 'vue',
     status: '发布',
     author: '曹老师',
-    content: 'vue.js基础'
+    content: 'vue.js基础',
+    submitStatus: '已提交',
+    rowFileList: [{
+      name: '演示.docx',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+      status: 'finished'
+    }]
   },
   {
     id: 1025,
@@ -18,9 +24,15 @@ const workList = [
     startTime: '2018-09-05',
     endTime: '2018-09-08',
     sclass: 'vue',
-    status: '草稿',
+    status: '发布',
     author: '曹老师',
-    content: 'vue.js初级'
+    content: 'vue.js初级',
+    submitStatus: '已提交',
+    rowFileList: [{
+      name: '演示.docx',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+      status: 'finished'
+    }]
   },
   {
     id: 1026,
@@ -30,7 +42,13 @@ const workList = [
     sclass: 'vue',
     status: '发布',
     author: '曹老师',
-    content: 'vue.js中级'
+    content: 'vue.js中级',
+    submitStatus: '已提交',
+    rowFileList: [{
+      name: '演示.docx',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+      status: 'finished'
+    }]
   },
   {
     id: 1027,
@@ -40,7 +58,13 @@ const workList = [
     sclass: 'vue',
     status: '发布',
     author: '王老师',
-    content: 'vue.js高级'
+    content: 'vue.js高级',
+    submitStatus: '已提交',
+    rowFileList: [{
+      name: '演示.docx',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+      status: 'finished'
+    }]
   },
   {
     id: 1028,
@@ -50,7 +74,13 @@ const workList = [
     sclass: 'vue',
     status: '发布',
     author: '应老师',
-    content: 'vue.js终级'
+    content: 'vue.js终级',
+    submitStatus: '已提交',
+    rowFileList: [{
+      name: '演示.docx',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+      status: 'finished'
+    }]
   }
 ]
 let List = []

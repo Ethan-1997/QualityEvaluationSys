@@ -160,7 +160,7 @@
 </template>
 
 <script>
-import { createWork, updateWork, fetchList } from '@/api/work'
+import { createWork, updateWork, fetchListWork } from '@/api/work'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -293,7 +293,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchListWork(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
@@ -320,6 +320,7 @@ export default {
         startTime: undefined,
         endTime: undefined,
         submitTime: undefined,
+        submitStatus: '未提交',
         history: undefined,
         annex: [],
         class: undefined,
