@@ -3,11 +3,10 @@ import { param2Obj } from '@/utils'
 
 const List = []
 const count = 2
-const title = ['休学一学期', '解决社会问题']
-const content = ['因为身体患了重病，申请休学一学期', '好人好事：捡到一部手机并上交']
+const title = ['休学一学期', '摇滚兔子获奖']
+const content = ['因为身体患了重病，申请休学一学期', '获国家技能比赛一等奖']
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
-
     sno: '101',
     sname: '摇滚兔子',
     ssex: '男',
@@ -17,7 +16,6 @@ for (let i = 0; i < count; i++) {
     time: '2018.9.' + +(i + 1)
   }))
 }
-
 export default {
   getList: config => {
     const { page = 1, limit = 20, sort, sname, status, sclass } = param2Obj(config.url)

@@ -326,6 +326,7 @@ export default {
           duration: 2000
         })
       }
+      this.dialogFormVisible = false
     },
     handleUptime(row) {
       this.temp = Object.assign({}, row) // copy obj
