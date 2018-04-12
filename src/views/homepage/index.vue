@@ -44,7 +44,7 @@
                                     <span>{{scope.row.endTime}}</span>
                                 </template>        
                             </el-table-column>
-                            <el-table-column fixed="right" prop="status" label="提交状态" width="100" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
+                            <el-table-column fixed="right" prop="submitStatus" label="提交状态" width="100" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
                                 <template slot-scope="scope">
                                     <el-tag :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'">{{scope.row.submitStatus}}</el-tag>
                                 </template>   
@@ -195,6 +195,7 @@
     import { fetchListDaily } from '@/api/participation'
     import { fetchListBreakRule } from '@/api/breakRole'
     import { fetchListGreat } from '@/api/otherImportant'
+    import storage from '@/utils/storage'
     export default {
     
       data() {
@@ -277,13 +278,6 @@
         this.$refs.gradeTabsThree.chart.resize()
       },
       created() {
-        if (this.$storage.get('worklist') !== null) {
-          this.taskData = this.$storage.get('worklist')
-          console.log(12)
-          console.log(this.$storage.get('worklist'))
-        } else {
-          this.getList()
-        }
         this.getTaskData()
         this.getAnnouncementData()
         this.$nextTick(() => {
@@ -445,7 +439,7 @@
         },
 
         tableRowClassName({ row, rowIndex }) {
-          if (row.status === '已提交') {
+          if (row.submitStatus === '已提交') {
             return 'success-row'
           }
           return ''
@@ -453,12 +447,11 @@
 
         getTaskData() {
           fetchListWork().then(response => {
-            this.taskData = Response.data.taskData
-            console.log(23)
+            this.taskData = storage.get('worklist')
           })
         },
         filterTaskTag(value, row) {
-          return row.status === value
+          return row.submitStatus === value
         },
 
         getAnnouncementData() {
