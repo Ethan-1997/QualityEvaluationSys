@@ -5,13 +5,13 @@
       <span style="font-size:25px">学生信息管理</span>
     </div>
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.Sname" v-model="listQuery.sname">
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.Sname" v-model="listQuery.Sname">
       </el-input>
       <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.Sprofession" :placeholder="tableCol.Sprofession">
         <el-option v-for="item in deptOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.Sclass">
+      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.Sclass" :placeholder="tableCol.Sclass">
         <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
@@ -27,6 +27,11 @@
 
     <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
+      <el-table-column width="100px" align="center" :label="tableCol.Sname">
+        <template slot-scope="scope">
+          <el-tag>{{scope.row.Sname }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="tableCol.Sprofession" width="95">
         <template slot-scope="scope">
           <span>{{scope.row.Sprofession}}</span>
@@ -42,11 +47,7 @@
           <span>{{scope.row.Sno}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" align="center" :label="tableCol.Sname">
-        <template slot-scope="scope">
-          <el-tag>{{scope.row.Sname }}</el-tag>
-        </template>
-      </el-table-column>
+      
       <el-table-column width="50px" align="center" :label="tableCol.Ssex">
         <template slot-scope="scope">
          <span>{{scope.row.Ssex}}</span>
@@ -175,10 +176,10 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        sname: undefined,
+        Sname: undefined,
         Sprofession: undefined,
         order: '+id',
-        sclass: undefined
+        Sclass: undefined
       },
       classOptions: ['101', '102', '103', '104', '105', '106', '107', '108', '109'],
       sexOptions: ['男', '女'],
@@ -213,7 +214,7 @@ export default {
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
-      tHeader: ['Sno', 'Sname', 'Ssex', 'Sclass', 'birth', 'Saddress', 'profession', 'Stime']
+      tHeader: ['Sno', 'Sname', 'Ssex', 'Sclass', 'birth', 'Saddress', 'Sprofession', 'Stime']
     }
   },
   filters: {
@@ -272,6 +273,7 @@ export default {
         let j, len
         for (j = 0, len = this.tableData.length; j < len; j++) {
           this.list.push(this.tableData[j])
+          this.$storage.set('studentlist', this.list)
         }
         this.list.concat(this.tableData)
         console.log(this.list.length)
@@ -413,7 +415,7 @@ export default {
       import('@/vendor/Export2Excel').then(excel => {
         const filterVal = ['Sno', 'Sname', 'Ssex', 'Sclass', 'birth', 'Saddress', 'Sprofession', 'Stime']
         const data = this.formatJson(filterVal, this.list)
-        excel.export_json_to_excel(this.tHeader, data, 'table-list')
+        excel.export_json_to_excel(this.tHeader, data, '学生信息')
         this.downloadLoading = false
       })
     },
