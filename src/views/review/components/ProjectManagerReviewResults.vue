@@ -86,7 +86,7 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['项目经理点评']
+          data: ['项目经理评定']
         },
         series: [{
           type: 'radar',
@@ -103,7 +103,7 @@ export default {
           data: [
             {
               value: this.projectManagerReviewResults,
-              name: '项目经理点评'
+              name: '项目经理评定'
             }
           ],
           animationDuration: animationDuration

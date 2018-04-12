@@ -4,7 +4,7 @@
       <el-col :span="24">
         <el-card>
           <div slot="header">
-            <span style="font-size:25px">点评系统</span>
+            <span style="font-size:25px">结业综合评定</span>
           </div>
           <el-table :data="reviewTable" border style="width: 100%">
             <el-table-column prop="name" label="班级" align="center">
@@ -21,7 +21,7 @@
             </el-table-column>
             <el-table-column prop="routerButton" label="评价" align="center">
               <template slot-scope="scope">
-                <el-button @click="goToDeatil(scope.row)" type="primary">点评</el-button>
+                <el-button @click="goToDeatil(scope.row)" type="primary">评定</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     goToDeatil(row) {
-      this.$router.push('/teacherReview/index')
+      this.$router.push({ name: 'finalTeacherReview' })
     }
   }
 }

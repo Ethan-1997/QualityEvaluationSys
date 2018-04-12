@@ -5,7 +5,7 @@
         <template>
           <el-card>
             <div slot="header" class="clearfix">
-              <span style="font-size:25px">技术经理面试</span>
+              <span style="font-size:25px">项目答辩评定</span>
             </div>
             <el-button :index="index" v-for="(buttonIndex,index) in studentFormData" :key="index" @click="setCarouselItem(index)" ref="studentSelect" style="width:9.3%;margin: 5px;line-height: 30px;text-align:center">{{buttonIndex.Sname}}</el-button>
           </el-card>
@@ -47,25 +47,19 @@
                   <el-row :gutter="20">
                     <el-col :span="24">
                       <el-card>
-                        <el-row :gutter="20">
-                          <el-col :span="7" :offset="3">
-                            <div style="font-size:16px">专业基础知识：<el-rate show-text v-model="studentFormData[index].developRate1"></el-rate></div>
-                          </el-col>
-                          <el-col :span="7">
-                            <div style="font-size:16px">项目分析能力：<el-rate show-text v-model="studentFormData[index].developRate2"></el-rate></div>
-                          </el-col>
-                          <el-col :span="7">
-                            <div style="font-size:16px">合作组织沟通能力：<el-rate show-text v-model="studentFormData[index].developRate3"></el-rate></div>
-                          </el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                          <el-col :span="7" :offset="3">
-                            <div style="font-size:16px">实际操作开发能力：<el-rate show-text v-model="studentFormData[index].daliyRate1"></el-rate></div>
-                          </el-col>
-                          <el-col :span="7">
-                            <div style="font-size:16px">思维能力：<el-rate show-text v-model="studentFormData[index].daliyRate2"></el-rate></div>
-                          </el-col>
-                        </el-row>
+                        <el-table :data="reviewTableData" style="width: 100%">
+                          <el-table-column prop="project" label="评定项目" width="150px">
+                          </el-table-column>
+                          <el-table-column prop="detail" label="评定要点" >
+                          </el-table-column>
+                          <el-table-column label="评定成绩" change="">
+                            <template slot-scope="scope">
+                              <div style="width:100%;padding:0px 10px">
+                                <div style><el-slider v-model="scope.row.grade" @change="handleChange" :max="scope.row.max" show-input> </el-slider></div>
+                              </div>
+                            </template>
+                          </el-table-column>
+                        </el-table>
                       </el-card>
                     </el-col>
                   </el-row>
@@ -94,9 +88,36 @@
 
 <script>
 import { getStudentData } from '@/api/student'
+import storage from '@/utils/storage'
 export default {
   data() {
     return {
+      reviewTableData: [
+        {
+          project: '自述情况',
+          detail: '主要评价学生在答辩过程中的表述情况，对自身项目的描述是否完整，描述的是否精彩',
+          grade: 0,
+          max: 30
+        },
+        {
+          project: '回答问题情况',
+          detail: '主要评价学生在答辩完后回答教师的情况，是否能及时且正确的回答出教师提出的问题',
+          grade: 0,
+          max: 30
+        },
+        {
+          project: '学术或技术水平',
+          detail: '主要评价学生的项目在学术和技术层面上的分数，项目的水准是否足够高',
+          grade: 0,
+          max: 30
+        },
+        {
+          project: '规范要求与文字表达',
+          detail: '主要评价学生的项目书是否达到了规范要求，并且是否有良好的文字表达',
+          grade: 0,
+          max: 10
+        }
+      ],
       options: {
         video: {
           url: 'http://p6k20rdt2.bkt.clouddn.com/FoiCdTJ3kxLZGCICyUZn7VlV9Di1'
@@ -112,6 +133,10 @@ export default {
       player: null,
       studentFormData: [{ Simage: null }],
       index: null,
+      examinationGrade1: 0,
+      examinationGrade2: 0,
+      examinationGrade3: 0,
+      examinationGrade4: 0,
       loading: true,
       activeNames: ['1'],
       studentImage: null,
@@ -141,16 +166,20 @@ export default {
         url: this.studentFormData[this.index].url
       })
     },
+    handleChange(value) {
+      this.examinationGrade1 = this.reviewTableData[0].grade
+      this.examinationGrade2 = this.reviewTableData[1].grade
+      this.examinationGrade3 = this.reviewTableData[2].grade
+      this.examinationGrade4 = this.reviewTableData[3].grade
+    },
     saveButton() {
       if (
-        this.studentFormData[this.index].developRate1.value !== 0 &&
-        this.studentFormData[this.index].developRate2.value !== 0 &&
-        this.studentFormData[this.index].developRate3.value !== 0 &&
-        this.studentFormData[this.index].daliyRate1.value !== 0 &&
-        this.studentFormData[this.index].daliyRate2.value !== 0 &&
         this.studentFormData[this.index].remark !== ''
       ) {
-        this.$refs.studentSelect[this.index].type = 'primary'
+        storage.set('examinationGrade1', this.examinationGrade1)
+        storage.set('examinationGrade2', this.examinationGrade2)
+        storage.set('examinationGrade3', this.examinationGrade3)
+        storage.set('examinationGrade4', this.examinationGrade4)
         this.$notify({
           title: '成功',
           message: '保存成功',

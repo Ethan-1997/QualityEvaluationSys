@@ -16,7 +16,7 @@
                   </div>
                 </el-col>
                 <el-col :span="18">
-                  <div class="grid-content bg-purple-light" v-if="temp">
+                  <div  v-if="temp">
                    <el-form ref="form" :model="temp" label-width="80px">
                       <el-form-item label="标题">
                         <el-input v-model="temp.meta.title"></el-input>

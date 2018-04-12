@@ -190,7 +190,7 @@
                 <el-row :gutter="20">
                   <el-col :xs="24" :sm="24" :lg="24">
                     <div style="width:100%;text-align:center;font-size:20px">
-                      点评系统
+                      评定系统
                     </div>
                   </el-col>
                 </el-row>
@@ -199,7 +199,7 @@
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
                         <div style="width:100%;text-align:center;font-size:20px">
-                          教师、学生点评
+                          教师、学生评定
                         </div>
                       </el-col>
                     </el-row>
@@ -213,7 +213,7 @@
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
                         <div style="width:100%;text-align:center;font-size:20px">
-                          项目经理点评
+                          项目经理评定
                         </div>
                       </el-col>
                     </el-row>
@@ -227,7 +227,7 @@
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
                         <div style="width:100%;text-align:center;font-size:20px">
-                          人事经理点评
+                          人事经理评定
                         </div>
                       </el-col>
                     </el-row>
