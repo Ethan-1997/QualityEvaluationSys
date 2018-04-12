@@ -129,7 +129,7 @@
                                 </el-table-column>
                                 <el-table-column label="上交进度" width="130" align="center" fixed="right">
                                     <template slot-scope="scope">
-                                    <el-tag :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'">{{scope.row.submitStatus}}</el-tag>
+                                    <el-progress :percentage="scope.row.rate/20*100" :show-text="false">123</el-progress><span>{{scope.row.rate}}/20</span>
                                 </template>         
                                 </el-table-column>
                             </el-table>
