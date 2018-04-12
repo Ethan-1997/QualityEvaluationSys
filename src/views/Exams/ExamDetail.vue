@@ -205,7 +205,7 @@
           return 0
         } else {
           this.exam = this.$storage.get('exam-' + id)
-    
+          console.log(this.exam)
           this.questions = this.exam.questions
         }
         this.question = this.questions[this.questionIndex]
@@ -226,7 +226,7 @@
           }
           console.log(midtest)
           this.$storage.set('midtest', midtest)
-          this.$router.push({ path: '/midTest/index/' })
+          this.$router.push({ name: 'dailyTestIndex' })
         },
         init() {
           for (const question of this.questions) {
