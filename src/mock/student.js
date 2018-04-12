@@ -30,12 +30,12 @@ let List = []
 export default {
   getList: config => {
     List = storage.get('studentlist', [])
-    const { importance, type, title, page = 1, limit = 20, sort } = param2Obj(config.url)
+    const { Sprofession, Sclass, Sname, page = 1, limit = 20, sort } = param2Obj(config.url)
 
     let mockList = List.filter(item => {
-      if (importance && item.importance !== +importance) return false
-      if (type && item.type !== type) return false
-      if (title && item.title.indexOf(title) < 0) return false
+      if (Sprofession && item.Sprofession !== Sprofession) return false
+      if (Sclass && item.Sclass !== Sclass) return false
+      if (Sname && item.Sname.indexOf(Sname) < 0) return false
       return true
     })
 
