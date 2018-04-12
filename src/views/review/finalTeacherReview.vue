@@ -5,7 +5,7 @@
         <template>
           <el-card>
             <div slot="header" class="clearfix">
-              <span style="font-size:25px">结业综合评定(学生小组端)</span>
+              <span style="font-size:25px">学末综合评定（教师端）</span>
             </div>
             <el-button :index="index" v-for="(buttonIndex,index) in studentFormData" :key="index" @click="setCarouselItem(index)" ref="studentSelect" style="width:9.3%;margin: 5px;line-height: 30px;text-align:center">{{buttonIndex.Sname}}</el-button>
           </el-card>

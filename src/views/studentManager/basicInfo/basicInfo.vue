@@ -1,17 +1,21 @@
 <template>
   <div class="app-container calendar-list-container">
+    <el-card>
+    <div slot="header" class="clearfix">
+      <span style="font-size:25px">学生信息管理</span>
+    </div>
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.Sname" v-model="listQuery.sname">
       </el-input>
       <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.Sprofession" :placeholder="tableCol.Sprofession">
         <el-option v-for="item in deptOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
+      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.Sclass">
         <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
-      <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
+      <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort" :placeholder="tableCol.order">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
         </el-option>
       </el-select>
@@ -23,27 +27,32 @@
 
     <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.Sno" width="65">
+      <el-table-column align="center" :label="tableCol.Sprofession" width="95">
+        <template slot-scope="scope">
+          <span>{{scope.row.Sprofession}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="80px" align="center" :label="tableCol.Sclass">
+        <template slot-scope="scope">
+          <span>{{scope.row.Sclass}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="tableCol.Sno" width="80">
         <template slot-scope="scope">
           <span>{{scope.row.Sno}}</span>
         </template>
       </el-table-column>
       <el-table-column width="100px" align="center" :label="tableCol.Sname">
         <template slot-scope="scope">
-          <span>{{scope.row.Sname }}</span>
+          <el-tag>{{scope.row.Sname }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column width="50px" :label="tableCol.Ssex">
+      <el-table-column width="50px" align="center" :label="tableCol.Ssex">
         <template slot-scope="scope">
          <span>{{scope.row.Ssex}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="50px" align="center" :label="tableCol.Sclass">
-        <template slot-scope="scope">
-          <span>{{scope.row.Sclass}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="110px"  align="center" :label="tableCol.birth">
+      <el-table-column width="100px"  align="center" :label="tableCol.birth">
         <template slot-scope="scope">
           <span >{{scope.row.birth}}</span>
         </template>
@@ -53,14 +62,9 @@
           <span>{{scope.row.Saddress}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.Sprofession" width="95">
+      <el-table-column class-name="status-col" :label="tableCol.Stime" width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.Sprofession}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" :label="tableCol.Stime" width="150">
-        <template slot-scope="scope">
-          <el-tag>{{scope.row.Stime}}</el-tag>
+          <span>{{scope.row.Stime}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
@@ -130,7 +134,7 @@
       
     </el-dialog>
 
-
+    </el-card>
   </div>
 </template>
 

@@ -11,11 +11,11 @@
       </el-select>
       <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
       </el-input>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.status" :placeholder="tableCol.status">
+      <el-select clearable style="width: 120px" class="filter-item" v-model="listQuery.status" :placeholder="tableCol.status">
         <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
-      <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
+      <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort" :placeholder="tableCol.sort">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
         </el-option>
       </el-select>
@@ -47,7 +47,7 @@
           <span>{{scope.row.sno}}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="150px" :label="tableCol.title">
+      <el-table-column min-width="150px" label="违纪内容">
         <template slot-scope="scope">
           <el-alert type="error" :closable="false">{{scope.row.title}}</el-alert>
         </template>
@@ -154,7 +154,8 @@ export default {
         time: '时间',
         reason: '原因',
         content: '内容',
-        status: '处分程度'
+        status: '处分程度',
+        sort: '排序方式'
       },
       oldtemp: null,
       tableKey: 0,

@@ -38,7 +38,7 @@
                             <el-table-column prop="title" label="每日任务">
                               
                             </el-table-column>
-                            <el-table-column label="截止时间" width="130" align="center">
+                            <el-table-column label="截止时间"  width="130" align="center">
                                 <template slot-scope="scope">
                                     <i class="el-icon-time"></i>
                                     <span>{{scope.row.endTime}}</span>

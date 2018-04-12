@@ -1,5 +1,9 @@
 <template>
+<div class="dashboard-editor-container">
   <el-card style="width:80%;margin:0 auto;">
+    <div slot="header" class="clearfix">
+      <span style="font-size:25px">项目详情</span>
+    </div>
     <el-form ref="form">
       <el-form-item label="项目标题">
         <el-input v-model="temp.title"></el-input>
@@ -20,7 +24,8 @@
           v-model="temp.startAndEndTime"
           value-format="yyyy年MM月dd日"
           type="daterange"
-          range-separator="至"
+          size="samll"
+          range-separator="-"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
         </el-date-picker>
@@ -49,6 +54,7 @@
     
 
   </el-card>
+</div>
 </template>
 
 <script>
@@ -92,7 +98,7 @@ export default {
       window.open(file.url)
     },
     handleCancel() {
-      this.$router.push('/projectDefense/index')
+      this.$router.push('/admissionTestIndex/midProfessionalKnowledgeTest/index')
     },
     handleUploadSuccess(response, file, fileList) {
       // p6k20rdt2.bkt.clouddn.com/FoiCdTJ3kxLZGCICyUZn7VlV9DiF?attname=123.exe
@@ -122,12 +128,15 @@ export default {
         })
       }
 
-      this.$router.push('/projectDefense/index')
+      this.$router.push('/admissionTestIndex/midProfessionalKnowledgeTest/index')
     }
   }
 }
 </script>
 
 <style scoped>
-
+  .dashboard-editor-container {
+  padding: 32px;
+  background-color: rgb(240, 242, 245);
+}
 </style>

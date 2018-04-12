@@ -29,8 +29,8 @@
                     <svg-icon icon-class="clipboard" class-name="card-panel-icon" />
                 </div>
                 <div class="card-panel-description">
-                    <div class="card-panel-text">点评系统</div>
-                    <div class="card-panel-detail">点评</div>
+                    <div class="card-panel-text">评定系统</div>
+                    <div class="card-panel-detail">评定</div>
                 </div>
             </div>
             </el-col>
@@ -225,7 +225,7 @@
       },
       methods: {
         goToStudentBasic() {
-          this.$router.push({ path: '/basicInfo/index' })
+          this.$router.push({ path: '/studentsInformation/index' })
         },
         goToDailyWork() {
           this.$router.push({ path: '/workManager/index' })

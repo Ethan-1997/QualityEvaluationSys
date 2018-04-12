@@ -87,7 +87,7 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['人事经理点评']
+          data: ['人事经理评定']
         },
         series: [{
           type: 'radar',
@@ -104,7 +104,7 @@ export default {
           data: [
             {
               value: this.HRReviewResults,
-              name: '人事经理点评'
+              name: '人事经理评定'
             }
           ],
           animationDuration: animationDuration

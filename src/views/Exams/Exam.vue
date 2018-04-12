@@ -1,19 +1,15 @@
 <template>
-<div class="exam">
-  <el-card>
-    <div class="text item">
+<div class="app-container calendar-list-container">
+  <el-card class="el-card-bottom">
+      <div slot="header" class="clearfix">
+        <span style="font-size:25px">制作试卷</span>
+      </div>
         <section>
-            <h2 class="box-title">我的试卷</h2>
             <template>
                 <el-table style="width: 100%" :data="exams">
                 <el-table-column label="试卷名称" width="130">
                     <template slot-scope="scope">
                         <span>{{ scope.row.name }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="上传日期" width="130">
-                    <template slot-scope="scope">
-                        <span>{{ scope.row.year }}/{{ scope.row.month }}/{{ scope.row.day }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="类型">
@@ -25,7 +21,12 @@
                       </el-radio-group>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="上传日期" width="100">
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.year }}/{{ scope.row.month }}/{{ scope.row.day }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" align="center" width="300px">
                     <template slot-scope="scope">
                         <el-button type="success" @click="midissue(scope.row)" v-if="scope.row.display">发布</el-button>
                         <el-button type="primary" @click="midcancel(scope.row)" v-if="scope.row.display===false">取消</el-button>
@@ -45,8 +46,12 @@
             </ul> -->
         </section>
         <ui-raised-button label="制作试卷" primary to="/Exams/ExamAdd" style="float:right;margin:20px;"/>
+      </el-card>
+      <el-card>
+        <div slot="header" class="clearfix">
+          <span style="font-size:25px">试卷管理</span>
+        </div>
         <section>
-            <h2 class="box-title">系统试卷</h2>
             <template>
                 <el-table style="width: 100%" :data="system_exams_mid">
                 <el-table-column label="试卷名称" width="130">
@@ -54,17 +59,17 @@
                         <span>{{ scope.row.name }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="上传日期" width="130">
-                    <template slot-scope="scope">
-                        <span>{{ scope.row.year }}/{{ scope.row.month }}/{{ scope.row.day }}</span>
-                    </template>
-                </el-table-column>
                 <el-table-column label="说明">
                     <template slot-scope="scope">
                       {{ scope.row.explain }}
                     </template>
                 </el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="上传日期" width="130">
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.year }}/{{ scope.row.month }}/{{ scope.row.day }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" align="center" width="300px">
                     <template slot-scope="scope">
                         <el-button type="success" @click="midissue_system(scope.row)" v-if="scope.row.display">发布</el-button>
                         <el-button type="primary" @click="midcancel_system(scope.row)" v-if="scope.row.display===false">截止</el-button>
@@ -81,7 +86,6 @@
                 </li>
             </ul> -->
         </section>
-    </div>
   </el-card>
 </div>
 </template>
@@ -302,23 +306,7 @@
 </script>
 
 <style scoped>
-/* .exam{
-  padding:32px;
+.el-card-bottom{
+  margin-bottom: 10px;
 }
-.text {
-    font-size: 14px;
-  }
-
-  .item {
-    margin-bottom: 18px;
-  }
-
-  .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
-  .clearfix:after {
-    clear: both
-  } */
 </style>

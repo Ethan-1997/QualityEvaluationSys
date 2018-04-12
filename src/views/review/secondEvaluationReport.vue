@@ -162,7 +162,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">20/20</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{examinationGrade1}}/30</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -174,7 +174,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">20/20</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{examinationGrade2}}/30</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -186,7 +186,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">50/50</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{examinationGrade3}}/30</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -198,7 +198,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">50/50</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{examinationGrade4}}/10</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -221,7 +221,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:40px">150</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:40px">{{midTest.singleSuccess+midTest.judgmentSuccess+examinationGrade1+examinationGrade2+examinationGrade3+examinationGrade4}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -237,7 +237,7 @@
                 <el-row :gutter="20">
                   <el-col :xs="24" :sm="24" :lg="24">
                     <div style="width:100%;text-align:center;font-size:20px">
-                      点评系统
+                      评定系统
                     </div>
                   </el-col>
                 </el-row>
@@ -284,6 +284,7 @@ import TeacherReviewResults from './components/TeacherReviewResults'
 import DailyPerformanceSummary from './components/DailyPerformanceSummary'
 import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
 import { fetchListDaily } from '@/api/participation'
+import storage from '@/utils/storage'
 export default {
   data() {
     return {
@@ -303,7 +304,12 @@ export default {
         judgmentSuccess: 0,
         judgmentTotal: 0
       },
-      comprehensiveQualityData: [60, 75, 60, 80, 50]
+      comprehensiveQualityData: [60, 75, 60, 80, 50],
+
+      examinationGrade1: storage.get('examinationGrade1'),
+      examinationGrade2: storage.get('examinationGrade2'),
+      examinationGrade3: storage.get('examinationGrade3'),
+      examinationGrade4: storage.get('examinationGrade4')
     }
   },
   created() {

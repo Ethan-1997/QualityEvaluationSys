@@ -218,7 +218,7 @@
             judgmentSuccess: judgment_success
           }
           this.$storage.set('midTestSocre', professional)
-          this.$router.push({ path: '/midTest/index' })
+          this.$router.push({ path: '/admissionTestIndex/midProfessionalKnowledgeTest/index' })
         },
         getList() {
           fetchList().then(Response => {

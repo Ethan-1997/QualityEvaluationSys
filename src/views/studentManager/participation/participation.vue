@@ -10,14 +10,14 @@
         type="date"
         placeholder="选择日期">
       </el-date-picker>
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
-      </el-input>
-      <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
-        </el-option>
-      </el-select>
       <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
         <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
+        </el-option>
+      </el-select>
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
+      </el-input>
+      <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort" :placeholder="tableCol.sort">
+        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
         </el-option>
       </el-select>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
@@ -28,14 +28,9 @@
 
     <el-table  :key='tableKey' :data="list" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.date" width="100">
+      <el-table-column align="center" prop="date" sortable :label="tableCol.date" width="100">
         <template slot-scope="scope">
           <span>{{scope.row.date}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="80px" align="center" :label="tableCol.sclass">
-        <template slot-scope="scope">
-          <span>{{scope.row.sclass}}</span>
         </template>
       </el-table-column>
       <el-table-column width="80px" align="center" :label="tableCol.sname">
@@ -43,18 +38,23 @@
           <span>{{scope.row.sname }}</span>
         </template>
       </el-table-column>
+      <el-table-column width="80px" align="center" :label="tableCol.sclass">
+        <template slot-scope="scope">
+          <span>{{scope.row.sclass}}</span>
+        </template>
+      </el-table-column>
       <el-table-column align="center" :label="tableCol.sno" width="80">
         <template slot-scope="scope">
           <span>{{scope.row.sno}}</span>
         </template>
       </el-table-column>
-     <el-table-column align="center" :label="tableCol.time" width="100">
+     <el-table-column align="center" prop="time" sortable :label="tableCol.time" width="80">
         <template slot-scope="scope">
           <span>{{scope.row.time}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.status" width="95">
-        <template slot-scope="scope">
+      <el-table-column align="center" prop="status" :label="tableCol.status" width="90" :filters="[{ text: '请假', value: '请假' }, { text: '已到', value: '已到' }, { text: '未到', value: '未到' }, { text: '迟到', value: '迟到' }]" :filter-method="filterTaskTag">
+        <template slot-scope="scope" >
           <el-tag :type="scope.row.status === '已到' ? 'success' : scope.row.status === '未到' ? 'danger' : scope.row.status === '迟到' ? 'warning' : 'info'">{{scope.row.status}}</el-tag>
         </template>
       </el-table-column>
@@ -176,9 +176,10 @@ export default {
         ssex: '性别',
         sclass: '班级',
         sprofession: '专业',
-        time: '考勤时间',
+        time: '时间',
         status: '考勤状态', // 已到、迟到、请假、未到
-        note: '备注'
+        note: '备注',
+        sort: '排序方式'
       },
       tableKey: 0,
       list: null,
@@ -416,6 +417,10 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+
+    filterTaskTag(value, row) {
+      return row.status === value
     },
 
     handleDownload() {
