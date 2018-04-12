@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function fetchListLeave(query) {
   return request({
     url: '/leave/list',
     method: 'get',

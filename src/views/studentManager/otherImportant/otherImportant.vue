@@ -43,9 +43,9 @@
           <span>{{scope.row.sno}}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="150px" :label="tableCol.content">
+      <el-table-column min-width="150px" :label="tableCol.title">
         <template slot-scope="scope">
-          <el-alert type="warning" :closable="false">{{scope.row.content}}</el-alert>
+          <el-alert type="warning" :closable="false">{{scope.row.title}}</el-alert>
         </template>
       </el-table-column>
       
@@ -92,7 +92,7 @@
         <el-form-item :label="tableCol.title" prop="title">
           <el-input v-model="temp.title"></el-input>
         </el-form-item>
-        <el-form-item :label="tableCol.content" prop="content">
+        <el-form-item :label="tableCol.content" prop="title">
           <el-input
             type="textarea"
             :autosize="{ minRows: 5, maxRows: 6}"
@@ -310,6 +310,7 @@ export default {
           duration: 2000
         })
       }
+      this.dialogFormVisible = false
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj

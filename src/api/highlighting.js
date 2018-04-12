@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function fetchListHighLight(query) {
   return request({
     url: '/highlighting/list',
     method: 'get',

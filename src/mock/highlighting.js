@@ -1,41 +1,45 @@
 import Mock from 'mockjs'
-import { param2Obj } from '@/utils'
+// import { param2Obj } from '@/utils'
 
 const List = []
-const count = 100
-
+const count = 10
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
-    sno: '@increment',
-    sname: '@cname',
-    'ssex|1': ['男', '女'],
-    sclass: '10' + Mock.Random.integer(1, 9),
-    title: '@ctitle',
-    content: '@cparagraph',
-    time: '@date'
+    sno: '101',
+    sname: '摇滚兔子',
+    ssex: '男',
+    sclass: '101',
+    content: '无',
+    'title|1': [
+      '上课积极发言',
+      '乐于助人',
+      '作业优异',
+      '认真听讲'
+    ],
+    time: '2018.9.' + +(i + 1)
   }))
 }
 
 export default {
   getList: config => {
-    const { page = 1, limit = 20, sort, sname, status, sclass } = param2Obj(config.url)
+    // const { page = 1, limit = 20, sort, sname, status, sclass } = param2Obj(config.url)
 
-    let mockList = List.filter(item => {
-      if (sname && item.sname.indexOf(sname) < 0) return false
-      if (status && item.status !== status) return false
-      if (sclass && item.sclass !== sclass) return false
-      return true
-    })
+    // let mockList = List.filter(item => {
+    //   if (sname && item.sname.indexOf(sname) < 0) return false
+    //   if (status && item.status !== status) return false
+    //   if (sclass && item.sclass !== sclass) return false
+    //   return true
+    // })
 
-    if (sort === '-id') {
-      mockList = mockList.reverse()
-    }
+    // if (sort === '-id') {
+    //   mockList = mockList.reverse()
+    // }
 
-    const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
+    // const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
 
     return {
-      total: mockList.length,
-      items: pageList
+      // total: mockList.length,
+      items: List
     }
   },
   getHighlighting: () => ({
