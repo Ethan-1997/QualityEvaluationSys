@@ -214,7 +214,7 @@ export default {
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
-      tHeader: ['学号', '姓名', '性别', '班级', '生日', '地址', '专业', '入学时间']
+      tHeader: ['Sno', 'Sname', 'Ssex', 'Sclass', 'birth', 'Saddress', 'Sprofession', 'Stime']
     }
   },
   filters: {
