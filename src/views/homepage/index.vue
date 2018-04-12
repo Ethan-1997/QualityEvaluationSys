@@ -24,7 +24,7 @@
                 <el-col :xs="24" :sm="24" :lg="24">
                     <el-card>
                         <div slot="header" class="clearfix">
-                            <span><svg-icon icon-class="form" />&nbsp;每日任务</span>
+                            <span><svg-icon icon-class="form" />&nbsp;学生作业</span>
                             <el-button style="float: right; padding: 3px 0" type="text" @click="showDaliyTask">更多</el-button>
                         </div>
                         <el-table :data="taskData" style="width: 100%" :row-class-name="tableRowClassName" @row-click="showDaliyTask">
@@ -35,7 +35,7 @@
                                 </span>
                               </template>
                             </el-table-column>
-                            <el-table-column prop="title" label="每日任务">
+                            <el-table-column prop="title" label="学生作业">
                               
                             </el-table-column>
                             <el-table-column label="截止时间"  width="130" align="center">
