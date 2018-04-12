@@ -5,7 +5,7 @@
     <el-col>
         <el-card style="font-size:20px">
           <div slot="header" class="clearfix">
-            <span><svg-icon icon-class="form" />&nbsp;每日任务</span>
+            <span><svg-icon icon-class="form" />&nbsp;学生作业</span>
           </div>
            <el-table :data="taskData" style="width:94%;margin:0px auto;font-size:16px" :row-class-name="tableRowClassName">
                 <el-table-column align="center" label="序号" width="65"  :index="indexMethod" >  

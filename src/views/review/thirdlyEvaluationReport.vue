@@ -72,7 +72,7 @@
                 <el-row :gutter="20">
                   <el-col :xs="24" :sm="24" :lg="24">
                     <div style="width:100%;text-align:center;font-size:20px">
-                      每日任务/作业完成情况
+                      学生作业 完成情况
                     </div>
                   </el-col>
                 </el-row>
@@ -85,7 +85,7 @@
                   </el-col>
                   <el-col :xs="24" :sm="24" :lg="8">
                     <div style="width:100%">
-                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="100"  color="#F56C6C"></el-progress></div>
+                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="0"  color="#F56C6C"></el-progress></div>
                       <div style="width:126px;text-align:center;margin:5px auto 0 auto">未上交情况</div>
                     </div>
                   </el-col>

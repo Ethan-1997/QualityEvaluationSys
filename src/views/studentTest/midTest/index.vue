@@ -3,7 +3,7 @@
   <el-card>
     <div class="text item">
         <section>
-            <h2 class="box-title">我的试卷</h2>
+            <h2 class="box-title">专业集中测试</h2>
             <template>
                 <el-table style="width: 100%" :data="professionalTest">
                 <el-table-column label="试卷名称" width="180">

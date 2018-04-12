@@ -81,7 +81,7 @@ export default {
         projectRate: 0
       }, {
         reviewProject: '日常表现自评',
-        projectDetail: '包括考勤，违纪等日常表现和每日任务及作业等学习任务的评价。',
+        projectDetail: '包括考勤，违纪等日常表现和学生作业及作业等学习任务的评价。',
         projectRate: 0
       }, {
         reviewProject: '素质素养自评',
