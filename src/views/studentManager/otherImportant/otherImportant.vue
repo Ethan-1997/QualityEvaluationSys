@@ -11,7 +11,7 @@
       </el-select>
       <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
       </el-input>
-      <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
+      <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort"  :placeholder="tableCol.order">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
         </el-option>
       </el-select>
@@ -137,7 +137,7 @@ export default {
         ssex: '性别',
         sclass: '班级',
         title: '标题',
-        content: '内容',
+        content: '重大事项',
         time: '时间',
         operator: '操作',
         order: '排序规则'

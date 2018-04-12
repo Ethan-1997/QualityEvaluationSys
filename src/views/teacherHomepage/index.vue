@@ -29,8 +29,8 @@
                     <svg-icon icon-class="clipboard" class-name="card-panel-icon" />
                 </div>
                 <div class="card-panel-description">
-                    <div class="card-panel-text">点评系统</div>
-                    <div class="card-panel-detail">点评</div>
+                    <div class="card-panel-text">评定系统</div>
+                    <div class="card-panel-detail">评定</div>
                 </div>
             </div>
             </el-col>
@@ -108,19 +108,29 @@
                             </div>
                             <el-table :data="taskData" style="width: 100%">
                                 <el-table-column align="center" label="序号" width="65" type="index" :index="indexMethod">
+                                    <template slot-scope="scope">
+                                        <span>
+                                        {{scope.row.id}}
+                                        </span>
+                                    </template>
                                 </el-table-column>
                                 <el-table-column prop="task" label="每日任务">
+                                    <template slot-scope="scope">
+                                        <span>
+                                        {{scope.row.title}}
+                                        </span>
+                                    </template>
                                 </el-table-column>
                                 <el-table-column label="截止时间" width="130" align="center">
                                     <template slot-scope="scope">
                                         <i class="el-icon-time"></i>
-                                        <span>{{scope.row.date}}</span>
-                                    </template>        
+                                        <span>{{scope.row.endTime}}</span>
+                                    </template>            
                                 </el-table-column>
                                 <el-table-column label="上交进度" width="130" align="center" fixed="right">
                                     <template slot-scope="scope">
-                                        <el-progress :percentage="scope.row.rate/20*100" :show-text="false">123</el-progress><span>{{scope.row.rate}}/20</span>
-                                    </template>        
+                                    <el-tag :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'">{{scope.row.submitStatus}}</el-tag>
+                                </template>         
                                 </el-table-column>
                             </el-table>
                         </el-card>
@@ -170,7 +180,7 @@
 
 <script>
     import { fetchList } from '@/api/announcement'
-    import { daliyTask } from '@/api/daliyTask'
+    import { fetchListWork } from '@/api/work'
     import { mapGetters } from 'vuex'
     export default {
     
@@ -205,10 +215,17 @@
       created() {
         this.getTaskData()
         this.getAnnouncementData()
+        if (this.$storage.get('worklist') !== null) {
+          this.taskData = this.$storage.get('worklist')
+          console.log(12)
+          console.log(this.$storage.get('worklist'))
+        } else {
+          this.getList()
+        }
       },
       methods: {
         goToStudentBasic() {
-          this.$router.push({ path: '/basicInfo/index' })
+          this.$router.push({ path: '/studentsInformation/index' })
         },
         goToDailyWork() {
           this.$router.push({ path: '/workManager/index' })
@@ -261,11 +278,10 @@
           })
         },
         getTaskData() {
-          daliyTask().then(response => {
-            this.taskData = response.data
+          fetchListWork().then(response => {
+            this.taskData = Response.data.taskData
+            console.log(23)
           })
-        //   this.$storage.set('taskData', this.taskData)
-        //   this.$storage.get('taskData')
         },
         indexMethod(index) {
           return index + 1

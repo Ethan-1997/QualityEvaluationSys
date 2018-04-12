@@ -1,31 +1,31 @@
 import request from '@/utils/request'
 
-export function fetchListWork(query) {
+export function fetchList(query) {
   return request({
-    url: '/work/list',
+    url: '/log/list',
     method: 'get',
     params: query
   })
 }
 
-export function fetchWork() {
+export function fetchLog() {
   return request({
-    url: '/work/detail',
+    url: '/log/detail',
     method: 'get'
   })
 }
 
-export function createWork(data) {
+export function createLog(data) {
   return request({
-    url: '/work/create',
+    url: '/log/create',
     method: 'post',
     data
   })
 }
 
-export function updateWork(data) {
+export function updateLog(data) {
   return request({
-    url: '/work/update',
+    url: '/log/update',
     method: 'post',
     data
   })

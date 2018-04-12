@@ -227,7 +227,7 @@
                 <el-row :gutter="20">
                   <el-col :xs="24" :sm="24" :lg="24">
                     <div style="width:100%;text-align:center;font-size:20px">
-                      点评系统
+                      评定系统
                     </div>
                   </el-col>
                 </el-row>

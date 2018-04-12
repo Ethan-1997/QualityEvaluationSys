@@ -23,7 +23,7 @@
         prop="introduction"
         label="项目简介">
       </el-table-column>
-       <el-table-column>
+       <el-table-column width="200px">
           <template slot-scope="scope">
              <el-button @click="handleClick(scope.row)" type="success">编辑</el-button>
              <el-button type="danger">删除</el-button>
