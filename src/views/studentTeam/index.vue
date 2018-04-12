@@ -67,7 +67,6 @@ import TransactionTable from './components/TransactionTable'
 import TodoList from './components/TodoList'
 import BoxCard from './components/BoxCard'
 import { fetchList } from '@/api/information'
-import { updateStudentTeam } from '@/api/information'
 
 const lineChartData = {
   newVisitis: {
@@ -109,7 +108,11 @@ export default {
     }
   },
   created() {
-    this.getList()
+    if (this.$storage.get('studentTeamVote') !== null) {
+      this.tableData = this.$storage.get('studentTeamVote')
+    } else {
+      this.getList()
+    }
   },
   methods: {
     selectChange(val, row) {
@@ -145,12 +148,12 @@ export default {
           for (const j in v.copyChooseTchIds) {
             if (v.copyChooseTchIds[j].id === v.tableData[i].id) {
               v.tableData[i].votes = v.tableData[i].votes + 1
-              updateStudentTeam(v.tableData)
+              this.$storage.set('studentTeamVote', v.tableData)
               break
             }
           }
         }
-        this.$router.push({ path: '/studentTeam/none' })
+        location.reload()
         this.$message({
           message: '投票成功',
           type: 'success'
@@ -191,6 +194,7 @@ export default {
     getList() {
       fetchList().then(Response => {
         this.tableData = Response.data.ticket
+        this.$storage.set('studentTeamVote', Response.data.ticket)
         console.log(this.tableData)
       })
     },
