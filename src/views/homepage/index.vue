@@ -129,10 +129,10 @@
                                 <raddar-chart ref="gradeTabsOne" id="gradeTabsOne"></raddar-chart>
                             </el-tab-pane>
                             <el-tab-pane label="学中测评">
-                                <pie-chart ref="gradeTabsTwo"></pie-chart>
+                                <comprehensive-quality-model ref="gradeTabsTwo" :comprehensive-quality-data="midComprehensiveQualityData"></comprehensive-quality-model>
                             </el-tab-pane>
                             <el-tab-pane label="结业测评">
-                                <bar-chart ref="gradeTabsThree"></bar-chart>
+                                <comprehensive-quality-model ref="gradeTabsThree" :comprehensive-quality-data="finalComprehensiveQualityData"></comprehensive-quality-model>
                             </el-tab-pane>
                         </el-tabs>
                     </el-card>
@@ -185,8 +185,7 @@
     import { fetchList } from '@/api/announcement'
     import { mapGetters } from 'vuex'
     import RaddarChart from './components/RaddarChart'
-    import PieChart from './components/PieChart'
-    import BarChart from './components/BarChart'
+    import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
     import { fetchListDaily } from '@/api/participation'
     import { fetchListBreakRule } from '@/api/breakRole'
     import { fetchListGreat } from '@/api/otherImportant'
@@ -197,6 +196,9 @@
           taskData: null,
           active: null,
           announcementData: null,
+
+          midComprehensiveQualityData: [60, 75, 60, 80, 50],
+          finalComprehensiveQualityData: [60, 80, 50, 60, 75],
 
           dynamicTags: ['晚上前提交布置的任务', '13：30理工楼101开会', '数据结构作业', '选修课作业', '前台使用的是Vue.js', '主要的是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
           inputVisible: false,
@@ -255,8 +257,7 @@
   },
       components: {
         RaddarChart,
-        PieChart,
-        BarChart
+        ComprehensiveQualityModel
       },
       computed: {
         ...mapGetters([

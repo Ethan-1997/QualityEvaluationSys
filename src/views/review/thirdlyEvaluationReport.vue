@@ -320,7 +320,7 @@ export default {
       projectManagerReviewResults: [55, 60, 70, 40, 55],
       HRReviewResults: [55, 66, 76, 88, 50, 90],
 
-      comprehensiveQualityData: [60, 75, 60, 80, 50]
+      comprehensiveQualityData: [60, 80, 50, 60, 75]
 
     }
   },
