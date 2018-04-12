@@ -1,12 +1,8 @@
 import Mock from 'mockjs'
-import { param2Obj } from '@/utils'
 const List = []
 const List1 = []
 const List2 = []
 const List3 = []
-const datebreak = ['2018.9.5', '2018.9.11', '2018.9.19']
-const dateextrude = ['2018.9.6', '2018.9.9', '2018.9.11', '2018.9.16', '2018.9.19']
-const dategreat = ['2018.9.6', '2018.9.13']
 const count = 20
 const statu = ['请假', '未到', '已到', '已到', '已到', '已到', '请假', '已到', '请假', '迟到', '请假', '已到', '请假', '已到', '请假', '已到', '请假', '迟到', '请假', '迟到']
 const time = ['--:--:--', '--:--:--', '08:00:00', '07:50:00', '08:02:00', '07:23:00', '--:--:--', '08:30:00', '--:--:--', '09:01:00', '--:--:--', '08:40:00', '--:--:--', '08:21:00', '--:--:--', '08:43:00', '--:--:--', '09:30:00', '--:--:--', '09:21:00']
@@ -22,10 +18,10 @@ for (let i = 0; i < count; i++) {
     ssex: '男',
     sclass: '101',
     sprofession: 'Vue.js',
-    date: '2018.9.' + +(i + 1),
     status: statu[i],
     note: '无',
-    time: time[i]
+    time: time[i],
+    date: '2018.9.' + +(i + 1)
   }))
 }
 let askForLeaveMid = 0
@@ -64,54 +60,11 @@ for (let i = 0; i < List.length / 2; i++) {
       break
   }
 }
-for (let i = 0; i < 3; i++) {
-  List1.push(Mock.mock({
-    date: datebreak[i],
-    'status|1': [
-      '警告',
-      '严重警告',
-      '记过',
-      '处分'
-    ],
-    'remark|1': [
-      '多次上课睡觉',
-      '和隔壁班学生发生争执',
-      '旷课3次'
-    ]
-  })
-  )
-}
 const breakRule = List1.length
 const breakRuleMid = parseInt(List1.length / 2)
-for (let i = 0; i < 5; i++) {
-  List2.push(Mock.mock({
-    date: dateextrude[i],
-    'status|1': [
-      '上课积极',
-      '提前完成作业',
-      '助人为乐'
-    ],
-    'remark|1': [
-      '无'
-    ]
-  })
-  )
-}
+
 const extrude = List2.length
 const extrudeMid = parseInt(List2.length / 2)
-for (let i = 0; i < 2; i++) {
-  List3.push(Mock.mock({
-    date: dategreat[i],
-    'status|1': [
-      '休学一学期',
-      '解决社会问题'
-    ],
-    'remark|1': [
-      '无'
-    ]
-  })
-  )
-}
 for (let i = List.length - 1; i > List.length - 6; i--) {
   List4.push(Mock.mock({
     sno: List[i].sno,
@@ -149,24 +102,8 @@ export default {
     // time: undefined,
     // order: '+id',
     // sclass: undefined
-    const { page = 1, limit = 20, sort, sname, time, sclass } = param2Obj(config.url)
-
-    let mockList = List.filter(item => {
-      if (sname && item.author.indexOf(sname) < 0) return false
-      if (time && item.time !== time) return false
-      if (sclass && item.sclass !== sclass) return false
-      return true
-    })
-
-    if (sort === '-id') {
-      mockList = mockList.reverse()
-    }
-
-    const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
-
     return {
-      total: mockList.length,
-      items: pageList,
+      items: List,
       item: List4,
       breakRule: List1,
       extrude: List2,

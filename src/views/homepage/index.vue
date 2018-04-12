@@ -67,31 +67,31 @@
                                 <div style="padding: 4px 0">
                                     <el-alert :title="firstDaily.status" 
                                     :type="firstDaily.status | statusFilter"
-                                    show-icon :closable="false"> {{firstDaily.time}}
+                                    show-icon :closable="false"> {{firstDaily.date}}
                                     </el-alert>
                                 </div>
                                 <div style="padding: 4px 0">
                                     <el-alert :title="secondDaily.status"
                                       :type="secondDaily.status | statusFilter" 
-                                      show-icon :closable="false"> {{secondDaily.time}}
+                                      show-icon :closable="false"> {{secondDaily.date}}
                                     </el-alert>
                                 </div>
                                 <div style="padding: 4px 0">
                                     <el-alert :title="thirdDaily.status"
                                       :type="thirdDaily.status | statusFilter" 
-                                      show-icon :closable="false"> {{thirdDaily.time}}
+                                      show-icon :closable="false"> {{thirdDaily.date}}
                                     </el-alert>
                                 </div>
                                 <div style="padding: 4px 0">
                                     <el-alert :title="fourthDaily.status"
                                       :type="fourthDaily.status | statusFilter" 
-                                      show-icon :closable="false"> {{fourthDaily.time}}
+                                      show-icon :closable="false"> {{fourthDaily.date}}
                                     </el-alert>
                                 </div>
                                 <div style="padding: 4px 0">
                                     <el-alert :title="fifthDaily.status"
                                       :type="fifthDaily.status | statusFilter" 
-                                      show-icon :closable="false"> {{fifthDaily.time}}
+                                      show-icon :closable="false"> {{fifthDaily.date}}
                                     </el-alert>
                                 </div>
                             </el-tab-pane>
@@ -106,8 +106,8 @@
                             <el-tab-pane label="突出表现">
                                 <template>
                                         <el-table :data="highlightData" style="width:100%" :row-class-name="highlightTable">
-                                            <el-table-column prop="item" label="突出表现" > </el-table-column>
-                                            <el-table-column prop="date" label="日期" width="100" align="center"> </el-table-column>
+                                            <el-table-column prop="title" label="突出表现" > </el-table-column>
+                                            <el-table-column prop="time" label="日期" width="100" align="center"> </el-table-column>
                                         </el-table>
                                 </template>
                             </el-tab-pane>
@@ -196,6 +196,8 @@
     import { fetchListBreakRule } from '@/api/breakRole'
     import { fetchListGreat } from '@/api/otherImportant'
     import storage from '@/utils/storage'
+    import { fetchListHighLight } from '@/api/highlighting'
+
     export default {
     
       data() {
@@ -217,6 +219,7 @@
           signIn: false,
           signInText: '签到',
           signInButton: false,
+          highLightList: null,
           listQuery: {
             page: 1,
             limit: 5,
@@ -225,22 +228,7 @@
             time: undefined
           },
           breakRuleData: [],
-          highlightData: [{
-            item: '突出表现',
-            date: '2016-05-02'
-          }, {
-            item: '突出表现',
-            date: '2016-05-02'
-          }, {
-            item: '突出表现',
-            date: '2016-05-02'
-          }, {
-            item: '突出表现',
-            date: '2016-05-02'
-          }, {
-            item: '突出表现',
-            date: '2016-05-02'
-          }],
+          highlightData: [],
           bigThingData: [],
           firstDaily: null,
           secondDaily: null,
@@ -285,61 +273,81 @@
           this.$refs.gradeTabsTwo.chart.resize()
           this.$refs.gradeTabsThree.chart.resize()
         })
-        if (this.$storage.get('dailyList') !== null) {
-          this.dailyList = this.$storage.get('dailyList')
-          const length = this.dailyList.length
-          this.firstDaily = this.dailyList[length - 1]
-          this.secondDaily = this.dailyList[length - 2]
-          this.thirdDaily = this.dailyList[length - 3]
-          this.fourthDaily = this.dailyList[length - 4]
-          this.fifthDaily = this.dailyList[length - 5]
-        } else {
-          this.getListDaily()
-        }
-        if (this.$storage.get('breakRuleList') !== null) {
-          this.breakRuleList = this.$storage.get('breakRuleList')
-          const length = this.breakRuleList.length
-          this.breakRuleData = []
-          if (length > 5) {
-            for (let i = 1; i <= 5; i++) {
-              this.breakRuleData[i - 1] = this.breakRuleList[length - i]
-            }
-          } else {
-            for (let i = 1; i <= length; i++) {
-              this.breakRuleData[i - 1] = this.breakRuleList[length - i]
-            }
-          }
-    
-          console.log(this.breakRuleData)
-        } else {
-          this.getListBreakRule()
-        }
-        if (this.$storage.get('greatList') !== null) {
-          this.greatList = this.$storage.get('greatList')
-          const length = this.greatList.length
-          this.bigThingData = []
-          if (length > 5) {
-            for (let i = 1; i <= 5; i++) {
-              this.bigThingData[i - 1] = this.greatList[length - i]
-            }
-          } else {
-            for (let i = 1; i <= length; i++) {
-              this.bigThingData[i - 1] = this.greatList[length - i]
-            }
-          }
-        } else {
-          this.getListGreat()
-        }
+        this.init()
       },
       methods: {
+        init() {
+          if (this.$storage.get('dailyList') !== null) {
+            this.dailyList = this.$storage.get('dailyList')
+            const length = this.dailyList.length
+            this.firstDaily = this.dailyList[length - 1]
+            this.secondDaily = this.dailyList[length - 2]
+            this.thirdDaily = this.dailyList[length - 3]
+            this.fourthDaily = this.dailyList[length - 4]
+            this.fifthDaily = this.dailyList[length - 5]
+          } else {
+            this.getListDaily()
+          }
+          if (this.$storage.get('breakRuleList') !== null) {
+            this.breakRuleList = this.$storage.get('breakRuleList')
+            const length = this.breakRuleList.length
+            this.breakRuleData = []
+            if (length > 5) {
+              for (let i = 1; i <= 5; i++) {
+                this.breakRuleData[i - 1] = this.breakRuleList[length - i]
+              }
+            } else {
+              for (let i = 1; i <= length; i++) {
+                this.breakRuleData[i - 1] = this.breakRuleList[length - i]
+              }
+            }
+          } else {
+            this.getListBreakRule()
+          }
+          if (this.$storage.get('greatList') !== null) {
+            this.greatList = this.$storage.get('greatList')
+            const length = this.greatList.length
+            this.bigThingData = []
+            if (length > 5) {
+              for (let i = 1; i <= 5; i++) {
+                this.bigThingData[i - 1] = this.greatList[length - i]
+              }
+            } else {
+              for (let i = 1; i <= length; i++) {
+                this.bigThingData[i - 1] = this.greatList[length - i]
+              }
+            }
+          } else {
+            this.getListGreat()
+          }
+          if (this.$storage.get('highLightList') !== null) {
+            this.highLightList = this.$storage.get('highLightList')
+            const length = this.highLightList.length
+            this.highlightData = []
+            if (length > 5) {
+              for (let i = 1; i <= 5; i++) {
+                this.highlightData[i - 1] = this.highLightList[length - i]
+              }
+            } else {
+              for (let i = 1; i <= length; i++) {
+                this.highlightData[i - 1] = this.highLightList[length - i]
+              }
+            }
+          } else {
+            this.getListHighLight()
+          }
+        },
         getListDaily() {
           fetchListDaily().then(response => {
-            this.dailyList = response.data.item
-            this.firstDaily = this.dailyList[0]
-            this.secondDaily = this.dailyList[1]
-            this.thirdDaily = this.dailyList[2]
-            this.fourthDaily = this.dailyList[3]
-            this.fifthDaily = this.dailyList[4]
+            this.dailyList = response.data.items
+            const length = this.dailyList.length
+            this.firstDaily = this.dailyList[length - 1]
+            this.secondDaily = this.dailyList[length - 2]
+            this.thirdDaily = this.dailyList[length - 3]
+            this.fourthDaily = this.dailyList[length - 4]
+            this.fifthDaily = this.dailyList[length - 5]
+            console.log(1)
+            console.log(this.firstDaily)
           })
         },
         getListBreakRule() {
@@ -370,6 +378,22 @@
             } else {
               for (let i = 1; i <= length; i++) {
                 this.bigThingData[i - 1] = this.greatList[length - i]
+              }
+            }
+          })
+        },
+        getListHighLight() {
+          fetchListHighLight(this.listQuery).then(response => {
+            this.highLightList = response.data.items
+            const length = this.highLightList.length
+            this.highlightData = []
+            if (length > 5) {
+              for (let i = 1; i <= 5; i++) {
+                this.highlightData[i - 1] = this.highLightList[length - i]
+              }
+            } else {
+              for (let i = 1; i <= length; i++) {
+                this.highlightData[i - 1] = this.highLightList[length - i]
               }
             }
           })
