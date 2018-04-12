@@ -24,18 +24,23 @@ export default {
       default: '300px'
     }
   },
-  created() {
-    this.getList()
-  },
   data() {
     return {
       chart: null,
       name: [],
-      data: []
+      data: [],
+      studentTeamVote: []
     }
   },
   mounted() {
     this.initChart()
+    if (this.$storage.get('studentTeamVote') !== null) {
+      this.studentTeamVote = this.$storage.get('studentTeamVote')
+      this.init()
+    } else {
+      this.getList()
+      this.init()
+    }
     this.__resizeHanlder = debounce(() => {
       if (this.chart) {
         this.chart.resize()
@@ -54,27 +59,30 @@ export default {
   methods: {
     getList() {
       fetchList().then(Response => {
-        for (let i = 0; i < 7; i++) {
-          this.name.push(Response.data.ticket[i].name)
-          this.data.push(Response.data.ticket[i].votes)
-        }
-        this.chart.setOption({
-          yAxis: [{
-            type: 'category',
-            data: this.name,
-            axisTick: {
-              alignWithLabel: true
-            }
-          }],
-          series: [{
-            name: '票数',
-            type: 'bar',
-            stack: 'vistors',
-            barWidth: '60%',
-            data: this.data,
-            animationDuration
-          }]
-        })
+        this.studentTeamVote = Response.data.ticket
+      })
+    },
+    init() {
+      for (let i = 0; i < 7; i++) {
+        this.name.push(this.studentTeamVote[i].name)
+        this.data.push(this.studentTeamVote[i].votes)
+      }
+      this.chart.setOption({
+        yAxis: [{
+          type: 'category',
+          data: this.name,
+          axisTick: {
+            alignWithLabel: true
+          }
+        }],
+        series: [{
+          name: '票数',
+          type: 'bar',
+          stack: 'vistors',
+          barWidth: '60%',
+          data: this.data,
+          animationDuration
+        }]
       })
     },
     initChart() {
