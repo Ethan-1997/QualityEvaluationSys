@@ -21,6 +21,7 @@ import student from './student'
 import projectDefenseAPI from './projectDefense'
 import classAPI from './class'
 import logAPI from './log'
+import firstReportAPI from './firstReport'
 
 // 伟哥
 import characterAPI from './character'
@@ -32,6 +33,9 @@ import ThinkingAPI from './Thinking'
 import dailysummaryAPI from './dailysummary'
 
 import teacherinformationAPI from './teacherinformation'
+
+// 入学测试相关
+Mock.mock(/\/firstReport\/list/, 'get', firstReportAPI.getList)
 
 // 学生
 Mock.mock(/\/student\/list/, 'get', student.getList)

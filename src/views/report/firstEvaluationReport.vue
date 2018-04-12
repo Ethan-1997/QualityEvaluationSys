@@ -201,12 +201,14 @@
                 <el-row :gutter="20" type="flex" justify="center">
                   <el-col :xs="24" :sm="24" :lg="24">
                     <div style="width:100%;text-align:center;line-height:40px;font-size:20px">
-                      综合素质模型
+                      专业推荐
                     </div>
                   </el-col>
                 </el-row>
                 <el-row :gutter="20" type="flex" ju40ify="center">
-                  <raddar-chart></raddar-chart>
+                  <div style="padding:0px 32px 16px 32px;">
+                    {{ firstReport[0].title }}
+                  </div>
                 </el-row>
               </el-card>
             </el-col>
@@ -221,10 +223,12 @@
 import PieChart from './components/PieChart'
 import RaddarChart from './components/RaddarChart'
 import BarChart from './components/BarChart'
+import { fetchListFirstReport } from '@/api/firstReport'
 export default {
   data() {
     return {
       character: 0,
+      firstReport: [],
       thinking: 0,
       results: '优秀',
       professional: {
@@ -273,6 +277,10 @@ export default {
       if (this.$storage.get('professional') !== null) {
         this.professional = this.$storage.get('professional')
       }
+      fetchListFirstReport().then(Response => {
+        this.firstReport = Response.data.items
+        console.log(this.firstReport)
+      })
     }
   }
 }
