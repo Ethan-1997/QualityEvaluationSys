@@ -90,7 +90,7 @@
                   <el-col :span="24" style="height:20px;"></el-col>
                   <el-col :span="24">
                     <div class="complete"><el-button type="primary" @click="firstEvaluationReport" :disabled="this.disabled_report">测评报告</el-button></div>
-                    <div class="complete"><el-button type="primary" @click="clear">清空所有</el-button></div>
+                    <!-- <div class="complete"><el-button type="primary" @click="clear">清空所有</el-button></div> -->
                   </el-col>
                 </el-row>
               </el-col>
@@ -133,12 +133,12 @@ export default {
     }
   },
   methods: {
-    clear() {
-      this.$storage.set('ctest', false)
-      this.$storage.set('ptest', false)
-      this.$storage.set('ttest', false)
-      this.$storage.set('percentage', 0)
-    },
+    // clear() {
+    //   this.$storage.set('ctest', false)
+    //   this.$storage.set('ptest', false)
+    //   this.$storage.set('ttest', false)
+    //   this.$storage.set('percentage', 0)
+    // },
     alterInformation() {
       console.log(this.activeName)
     },
