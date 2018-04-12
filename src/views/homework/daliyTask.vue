@@ -7,27 +7,27 @@
           <div slot="header" class="clearfix">
             <span><svg-icon icon-class="form" />&nbsp;每日任务</span>
           </div>
-           <el-table :data="taskData" style="width:94%;margin:0px auto;font-size:16px" :row-class-name="tableRowClassName" ref="daliyTask">
-                <el-table-column align="center" label="序号" width="65"  :index="indexMethod">  
+           <el-table :data="taskData" style="width:94%;margin:0px auto;font-size:16px" :row-class-name="tableRowClassName">
+                <el-table-column align="center" label="序号" width="65"  :index="indexMethod" >  
                   <template slot-scope="scope">
                       <span> {{scope.row.id}}</span>
                   </template> 
                 </el-table-column>
-                <el-table-column label="任务">
+                <el-table-column label="任务" >
                   <template slot-scope="scope">
-                      <span>{{scope.row.task}}</span>&nbsp;
+                      <span>{{scope.row.title}}</span>&nbsp;
                       <el-button type="primary" plain size="mini" @click="openTaskDetail(scope.row)">{{'详情'}}</el-button>
                   </template> 
                 </el-table-column>
                 <el-table-column label="截止时间" width="200" align="center"> 
                   <template slot-scope="scope">
                     <i class="el-icon-time"></i>
-                      <span>{{scope.row.date}}</span>
+                      <span>{{scope.row.endTime}}</span>
                   </template>      
                 </el-table-column>
-                <el-table-column  prop="status" label="提交状态" width="120" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
+                <el-table-column label="提交状态" prop="submitStatus" width="120" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
                   <template slot-scope="scope">
-                      <el-button :type="scope.row.status === '已提交' ? 'success' : 'warning'"  @click="openUploadTask(scope.row)">{{scope.row.status}}</el-button>
+                      <el-button :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'"  @click="openUploadTask(scope.row)" >{{scope.row.submitStatus}}</el-button>
                   </template>   
                 </el-table-column>
               </el-table>
@@ -81,12 +81,13 @@
   </div>
 </template>
 <script>
-import { daliyTask } from '@/api/daliyTask'
+import { fetchListWork } from '@/api/work'
+import storage from '@/utils/storage'
 export default {
 
   data() {
     return {
-      taskData: null,
+      taskData: [],
       activeNames: ['1'],
       temp: null,
       fileList: [],
@@ -99,12 +100,19 @@ export default {
     }
   },
   created() {
-    this.getTaskData()
+    if (this.$storage.get('worklist') !== null) {
+      this.taskData = this.$storage.get('worklist')
+      console.log(2)
+      console.log(this.$storage.get('worklist'))
+    } else {
+      this.getList()
+    }
   },
   methods: {
-    getTaskData() {
-      daliyTask().then(response => {
-        this.taskData = response.data
+    getList() {
+      fetchListWork().then(Response => {
+        this.taskData = Response.data.taskData
+        console.log(this.taskData)
       })
     },
     filterTaskTag(value, row) {
@@ -112,7 +120,7 @@ export default {
     },
 
     tableRowClassName({ row, rowIndex }) {
-      if (row.status === '已提交') {
+      if (row.submitStatus === '已提交') {
         return 'success-row'
       }
       return ''
@@ -120,10 +128,10 @@ export default {
 
     openTaskDetail(row) {
       this.temp = Object.assign({}, row) // copy obj
-      this.taskTitle = this.temp.task
+      this.taskTitle = this.temp.title
       this.taskAuthor = this.temp.author
-      this.taskFinishedTime = this.temp.date
-      this.taskDetailText = this.temp.detail
+      this.taskFinishedTime = this.temp.endTime
+      this.taskDetailText = this.temp.content
       this.taskDetail = true
     },
     closeTaskDetail() {
@@ -143,7 +151,7 @@ export default {
       for (const v of this.taskData) {
         if (v.id === this.temp.id) {
           if (this.fileList.length !== 0) {
-            v.status = '已提交'
+            v.submitStatus = '已提交'
 
             this.$notify({
               title: '成功',
@@ -152,9 +160,12 @@ export default {
               duration: 2000
             })
           } else if (this.fileList.length === 0) {
-            v.status = '未提交'
+            v.submitStatus = '未提交'
           }
           v.rowFileList = this.fileList
+
+          storage.set('worklist', this.taskData)
+          console.log(storage.get('worklist'))
         }
       }
       this.uploadTask = false
