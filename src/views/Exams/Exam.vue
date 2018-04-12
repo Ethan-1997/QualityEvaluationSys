@@ -96,7 +96,6 @@
           midtest: [],
           type: '',
           system_exams_mid: [
-            { name: '期中测试', year: 2018, month: 4, day: 9, display: true, id: null, state: '未完成', explain: '系统随机生成一套期中试卷' },
             { name: '期末测试', year: 2018, month: 4, day: 9, display: true, id: null, state: '未完成', explain: '系统随机生成五套期末试卷' }
           ],
           radio2: ''
@@ -186,30 +185,18 @@
           })
           const midtest = this.$storage.get('professionalTest', [])
           const radio = data.name.split('', 2)[0] + data.name.split('', 2)[1]
-          if (radio === '期中') {
+          for (let i = 0; i < 5; i++) {
+            const name = '期末测试(' + (+i + +1) + ')'
+            console.log(name.split('')[5])
             midtest.push({
               id: data.id,
-              name: data.name,
+              name: name,
               day: data.day,
               month: data.month,
               year: data.year,
               state: data.state,
               radio: radio
             })
-          } else {
-            for (let i = 0; i < 5; i++) {
-              const name = '期末测试(' + (+i + +1) + ')'
-              console.log(name.split('')[5])
-              midtest.push({
-                id: data.id,
-                name: name,
-                day: data.day,
-                month: data.month,
-                year: data.year,
-                state: data.state,
-                radio: radio
-              })
-            }
           }
           console.log()
           this.$storage.set('professionalTest', midtest)
