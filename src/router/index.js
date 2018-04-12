@@ -269,6 +269,7 @@ export const asyncRouterMap = [
           { path: 'midTest', component: _import('studentTest/systemTest/midTest'), name: 'systemTest-midTest', meta: { title: '笔试题', icon: 'icon' }},
           { path: 'index', component: _import('projectDefense/index'), name: 'projectDefense', meta: { title: '项目答辩', icon: 'mic', noCache: true }}
         ] },
+      { path: 'dailyTest', component: _import('studentTest/dailyTest/index'), name: 'dailyTestIndex', meta: { title: '日常测试', icon: 'test' }},
       { path: 'finProfessionalKnowledgeTest', component: _import('studentTest/midTest/index'), name: 'finalProfessionalKnowledgeTest', meta: { title: '专业集中测试', icon: 'test' }}
 
     ]
@@ -392,19 +393,6 @@ export const asyncRouterMap = [
   //   }]
   // },
   {
-    path: '/studentInformation',
-    component: Layout,
-    meta: {
-      title: '学生信息',
-      icon: 'information',
-      roles: ['student']
-    },
-    children: [
-      { path: 'information', component: _import('information/alter'), name: 'alter-information', meta: { title: '个人信息', icon: 'information' }},
-      { path: 'daliyReport', component: _import('information/dailysummary'), name: 'imformation', meta: { title: '日常表现汇总', icon: 'daliyreport', noCache: true }}
-    ]
-  },
-  {
     path: '/evaluationReport',
     component: Layout,
     name: 'evaluationReport',
@@ -417,6 +405,19 @@ export const asyncRouterMap = [
       { path: 'admissionAssessment', component: _import('report/firstEvaluationReport'), name: 'firstEvaluationReport', meta: { title: '入学测评报告', icon: 'report' }},
       { path: 'midtermAssessment', component: _import('review/secondEvaluationReport'), name: 'secondEvaluationReport', meta: { title: '学中测评报告', icon: 'report' }},
       { path: 'endAssessment', component: _import('review/thirdlyEvaluationReport'), name: 'thirdlyEvaluationReport', meta: { title: '结业测评报告', icon: 'report' }}
+    ]
+  },
+  {
+    path: '/studentInformation',
+    component: Layout,
+    meta: {
+      title: '学生信息',
+      icon: 'information',
+      roles: ['student']
+    },
+    children: [
+      { path: 'information', component: _import('information/alter'), name: 'alter-information', meta: { title: '个人信息', icon: 'information' }},
+      { path: 'daliyReport', component: _import('information/dailysummary'), name: 'imformation', meta: { title: '日常表现汇总', icon: 'daliyreport', noCache: true }}
     ]
   },
   // 老师端
