@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       chart: null,
-      iitem: ''
+      iitem: [0, 0, 45]
     }
   },
   mounted() {
@@ -52,12 +52,12 @@ export default {
     this.chart = null
   },
   created() {
-    this.iitem = this.$storage.get('thinking_iitem')
+    if (this.$storage.get('thinking_iitem') !== null) {
+      this.iitem = this.$storage.get('thinking_iitem')
+    }
   },
   methods: {
     getList() {
-      console.log(1)
-      console.log(this.iitem)
       this.chart.setOption({
         series: [{
           name: '数量',

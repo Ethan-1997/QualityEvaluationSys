@@ -146,7 +146,7 @@
                               无尾熊型领导人强调无为而治，能与周围的人和睦相处而不树敌，是极佳的人事领导者，适宜在企业改革后，为公司和员工重建互信的工作。
                             </div>
                           </div>
-                          <div style="margin-top:20px;" v-if="character===3">
+                          <div style="margin-top:20px;" v-if="character===4">
                             <div style="width:100%;text-align:center;font-size:18px;margin-bottom:20px;">变色龙型</div>
                             <div style="width:100%;text-align:left;font-size:16px;">
                               善于在工作中调整自己的角色去适应环境，具有很好的沟通能力。
@@ -155,7 +155,7 @@
                              变色龙型的领导人既没有凸出的个性，对事也没有什么强烈的个人意识型态，事事求中立并倾向站在没有立场的位置，故在冲突的环境中，是个能游走折中的高手。
                             </div>
                           </div>
-                          <div style="margin-top:20px;" v-if="character === 4">
+                          <div style="margin-top:20px;" v-if="character === 3">
                             <div style="width:100%;text-align:center;font-size:18px;margin-bottom:20px;">猫头鹰型</div>
                             <div style="width:100%;text-align:left;font-size:16px;">
                               个性特点：很传统，注重细节，条理分明，责任感强，重视纪律。保守、分析力强，精准度高，喜欢把细节条例化，个性拘谨含蓄。 <br/>
@@ -170,7 +170,7 @@
                   <el-col :xs="24" :sm="24">
                     <el-row>
                       <el-col :xs="24" :sm="24" :lg="24">
-                        <div style="width:100%;text-align:center;font-size:20px">
+                        <div style="width:100%;text-align:center;font-size:20px;">
                           思维能力测试
                         </div>
                       </el-col>
@@ -224,10 +224,16 @@ import BarChart from './components/BarChart'
 export default {
   data() {
     return {
-      character: '',
-      thinking: '',
-      results: '',
-      professional: ''
+      character: 0,
+      thinking: 0,
+      results: '优秀',
+      professional: {
+        single_success: 0,
+        single_total: 0,
+        judgment_success: 0,
+        judgment_total: 0,
+        score: 0
+      }
     }
   },
   components: {
@@ -250,15 +256,22 @@ export default {
   },
   methods: {
     init() {
-      const chara = this.$storage.get('character')
-      this.thinking = this.$storage.get('thinking')
-      this.professional = this.$storage.get('professional')
-      let max = -1
-      for (let i = 0; i < chara.length; i++) {
-        if (max < chara[i]) {
-          max = chara[i]
-          this.character = i
+      if (this.$storage.get('character') !== null) {
+        const chara = this.$storage.get('character')
+        let max = 0
+        for (let i = 1; i < chara.length; i++) {
+          if (max < chara[i]) {
+            max = chara[i]
+            this.character = i
+          }
         }
+      }
+      console.log(this.character)
+      if (this.$storage.get('thinking') !== null) {
+        this.thinking = this.$storage.get('thinking')
+      }
+      if (this.$storage.get('professional') !== null) {
+        this.professional = this.$storage.get('professional')
       }
     }
   }
