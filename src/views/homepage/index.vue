@@ -29,18 +29,24 @@
                         </div>
                         <el-table :data="taskData" style="width: 100%" :row-class-name="tableRowClassName" @row-click="showDaliyTask">
                             <el-table-column align="center" label="序号" width="65" type="index" :index="indexMethod">
+                              <template slot-scope="scope">
+                                <span>
+                                  {{scope.row.id}}
+                                </span>
+                              </template>
                             </el-table-column>
-                            <el-table-column prop="task" label="每日任务">
+                            <el-table-column prop="title" label="每日任务">
+                              
                             </el-table-column>
                             <el-table-column label="截止时间"  width="130" align="center">
                                 <template slot-scope="scope">
                                     <i class="el-icon-time"></i>
-                                    <span>{{scope.row.date}}</span>
+                                    <span>{{scope.row.endTime}}</span>
                                 </template>        
                             </el-table-column>
                             <el-table-column fixed="right" prop="status" label="提交状态" width="100" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
                                 <template slot-scope="scope">
-                                    <el-tag :type="scope.row.status === '已提交' ? 'success' : 'warning'">{{scope.row.status}}</el-tag>
+                                    <el-tag :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'">{{scope.row.submitStatus}}</el-tag>
                                 </template>   
                             </el-table-column>
                         </el-table>
@@ -181,7 +187,7 @@
 </template>
 
 <script>
-    import { daliyTask } from '@/api/daliyTask'
+    import { fetchListWork } from '@/api/work'
     import { fetchList } from '@/api/announcement'
     import { mapGetters } from 'vuex'
     import RaddarChart from './components/RaddarChart'
@@ -271,6 +277,13 @@
         this.$refs.gradeTabsThree.chart.resize()
       },
       created() {
+        if (this.$storage.get('worklist') !== null) {
+          this.taskData = this.$storage.get('worklist')
+          console.log(12)
+          console.log(this.$storage.get('worklist'))
+        } else {
+          this.getList()
+        }
         this.getTaskData()
         this.getAnnouncementData()
         this.$nextTick(() => {
@@ -439,8 +452,9 @@
         },
 
         getTaskData() {
-          daliyTask().then(response => {
-            this.taskData = response.data
+          fetchListWork().then(response => {
+            this.taskData = Response.data.taskData
+            console.log(23)
           })
         },
         filterTaskTag(value, row) {

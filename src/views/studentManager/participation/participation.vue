@@ -99,12 +99,12 @@
         <el-form-item :label="tableCol.sclass" prop="sclass">
           <el-input v-model="temp.sclass"></el-input>
         </el-form-item>
-        <el-form-item :label="tableCol.time" prop="time">
+        <el-form-item :label="tableCol.date" prop="date">
           <el-date-picker
-            v-model="temp.time"
+            v-model="temp.date"
             type="datetime"
             format="yyyy-MM-dd"
-            placeholder="选择日期时间">
+            placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
          <el-form-item :label="tableCol.sprofession" prop="sprofession">
@@ -124,7 +124,9 @@
            <el-time-picker
             v-model="temp.time"
             type="datetime"
-            placeholder="选择日期时间">
+            format="HH:mm:ss"
+            value-format="HH:mm:ss"
+            placeholder="选择时间">
           </el-time-picker>
         </el-form-item>
         <el-form-item :label="tableCol.note" prop="note">
@@ -205,7 +207,8 @@ export default {
         sprofession: undefined,
         time: undefined,
         status: undefined, // 已到、迟到、请假、未到
-        note: undefined
+        note: undefined,
+        date: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -253,6 +256,7 @@ export default {
     } else {
       this.getList()
     }
+    console.log(this.list)
   },
   methods: {
     selected(data) {
@@ -327,8 +331,8 @@ export default {
           duration: 2000
         })
       } else {
-        const months = this.temp.time.getMonth() + 1
-        const times = this.temp.time.getFullYear() + '.' + months + '.' + this.temp.time.getDate()
+        const months = this.temp.date.getMonth() + 1
+        const dates = this.temp.date.getFullYear() + '.' + months + '.' + this.temp.date.getDate()
         this.list.push({
           sno: '101',
           sname: this.temp.sname,
@@ -337,7 +341,8 @@ export default {
           sprofession: this.temp.sprofession,
           status: this.temp.status, // 已到、迟到、请假、未到
           note: this.temp.note,
-          time: times
+          time: this.temp.time,
+          date: dates
         })
         this.$storage.set('dailyList', this.list)
         this.$notify({
@@ -350,6 +355,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
+      console.log(this.temp)
       this.oldtemp = row
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
@@ -363,23 +369,24 @@ export default {
       const tempData = Object.assign({}, this.temp)
       tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
       const oldtempData = Object.assign({}, this.oldtemp)
-      let times
-      if (tempData.time !== oldtempData.time) {
-        const months = tempData.time.getMonth() + 1
-        times = tempData.time.getFullYear() + '.' + months + '.' + tempData.time.getDate()
+      let dates
+      if (tempData.date !== oldtempData.date) {
+        const months = tempData.date.getMonth() + 1
+        dates = tempData.date.getFullYear() + '.' + months + '.' + tempData.date.getDate()
       } else {
-        times = oldtempData.time
+        dates = oldtempData.date
       }
       for (let i = 0; i < this.list.length; i++) {
-        if (this.list[i].time === oldtempData.time && this.list[i].id === oldtempData.id) {
-          console.log(this.list[i])
+        if (this.list[i].date === oldtempData.date && this.list[i].id === oldtempData.id) {
+          console.log(this.list[i].date)
           this.list[i].sname = this.temp.sname
-          this.list[i].time = times
+          this.list[i].time = this.temp.time
           this.list[i].ssex = this.temp.ssex
           this.list[i].sclass = this.temp.sclass
           this.list[i].sprofession = this.temp.sprofession
           this.list[i].status = this.temp.status // 已到、迟到、请假、未到
           this.list[i].note = this.temp.note
+          this.list[i].date = dates
           this.$storage.set('dailyList', this.list)
           break
         }
