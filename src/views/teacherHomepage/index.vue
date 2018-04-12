@@ -19,7 +19,7 @@
                 </div>
                 <div class="card-panel-description">
                     <div class="card-panel-text">作业管理</div>
-                    <div class="card-panel-detail">每日任务/作业</div>
+                    <div class="card-panel-detail">学生作业 </div>
                 </div>
             </div>
             </el-col>
@@ -103,7 +103,7 @@
                     <el-row :gutter="20">
                         <el-card>
                             <div slot="header" class="clearfix" style="align:center">
-                                <span><svg-icon icon-class="form" />&nbsp;每日任务概况</span>
+                                <span><svg-icon icon-class="form" />&nbsp;学生作业概况</span>
                                 <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
                             </div>
                             <el-table :data="taskData" style="width: 100%">
@@ -114,7 +114,7 @@
                                         </span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="task" label="每日任务">
+                                <el-table-column prop="task" label="学生作业">
                                     <template slot-scope="scope">
                                         <span>
                                         {{scope.row.title}}
@@ -191,7 +191,7 @@
           announcementDataData: null,
           taskData: null,
 
-          dynamicTags: ['今晚检查学生每日任务', '周五下午四点行政楼开会', '今天有5人迟到', '提醒课代表收作业', '前台使用的技术是Vue.js', '主要的组件是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
+          dynamicTags: ['今晚检查学生学生作业', '周五下午四点行政楼开会', '今天有5人迟到', '提醒课代表收作业', '前台使用的技术是Vue.js', '主要的组件是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
           inputVisible: false,
           inputValue: '',
     
