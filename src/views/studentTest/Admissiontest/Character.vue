@@ -293,6 +293,7 @@
           this.$storage.set('percentage', this.$storage.get('percentage') + 33)// 进度条
           this.$storage.set('name', 'professional')//
           this.$router.push({ name: 'admissionTestIndex' })
+
           this.PDP()
         },
         getList() {
