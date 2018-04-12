@@ -18,11 +18,7 @@
                 </el-table-column>
                 <el-table-column label="类型">
                     <template slot-scope="scope">
-                      <el-radio-group v-model="scope.row.id" @change="typechange(scope.row.id)">
-                        <el-radio :label="3">日常</el-radio>
-                        <el-radio :label="6">期中</el-radio>
-                        <el-radio :label="9">期末</el-radio>
-                      </el-radio-group>
+                      日常测试
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
@@ -135,34 +131,27 @@
           }
         },
         midissue(data) {
-          if (this.radio2 !== '') {
-            this.$message({
-              message: '设置成功',
-              type: 'success'
-            })
-            const midtest = this.$storage.get('midtest', [])
-            midtest.push({
-              id: data.id,
-              name: data.name,
-              day: data.day,
-              month: data.month,
-              year: data.year,
-              state: data.state,
-              radio: this.type
-            })
-            this.$storage.set('midtest', midtest)
-            for (let i = 0; i < this.exams.length; i++) {
-              if (this.exams[i].id === data.id) {
-                this.exams[i].display = false
-              }
+          const midtest = this.$storage.get('midtest', [])
+          midtest.push({
+            id: data.id,
+            name: data.name,
+            day: data.day,
+            month: data.month,
+            year: data.year,
+            state: data.state,
+            radio: '日常'
+          })
+          this.$storage.set('midtest', midtest)
+          this.$message({
+            message: '设置成功',
+            type: 'success'
+          })
+          for (let i = 0; i < this.exams.length; i++) {
+            if (this.exams[i].id === data.id) {
+              this.exams[i].display = false
             }
-            this.$storage.set('exams', this.exams)
-          } else {
-            this.$message({
-              message: '请选择类型',
-              type: 'warning'
-            })
           }
+          this.$storage.set('exams', this.exams)
         },
         midcancel(data) {
           this.$message({
@@ -191,7 +180,7 @@
             message: '发布成功',
             type: 'success'
           })
-          const midtest = this.$storage.get('midtest', [])
+          const midtest = this.$storage.get('professionalTest', [])
           const radio = data.name.split('', 2)[0] + data.name.split('', 2)[1]
           if (radio === '期中') {
             midtest.push({
@@ -219,7 +208,7 @@
             }
           }
           console.log()
-          this.$storage.set('midtest', midtest)
+          this.$storage.set('professionalTest', midtest)
           for (let i = 0; i < this.system_exams_mid.length; i++) {
             if (this.system_exams_mid[i].name === data.name) {
               this.system_exams_mid[i].display = false
@@ -231,7 +220,7 @@
           this.$message({
             message: '截止成功'
           })
-          const midtest = this.$storage.get('midtest')
+          const midtest = this.$storage.get('professionalTest')
           const dataname = data.name.split('', 2)[0] + data.name.split('', 2)[1]
           if (dataname === '期中') {
             for (let i = 0; i < midtest.length; i++) {
@@ -255,7 +244,7 @@
               this.system_exams_mid[i].display = true
             }
           }
-          this.$storage.set('midtest', midtest)
+          this.$storage.set('professionalTest', midtest)
           this.$storage.set('system_exams_mid', this.system_exams_mid)
         },
         cs() {
@@ -297,7 +286,7 @@
             })
           })
         }
-      }
+  }
     }
 </script>
 

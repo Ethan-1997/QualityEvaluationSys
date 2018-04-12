@@ -270,6 +270,7 @@ export const asyncRouterMap = [
           { path: 'midTest', component: _import('studentTest/systemTest/midTest'), name: 'systemTest-midTest', meta: { title: '笔试题', icon: 'icon' }},
           { path: 'index', component: _import('projectDefense/index'), name: 'projectDefense', meta: { title: '项目答辩', icon: 'mic', noCache: true }}
         ] },
+      { path: 'dailyTest', component: _import('studentTest/dailyTest/index'), name: 'dailyTestIndex', meta: { title: '日常测试', icon: 'test' }},
       { path: 'finProfessionalKnowledgeTest', component: _import('studentTest/midTest/index'), name: 'finalProfessionalKnowledgeTest', meta: { title: '专业集中测试', icon: 'test' }}
 
     ]
