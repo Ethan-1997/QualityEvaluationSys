@@ -182,6 +182,7 @@
     import { fetchList } from '@/api/announcement'
     import { fetchListWork } from '@/api/work'
     import { mapGetters } from 'vuex'
+    import storage from '@/utils/storage'
     export default {
     
       data() {
@@ -215,13 +216,13 @@
       created() {
         this.getTaskData()
         this.getAnnouncementData()
-        if (this.$storage.get('worklist') !== null) {
-          this.taskData = this.$storage.get('worklist')
-          console.log(12)
-          console.log(this.$storage.get('worklist'))
-        } else {
-          this.getList()
-        }
+        // if (this.$storage.get('worklist') !== null) {
+    
+        //   console.log(12)
+        //   console.log(this.$storage.get('worklist'))
+        // } else {
+        //   this.getList()
+        // }
       },
       methods: {
         goToStudentBasic() {
@@ -279,8 +280,7 @@
         },
         getTaskData() {
           fetchListWork().then(response => {
-            this.taskData = Response.data.taskData
-            console.log(23)
+            this.taskData = storage.get('worklist')
           })
         },
         indexMethod(index) {

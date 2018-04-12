@@ -94,21 +94,18 @@ export default {
       storage.set('workTemp', 1)
     }
     List = storage.get('worklist')
-    console.log(List)
     let mockList = List.filter(item => {
-      console.log(List)
       if (author && item.author.indexOf(author) < 0) return false
       if (sclass && item.sclass !== sclass) return false
       if (status && item.status !== status) return false
       return true
     })
-    console.log(mockList)
     if (sort === '-id') {
       mockList = mockList.reverse()
     }
 
     const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
-    console.log(pageList)
+    console.log(storage.get('worklist'))
     return {
       total: mockList.length,
       items: pageList,

@@ -184,7 +184,7 @@
           this.$storage.set('name', 'thinking')
           this.$storage.set('percentage', this.$storage.get('percentage') + 33)
           this.$storage.set('ptest', true)
-          this.$router.push({ name: 'Admissiontest-index' })
+          this.$router.push({ path: '/studentTest/admissionTest' })
           let score = 0
           let single_success = 0
           let judgment_success = 0

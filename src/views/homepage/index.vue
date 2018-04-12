@@ -44,7 +44,7 @@
                                     <span>{{scope.row.endTime}}</span>
                                 </template>        
                             </el-table-column>
-                            <el-table-column fixed="right" prop="status" label="提交状态" width="100" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
+                            <el-table-column fixed="right" prop="submitStatus" label="提交状态" width="100" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
                                 <template slot-scope="scope">
                                     <el-tag :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'">{{scope.row.submitStatus}}</el-tag>
                                 </template>   
@@ -135,10 +135,10 @@
                                 <raddar-chart ref="gradeTabsOne" id="gradeTabsOne"></raddar-chart>
                             </el-tab-pane>
                             <el-tab-pane label="学中测评">
-                                <pie-chart ref="gradeTabsTwo"></pie-chart>
+                                <comprehensive-quality-model ref="gradeTabsTwo" :comprehensive-quality-data="midComprehensiveQualityData"></comprehensive-quality-model>
                             </el-tab-pane>
                             <el-tab-pane label="结业测评">
-                                <bar-chart ref="gradeTabsThree"></bar-chart>
+                                <comprehensive-quality-model ref="gradeTabsThree" :comprehensive-quality-data="finalComprehensiveQualityData"></comprehensive-quality-model>
                             </el-tab-pane>
                         </el-tabs>
                     </el-card>
@@ -191,12 +191,13 @@
     import { fetchList } from '@/api/announcement'
     import { mapGetters } from 'vuex'
     import RaddarChart from './components/RaddarChart'
-    import PieChart from './components/PieChart'
-    import BarChart from './components/BarChart'
+    import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
     import { fetchListDaily } from '@/api/participation'
     import { fetchListBreakRule } from '@/api/breakRole'
     import { fetchListGreat } from '@/api/otherImportant'
+    import storage from '@/utils/storage'
     import { fetchListHighLight } from '@/api/highlighting'
+
     export default {
     
       data() {
@@ -204,6 +205,9 @@
           taskData: null,
           active: null,
           announcementData: null,
+
+          midComprehensiveQualityData: [60, 75, 60, 80, 50],
+          finalComprehensiveQualityData: [60, 80, 50, 60, 75],
 
           dynamicTags: ['晚上前提交布置的任务', '13：30理工楼101开会', '数据结构作业', '选修课作业', '前台使用的是Vue.js', '主要的是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
           inputVisible: false,
@@ -248,8 +252,7 @@
   },
       components: {
         RaddarChart,
-        PieChart,
-        BarChart
+        ComprehensiveQualityModel
       },
       computed: {
         ...mapGetters([
@@ -263,13 +266,6 @@
         this.$refs.gradeTabsThree.chart.resize()
       },
       created() {
-        if (this.$storage.get('worklist') !== null) {
-          this.taskData = this.$storage.get('worklist')
-          console.log(12)
-          console.log(this.$storage.get('worklist'))
-        } else {
-          this.getList()
-        }
         this.getTaskData()
         this.getAnnouncementData()
         this.$nextTick(() => {
@@ -467,7 +463,7 @@
         },
 
         tableRowClassName({ row, rowIndex }) {
-          if (row.status === '已提交') {
+          if (row.submitStatus === '已提交') {
             return 'success-row'
           }
           return ''
@@ -475,12 +471,11 @@
 
         getTaskData() {
           fetchListWork().then(response => {
-            this.taskData = Response.data.taskData
-            console.log(23)
+            this.taskData = storage.get('worklist')
           })
         },
         filterTaskTag(value, row) {
-          return row.status === value
+          return row.submitStatus === value
         },
 
         getAnnouncementData() {
