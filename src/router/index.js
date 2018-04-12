@@ -446,7 +446,7 @@ export const asyncRouterMap = [
     },
     children: [{
       path: 'review',
-      component: _import('projectDefense/review'),
+      component: _import('review/examinationReview'),
       name: 'projectDefenseReview',
       meta: { title: '项目答辩评定', icon: 'dashboard', noCache: true }
     }]

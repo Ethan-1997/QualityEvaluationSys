@@ -16,7 +16,6 @@ for (let i = 0; i < count; i++) {
     content: content[i],
     time: '2018.9.' + +(i + 1)
 
-
   }))
 }
 

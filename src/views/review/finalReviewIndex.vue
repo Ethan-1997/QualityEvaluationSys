@@ -21,7 +21,7 @@
             </el-table-column>
             <el-table-column prop="routerButton" label="评价" align="center">
               <template slot-scope="scope">
-                <el-button @click="goToDeatil(scope.row)" type="primary">点评</el-button>
+                <el-button @click="goToDeatil(scope.row)" type="primary">评定</el-button>
               </template>
             </el-table-column>
           </el-table>

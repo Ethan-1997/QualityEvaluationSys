@@ -26,9 +26,9 @@
           <el-card>
             <el-row :gutter="20">
               <el-table :data="selfReviewData" style="width: 100%">
-                <el-table-column prop="reviewProject" label="点评项目" width="150px">
+                <el-table-column prop="reviewProject" label="评定项目" width="150px">
                 </el-table-column>
-                <el-table-column prop="projectDetail" label="点评要点" >
+                <el-table-column prop="projectDetail" label="评定要点" >
                 </el-table-column>
                 <el-table-column label="自评成绩" fixed="right" align="center">
                   <template slot-scope="scope">
