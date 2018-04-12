@@ -240,7 +240,6 @@ export const asyncRouterMap = [
     name: 'studentWork',
     meta: {
       icon: 'homework',
-      title: '学生作业/每日任务',
       roles: ['student']
     },
     children: [{
@@ -270,6 +269,7 @@ export const asyncRouterMap = [
           { path: 'midTest', component: _import('studentTest/systemTest/midTest'), name: 'systemTest-midTest', meta: { title: '笔试题', icon: 'icon' }},
           { path: 'index', component: _import('projectDefense/index'), name: 'projectDefense', meta: { title: '项目答辩', icon: 'mic', noCache: true }}
         ] },
+      { path: 'dailyTest', component: _import('studentTest/dailyTest/index'), name: 'dailyTestIndex', meta: { title: '日常测试', icon: 'test' }},
       { path: 'finProfessionalKnowledgeTest', component: _import('studentTest/midTest/index'), name: 'finalProfessionalKnowledgeTest', meta: { title: '专业集中测试', icon: 'test' }}
 
     ]
@@ -518,7 +518,6 @@ export const asyncRouterMap = [
     component: Layout,
     name: 'other',
     meta: {
-      title: '其他',
       icon: 'other',
       roles: ['teacher', 'student']
     },

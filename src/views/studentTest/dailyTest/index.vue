@@ -5,7 +5,7 @@
         <section>
             <h2 class="box-title">我的试卷</h2>
             <template>
-                <el-table style="width: 100%" :data="professionalTest">
+                <el-table style="width: 100%" :data="dailyTest">
                 <el-table-column label="试卷名称" width="180">
                     <template slot-scope="scope">
                         <span>{{ scope.row.name }}</span>
@@ -51,22 +51,18 @@
       data() {
         return {
           visible2: false,
-          midtest: [],
-          professionalTest: []
+          dailyTest: []
         }
       },
-      created() {
+      mounted() {
         this.init()
       },
       methods: {
         init() {
-          this.professionalTest = this.$storage.get('professionalTest')
-          console.log(3123)
-          console.log(this.professionalTest)
+          this.dailyTest = this.$storage.get('midtest')
         },
         goTest(row) {
-          const path = '/systemTest/lastTest' + row.name.split('')[5] + '/'
-          this.$router.push({ path: path })
+          this.$router.push({ path: '/Exams/Exam/' + row.id })
         }
       }
     }

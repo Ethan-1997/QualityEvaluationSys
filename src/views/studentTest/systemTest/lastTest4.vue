@@ -182,14 +182,14 @@
       },
       methods: {
         submit() {
-          const lastTest4 = this.$storage.get('midtest')
+          const lastTest4 = this.$storage.get('professionalTest')
           for (let i = 0; i < lastTest4.length; i++) {
             if (lastTest4[i].name === '期末测试(4)') {
               lastTest4[i].state = '已完成'
               break
             }
           }
-          this.$storage.set('midtest', lastTest4)
+          this.$storage.set('professionalTest', lastTest4)
           let score = 0
           let single_success = 0
           let judgment_success = 0
@@ -218,7 +218,7 @@
             judgment_success: judgment_success
           }
           this.$storage.set('lastTest4Score', professional)
-          this.$router.push({ path: '/midTest/index' })
+          this.$router.push({ name: 'finalProfessionalKnowledgeTest' })
         },
         getList() {
           fetchList().then(Response => {
