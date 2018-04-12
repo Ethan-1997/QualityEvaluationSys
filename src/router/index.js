@@ -240,7 +240,6 @@ export const asyncRouterMap = [
     name: 'studentWork',
     meta: {
       icon: 'homework',
-      title: '学生作业/每日任务',
       roles: ['student']
     },
     children: [{
@@ -518,7 +517,6 @@ export const asyncRouterMap = [
     component: Layout,
     name: 'other',
     meta: {
-      title: '其他',
       icon: 'other',
       roles: ['teacher', 'student']
     },
