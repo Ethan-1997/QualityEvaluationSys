@@ -247,24 +247,10 @@ export const asyncRouterMap = [
         meta: { title: '专业测试(智育)', icon: 'test' },
         children: [
           { path: 'midTest', component: _import('studentTest/systemTest/midTest'), name: 'systemTest-midTest', meta: { title: '笔试题', icon: 'icon' }},
-          { path: 'index', component: _import('projectDefense/index'), name: 'projectDefense', meta: { title: '项目答辩', icon: 'mic', noCache: true }}
+          { path: 'projectDefenseIndex', component: _import('studentTest/midTest/projectDefense/index'), name: 'projectDefenseIndex', meta: { title: '项目答辩', icon: 'mic', noCache: true }}
         ] },
       { path: 'finProfessionalKnowledgeTest', component: _import('studentTest/midTest/index'), name: 'finalProfessionalKnowledgeTest', meta: { title: '专业集中测试', icon: 'test' }}
-
     ]
-    // D:\CODE\Git\QualityEvaluationSys\src\views\studentTest\index.vue
-    // { path: 'admissionTest', component: _import('studentTest/Admissiontest/index'), name: 'admissionTestIndex', meta: { title: '入学测试', icon: 'test' }},
-    //   { path: 'midProfessionalKnowledgeTest', name: 'midProfessionalKnowledgeTest', meta: { title: '专业知识测试(智育)', icon: 'test' }, children: [
-    //     { path: 'midTest', component: _import('studentTest/systemTest/midTest'), name: 'systemTest-midTest', meta: { title: '笔试题', icon: 'icon' }},
-    //     {
-    //       path: 'index',
-    //       component: _import('projectDefense/index'),
-    //       name: 'projectDefense',
-    //       meta: { title: '项目答辩', icon: 'mic', noCache: true }
-    //     }
-    //   ] },
-    //   { path: 'finalProfessionalKnowledgeTest', component: _import('studentTest/midTest/index'), name: 'finalProfessionalKnowledgeTest', meta: { title: '专业知识集中测试', icon: 'test' }}
-
   },
   {
     path: '/Admissiontest',
@@ -322,7 +308,7 @@ export const asyncRouterMap = [
     hidden: true,
     children: [{
       path: 'detail',
-      component: _import('projectDefense/detail'),
+      component: _import('studentTest/midTest/projectDefense/detail'),
       name: 'projectDefenseDetail',
       meta: { title: '项目详情', icon: 'dashboard', noCache: true }
     }]
