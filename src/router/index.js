@@ -73,7 +73,7 @@ export const asyncRouterMap = [
     meta: { roles: ['student'] },
     children: [{
       path: 'studentHomepage',
-      component: _import('homepage/index'),
+      component: _import('studentHomepage/index'),
       name: 'studentHomepage',
       meta: { title: '首页', icon: 'dashboard', noCache: true }
     }]
