@@ -20,12 +20,32 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    characterOneData: {
+      type: Array,
+      default: null
+    },
+    characterTwoData: {
+      type: Array,
+      default: null
+    },
+    characterThreeData: {
+      type: Array,
+      default: null
+    },
+    characterFourData: {
+      type: Array,
+      default: null
+    },
+    characterFiveData: {
+      type: Array,
+      default: null
     }
   },
   data() {
     return {
-      chart: null,
-      character: this.$storage.get('character')
+      chart: null
+      // character: this.$storage.get('character')
     }
   },
   mounted() {
@@ -67,11 +87,11 @@ export default {
             radius: [15, 95],
             center: ['50%', '38%'],
             data: [
-              { value: this.character[0], name: '老虎型' },
-              { value: this.character[1], name: '孔雀型' },
-              { value: this.character[2], name: '熊猫型' },
-              { value: this.character[3], name: '猫头鹰型' },
-              { value: this.character[4], name: '变色龙型' }
+              { value: this.characterOneData, name: '老虎型' },
+              { value: this.characterTwoData, name: '孔雀型' },
+              { value: this.characterThreeData, name: '熊猫型' },
+              { value: this.characterFourData, name: '猫头鹰型' },
+              { value: this.characterFiveData, name: '变色龙型' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600

@@ -22,6 +22,10 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    thinkingData: {
+      type: Array,
+      default: null
     }
   },
   data() {
@@ -51,11 +55,6 @@ export default {
     this.chart.dispose()
     this.chart = null
   },
-  created() {
-    if (this.$storage.get('thinking_iitem') !== null) {
-      this.iitem = this.$storage.get('thinking_iitem')
-    }
-  },
   methods: {
     getList() {
       this.chart.setOption({
@@ -64,7 +63,7 @@ export default {
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: this.iitem,
+          data: this.thinkingData,
           animationDuration
         }]
       })

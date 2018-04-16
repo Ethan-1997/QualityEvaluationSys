@@ -132,7 +132,14 @@
                         </div>
                         <el-tabs tab-position="left" style="height:300px" @tab-click="clickTab" >
                             <el-tab-pane label="入学测评" style="width:100%">
-                                <pie-chart ref="gradeTabsOne" ></pie-chart>
+                                <character-test-grade ref="gradeTabsOne" 
+                                  :characterOneData="characterOneData"
+                                  :characterTwoData="characterTwoData"
+                                  :characterThreeData="characterThreeData"
+                                  :characterFourData="characterFourData"
+                                  :characterFiveData="characterFiveData"
+                                  >
+                                </character-test-grade>
                             </el-tab-pane>
                             <el-tab-pane label="学中测评">
                                 <comprehensive-quality-model ref="gradeTabsTwo" :comprehensive-quality-data="midComprehensiveQualityData"></comprehensive-quality-model>
@@ -190,14 +197,13 @@
     import { fetchListWork } from '@/api/work'
     import { fetchList } from '@/api/announcement'
     import { mapGetters } from 'vuex'
-    import RaddarChart from './components/RaddarChart'
     import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
     import { fetchListDaily } from '@/api/participation'
     import { fetchListBreakRule } from '@/api/breakRole'
     import { fetchListGreat } from '@/api/otherImportant'
     import storage from '@/utils/storage'
     import { fetchListHighLight } from '@/api/highlighting'
-    import PieChart from './components/PieChart'
+    import CharacterTestGrade from './components/CharacterTestGrade'
     export default {
     
       data() {
@@ -208,6 +214,12 @@
 
           midComprehensiveQualityData: [60, 75, 60, 80, 50],
           finalComprehensiveQualityData: [60, 80, 50, 60, 75],
+
+          characterOneData: storage.get('character')[0],
+          characterTwoData: storage.get('character')[1],
+          characterThreeData: storage.get('character')[2],
+          characterFourData: storage.get('character')[3],
+          characterFiveData: storage.get('character')[4],
 
           dynamicTags: ['晚上前提交布置的任务', '13：30理工楼101开会', '数据结构作业', '选修课作业', '前台使用的是Vue.js', '主要的是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
           inputVisible: false,
@@ -251,8 +263,7 @@
         }
   },
       components: {
-        PieChart,
-        RaddarChart,
+        CharacterTestGrade,
         ComprehensiveQualityModel
       },
       computed: {
@@ -417,7 +428,7 @@
           this.$router.push({ path: '/studentInformation/studentDailySummary' })
         },
         goToReport() {
-          this.$router.push({ path: '/evaluationReport/admissionAssessment' })
+          this.$router.push({ path: '/evaluationReport/admissionEvaluationReport' })
         },
         goToInformation() {
           this.$router.push({ path: '/studentInformation/studentInformation' })

@@ -367,9 +367,9 @@ export const asyncRouterMap = [
       roles: ['student']
     },
     children: [
-      { path: 'admissionAssessment', component: _import('report/firstEvaluationReport'), name: 'firstEvaluationReport', meta: { title: '入学测评报告', icon: 'report' }},
-      { path: 'midtermAssessment', component: _import('review/secondEvaluationReport'), name: 'secondEvaluationReport', meta: { title: '学中测评报告', icon: 'report' }},
-      { path: 'endAssessment', component: _import('review/thirdlyEvaluationReport'), name: 'thirdlyEvaluationReport', meta: { title: '结业测评报告', icon: 'report' }}
+      { path: 'admissionEvaluationReport', component: _import('studentEvaluationReport/firstEvaluationReport'), name: 'firstEvaluationReport', meta: { title: '入学测评报告', icon: 'report' }},
+      { path: 'midtermEvaluationReport', component: _import('studentEvaluationReport/secondEvaluationReport'), name: 'secondEvaluationReport', meta: { title: '学中测评报告', icon: 'report' }},
+      { path: 'endEvaluationReport', component: _import('studentEvaluationReport/thirdlyEvaluationReport'), name: 'thirdlyEvaluationReport', meta: { title: '结业测评报告', icon: 'report' }}
     ]
   },
   {

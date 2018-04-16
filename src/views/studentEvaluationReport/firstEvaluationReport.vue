@@ -113,7 +113,14 @@
                       </el-col>
                       <el-col :sm="24" :lg="12">
                         <div style="width:100%;text-align:center;margin-top:20px;">
-                        <pie-chart></pie-chart>
+                        <character-test-grade
+                          :characterOneData="characterOneData"
+                          :characterTwoData="characterTwoData"
+                          :characterThreeData="characterThreeData"
+                          :characterFourData="characterFourData"
+                          :characterFiveData="characterFiveData"
+                          >
+                        </character-test-grade>
                         </div>
                       </el-col>
                       <el-col :sm="24" :lg="12">
@@ -179,7 +186,7 @@
                       <el-col :xs="24" :sm="24" :lg="4" style="height:1px;"></el-col>
                       <el-col :xs="24" :sm="24" :lg="16">
                         <div>
-                          <bar-chart></bar-chart>
+                          <thinking-test-grade :thinkingData="thinkingData"></thinking-test-grade>
                         </div>
                         <div style="font-size:20px;width:100%;text-align:center;padding:20px;">
                           你的分数为{{thinking}}分，逻辑思维能力{{results}}
@@ -220,10 +227,10 @@
 </template>
 
 <script>
-import PieChart from './components/PieChart'
-import RaddarChart from './components/RaddarChart'
-import BarChart from './components/BarChart'
+import CharacterTestGrade from './components/CharacterTestGrade'
+import ThinkingTestGrade from './components/ThinkingTestGrade'
 import { fetchListFirstReport } from '@/api/firstReport'
+import storage from '@/utils/storage'
 export default {
   data() {
     return {
@@ -237,13 +244,19 @@ export default {
         judgment_success: 0,
         judgment_total: 0,
         score: 0
-      }
+      },
+
+      thinkingData: storage.get('thinking_iitem'),
+      characterOneData: storage.get('character')[0],
+      characterTwoData: storage.get('character')[1],
+      characterThreeData: storage.get('character')[2],
+      characterFourData: storage.get('character')[3],
+      characterFiveData: storage.get('character')[4]
     }
   },
   components: {
-    PieChart,
-    RaddarChart,
-    BarChart
+    CharacterTestGrade,
+    ThinkingTestGrade
   },
   created() {
     this.init()
