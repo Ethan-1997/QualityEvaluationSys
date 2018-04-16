@@ -414,13 +414,13 @@
           this.$router.push({ path: '/other/announcement' })
         },
         goToDaliyReport() {
-          this.$router.push({ path: '/studentInformation/daliyReport' })
+          this.$router.push({ path: '/studentInformation/studentDailySummary' })
         },
         goToReport() {
           this.$router.push({ path: '/evaluationReport/admissionAssessment' })
         },
         goToInformation() {
-          this.$router.push({ path: '/studentInformation/information' })
+          this.$router.push({ path: '/studentInformation/studentInformation' })
         },
 
         handleClose(tag) { // 动态编辑标签

@@ -395,8 +395,8 @@ export const asyncRouterMap = [
       roles: ['student']
     },
     children: [
-      { path: 'information', component: _import('information/alter'), name: 'alter-information', meta: { title: '个人信息', icon: 'information' }},
-      { path: 'daliyReport', component: _import('information/dailysummary'), name: 'imformation', meta: { title: '日常表现汇总', icon: 'daliyreport', noCache: true }}
+      { path: 'studentInformation', component: _import('studentInformation/studentInformation'), name: 'studentInformation', meta: { title: '个人信息', icon: 'information' }},
+      { path: 'studentDailySummary', component: _import('studentInformation/studentDailySummary'), name: 'studentDailySummary', meta: { title: '日常表现汇总', icon: 'daliyreport', noCache: true }}
     ]
   },
   // 老师端
