@@ -348,7 +348,7 @@
 </script>
 
 <style lang="scss">
-    @import "../../scss/var";
+    @import "../../../scss/var";
     .submit{
         float:right;
         margin-bottom:20px;

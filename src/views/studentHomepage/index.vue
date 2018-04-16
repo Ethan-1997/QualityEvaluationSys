@@ -215,11 +215,11 @@
           midComprehensiveQualityData: [60, 75, 60, 80, 50],
           finalComprehensiveQualityData: [60, 80, 50, 60, 75],
 
-          characterOneData: storage.get('character')[0],
-          characterTwoData: storage.get('character')[1],
-          characterThreeData: storage.get('character')[2],
-          characterFourData: storage.get('character')[3],
-          characterFiveData: storage.get('character')[4],
+          characterOneData: null,
+          characterTwoData: null,
+          characterThreeData: null,
+          characterFourData: null,
+          characterFiveData: null,
 
           dynamicTags: ['晚上前提交布置的任务', '13：30理工楼101开会', '数据结构作业', '选修课作业', '前台使用的是Vue.js', '主要的是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
           inputVisible: false,
@@ -250,8 +250,7 @@
           greatList: null
         }
       },
-
-  filters: {
+      filters: {
         statusFilter(status) {
           const statusMap = {
             已到: 'success',
@@ -261,7 +260,7 @@
           }
           return statusMap[status]
         }
-  },
+      },
       components: {
         CharacterTestGrade,
         ComprehensiveQualityModel
@@ -270,7 +269,6 @@
         ...mapGetters([
           'avatar'
         ])
-    
       },
       updated() {
         this.$refs.gradeTabsOne.chart.resize()
@@ -286,6 +284,12 @@
           this.$refs.gradeTabsThree.chart.resize()
         })
         this.init()
+        if (storage.get('character') !== null) {
+          this.characterOneData = storage.get('character')[0]
+          this.characterOneData = storage.get('character')[1]
+          this.characterOneData = storage.get('character')[2]
+          this.characterOneData = storage.get('character')[3]
+        }
       },
       methods: {
         init() {
