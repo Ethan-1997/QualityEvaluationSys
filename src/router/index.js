@@ -222,9 +222,9 @@ export const asyncRouterMap = [
       roles: ['student']
     },
     children: [{
-      path: 'index',
-      component: _import('homework/daliyTask'),
-      name: 'daliyTask',
+      path: 'studentWorkIndex',
+      component: _import('studentWork/studentWork'),
+      name: 'studentWorkIndex',
       meta: { title: '学生作业', icon: 'homework', noCache: true }
     }]
   },

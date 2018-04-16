@@ -25,9 +25,9 @@
                     <el-card>
                         <div slot="header" class="clearfix">
                             <span><svg-icon icon-class="form" />&nbsp;学生作业</span>
-                            <el-button style="float: right; padding: 3px 0" type="text" @click="showDaliyTask">更多</el-button>
+                            <el-button style="float: right; padding: 3px 0" type="text" @click="showStudentWork">更多</el-button>
                         </div>
-                        <el-table :data="taskData" style="width: 100%" :row-class-name="tableRowClassName" @row-click="showDaliyTask">
+                        <el-table :data="taskData" style="width: 100%" :row-class-name="tableRowClassName">
                             <el-table-column align="center" label="序号" width="65" type="index" :index="indexMethod">
                               <template slot-scope="scope">
                                 <span>
@@ -407,8 +407,8 @@
           })
         },
 
-        showDaliyTask() {
-          this.$router.push({ name: 'daliyTask' })
+        showStudentWork() {
+          this.$router.push({ name: 'studentWorkIndex' })
         },
         goToAnnocument() {
           this.$router.push({ path: '/other/announcement' })
