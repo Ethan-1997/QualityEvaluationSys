@@ -73,56 +73,35 @@ export const asyncRouterMap = [
     meta: { roles: ['student'] },
     children: [{
       path: 'studentHomepage',
-      component: _import('homepage/index'),
+      component: _import('studentHomepage/index'),
       name: 'studentHomepage',
       meta: { title: '首页', icon: 'dashboard', noCache: true }
     }]
   },
 
   {
-    path: '/Exams',
+    path: '/tests',
     component: Layout,
-    meta: { roles: ['teacher'] },
-    children: [{
-      path: 'index',
-      component: _import('Exams/Exam'),
-      name: 'Exam',
-      meta: { title: '测试管理', icon: 'test' }
-    }] },
-  {
-    path: '/Exams',
-    component: Layout,
-    hidden: true,
-    meta: { roles: ['teacher'] },
-    children: [{
-      path: 'ExamAdd',
-      component: _import('Exams/ExamAdd'),
-      name: 'ExamAdd',
-      meta: { title: '制作试卷', icon: 'icon', noCache: true }
-    }]
+    meta: {
+      icon: 'test',
+      title: '学生测试管理',
+      roles: ['teacher']
+    },
+    children: [
+      { path: 'index', component: _import('studentManagement/testManagement/testManagementIndex'), name: 'testManagementIndex', meta: { title: '测试管理', icon: 'test' }},
+      { path: 'testAdd', component: _import('studentManagement/testManagement/testAdd'), name: 'testAdd', hidden: true, meta: { title: '制作试卷', icon: 'icon', noCache: true }}
+    ]
   },
   {
-    path: '/Exams/Exam/',
+    path: '/tests',
     component: Layout,
     hidden: true,
     // meta: { roles: ['student'] },
     children: [{
       path: ':id',
-      component: _import('Exams/ExamDetail'),
-      name: 'ExamDetail',
+      component: _import('studentManagement/testManagement/testDetail'),
+      name: 'testDetail',
       meta: { title: '试卷详情', icon: 'icon', noCache: true }
-    }]
-  },
-  {
-    path: '/Exams/Exam/',
-    component: Layout,
-    hidden: true,
-    meta: { roles: ['teacher'] },
-    children: [{
-      path: ':id/edit',
-      component: _import('Exams/ExamAdd'),
-      name: 'ExamAdd',
-      meta: { title: '制作试卷', icon: 'icon', noCache: true }
     }]
   },
 
@@ -165,19 +144,19 @@ export const asyncRouterMap = [
   //     icon: 'excel'
   //   },
   //   children: [
-  //     { path: 'basicInfo', component: _import('studentManager/basicInfo/basicInfo'), name: 'basicInfo', meta: { title: '学生基本信息管理' }},
-  //     { path: 'participation', component: _import('studentManager/participation/participation'), name: 'participation', meta: { title: '出勤管理' }},
-  //     { path: 'breakTheRule', component: _import('studentManager/breakTheRule/breakTheRule'), name: 'breakTheRule', meta: { title: '违纪管理' }},
-  //     { path: 'leave', component: _import('studentManager/leave/leave'), name: 'leave', meta: { title: '请假登记' }},
+  //     { path: 'basicInfo', component: _import('studentManagement/basicInfo/basicInfo'), name: 'basicInfo', meta: { title: '学生基本信息管理' }},
+  //     { path: 'participation', component: _import('studentManagement/participation/participation'), name: 'participation', meta: { title: '出勤管理' }},
+  //     { path: 'breakTheRule', component: _import('studentManagement/breakTheRule/breakTheRule'), name: 'breakTheRule', meta: { title: '违纪管理' }},
+  //     { path: 'leave', component: _import('studentManagement/leave/leave'), name: 'leave', meta: { title: '请假登记' }},
   //     {
-  //       path: 'workManager',
-  //       component: _import('studentManager/workManager/index'),
-  //       name: 'workManager',
+  //       path: 'workManagement',
+  //       component: _import('studentManagement/workManagement/index'),
+  //       name: 'workManagement',
   //       meta: {
   //         title: '作业管理'
   //       }
   //     },
-  //     { path: 'otherImportant', component: _import('studentManager/otherImportant/otherImportant'), name: 'otherImportant', meta: { title: '重大事项管理' }}
+  //     { path: 'otherImportant', component: _import('studentManagement/otherImportant/otherImportant'), name: 'otherImportant', meta: { title: '重大事项管理' }}
   //   ]
   // },
 
@@ -243,9 +222,9 @@ export const asyncRouterMap = [
       roles: ['student']
     },
     children: [{
-      path: 'index',
-      component: _import('homework/daliyTask'),
-      name: 'daliyTask',
+      path: 'studentWorkIndex',
+      component: _import('studentWork/studentWork'),
+      name: 'studentWorkIndex',
       meta: { title: '学生作业', icon: 'homework', noCache: true }
     }]
   },
@@ -268,24 +247,10 @@ export const asyncRouterMap = [
         meta: { title: '专业测试(智育)', icon: 'test' },
         children: [
           { path: 'midTest', component: _import('studentTest/systemTest/midTest'), name: 'systemTest-midTest', meta: { title: '笔试题', icon: 'icon' }},
-          { path: 'index', component: _import('projectDefense/index'), name: 'projectDefense', meta: { title: '项目答辩', icon: 'mic', noCache: true }}
+          { path: 'projectDefenseIndex', component: _import('studentTest/midTest/projectDefense/index'), name: 'projectDefenseIndex', meta: { title: '项目答辩', icon: 'mic', noCache: true }}
         ] },
       { path: 'finProfessionalKnowledgeTest', component: _import('studentTest/midTest/index'), name: 'finalProfessionalKnowledgeTest', meta: { title: '专业集中测试', icon: 'test' }}
-
     ]
-    // D:\CODE\Git\QualityEvaluationSys\src\views\studentTest\index.vue
-    // { path: 'admissionTest', component: _import('studentTest/Admissiontest/index'), name: 'admissionTestIndex', meta: { title: '入学测试', icon: 'test' }},
-    //   { path: 'midProfessionalKnowledgeTest', name: 'midProfessionalKnowledgeTest', meta: { title: '专业知识测试(智育)', icon: 'test' }, children: [
-    //     { path: 'midTest', component: _import('studentTest/systemTest/midTest'), name: 'systemTest-midTest', meta: { title: '笔试题', icon: 'icon' }},
-    //     {
-    //       path: 'index',
-    //       component: _import('projectDefense/index'),
-    //       name: 'projectDefense',
-    //       meta: { title: '项目答辩', icon: 'mic', noCache: true }
-    //     }
-    //   ] },
-    //   { path: 'finalProfessionalKnowledgeTest', component: _import('studentTest/midTest/index'), name: 'finalProfessionalKnowledgeTest', meta: { title: '专业知识集中测试', icon: 'test' }}
-
   },
   {
     path: '/Admissiontest',
@@ -313,7 +278,7 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'votw', component: _import('studentTeam/index'), name: 'student-team', meta: { title: '评定小组投票', icon: 'vote' }},
-      { path: 'studentsReview', component: _import('review/studentGroupReview'), name: 'groupReview', meta: { title: '学生小组评定', icon: 'review', noCache: true }}
+      { path: 'studentsReview', component: _import('reviewSystem/studentGroupReview'), name: 'groupReview', meta: { title: '学生小组评定', icon: 'review', noCache: true }}
     ]
   },
   {
@@ -343,7 +308,7 @@ export const asyncRouterMap = [
     hidden: true,
     children: [{
       path: 'detail',
-      component: _import('projectDefense/detail'),
+      component: _import('studentTest/midTest/projectDefense/detail'),
       name: 'projectDefenseDetail',
       meta: { title: '项目详情', icon: 'dashboard', noCache: true }
     }]
@@ -357,7 +322,7 @@ export const asyncRouterMap = [
   //     roles: ['student']
   //   },
   //   children: [
-  //     { path: 'index', component: _import('review/secondEvaluationReport'), name: 'secondEvaluationReport', meta: { title: '学中测评报告', icon: 'icon' }}
+  //     { path: 'index', component: _import('reviewSystem/secondEvaluationReport'), name: 'secondEvaluationReport', meta: { title: '学中测评报告', icon: 'icon' }}
   //   ]
   // },
   // {
@@ -368,7 +333,7 @@ export const asyncRouterMap = [
   //     roles: ['student']
   //   },
   //   children: [
-  //     { path: 'index', component: _import('review/thirdlyEvaluationReport'), name: 'thirdlyEvaluationReport', meta: { title: '结业测评报告', icon: 'icon' }}
+  //     { path: 'index', component: _import('reviewSystem/thirdlyEvaluationReport'), name: 'thirdlyEvaluationReport', meta: { title: '结业测评报告', icon: 'icon' }}
   //   ]
   // },
   // {
@@ -377,7 +342,7 @@ export const asyncRouterMap = [
   //   meta: {
   //     roles: ['student']
   //   },
-  //   children: [{ path: 'index', component: _import('review/selfReview'), name: 'selfReview', meta: { title: '学生自评', icon: 'dashboard' }}]
+  //   children: [{ path: 'index', component: _import('reviewSystem/selfReview'), name: 'selfReview', meta: { title: '学生自评', icon: 'dashboard' }}]
   // },
   // {
   //   path: '/imformationn',
@@ -402,9 +367,9 @@ export const asyncRouterMap = [
       roles: ['student']
     },
     children: [
-      { path: 'admissionAssessment', component: _import('report/firstEvaluationReport'), name: 'firstEvaluationReport', meta: { title: '入学测评报告', icon: 'report' }},
-      { path: 'midtermAssessment', component: _import('review/secondEvaluationReport'), name: 'secondEvaluationReport', meta: { title: '学中测评报告', icon: 'report' }},
-      { path: 'endAssessment', component: _import('review/thirdlyEvaluationReport'), name: 'thirdlyEvaluationReport', meta: { title: '结业测评报告', icon: 'report' }}
+      { path: 'admissionEvaluationReport', component: _import('studentEvaluationReport/firstEvaluationReport'), name: 'firstEvaluationReport', meta: { title: '入学测评报告', icon: 'report' }},
+      { path: 'midtermEvaluationReport', component: _import('studentEvaluationReport/secondEvaluationReport'), name: 'secondEvaluationReport', meta: { title: '学中测评报告', icon: 'report' }},
+      { path: 'endEvaluationReport', component: _import('studentEvaluationReport/thirdlyEvaluationReport'), name: 'thirdlyEvaluationReport', meta: { title: '结业测评报告', icon: 'report' }}
     ]
   },
   {
@@ -416,22 +381,22 @@ export const asyncRouterMap = [
       roles: ['student']
     },
     children: [
-      { path: 'information', component: _import('information/alter'), name: 'alter-information', meta: { title: '个人信息', icon: 'information' }},
-      { path: 'daliyReport', component: _import('information/dailysummary'), name: 'imformation', meta: { title: '日常表现汇总', icon: 'daliyreport', noCache: true }}
+      { path: 'studentInformation', component: _import('studentInformation/studentInformation'), name: 'studentInformation', meta: { title: '个人信息', icon: 'information' }},
+      { path: 'studentDailySummary', component: _import('studentInformation/studentDailySummary'), name: 'studentDailySummary', meta: { title: '日常表现汇总', icon: 'daliyreport', noCache: true }}
     ]
   },
   // 老师端
 
   {
-    path: '/workManager',
+    path: '/workManagement',
     component: Layout,
     meta: {
       roles: ['teacher']
     },
     children: [{
       path: 'index',
-      component: _import('studentManager/workManager/index'),
-      name: 'workManager',
+      component: _import('studentManagement/workManagement/index'),
+      name: 'workManagement',
       meta: {
         title: '作业管理',
         icon: 'homework'
@@ -446,7 +411,7 @@ export const asyncRouterMap = [
     },
     children: [{
       path: 'review',
-      component: _import('review/examinationReview'),
+      component: _import('reviewSystem/examinationReview'),
       name: 'projectDefenseReview',
       meta: { title: '项目答辩评定', icon: 'dashboard', noCache: true }
     }]
@@ -461,11 +426,11 @@ export const asyncRouterMap = [
       roles: ['teacher']
     },
     children: [
-      { path: 'participation', component: _import('studentManager/participation/participation'), name: 'participation', meta: { title: '出勤管理', icon: 'late' }},
-      { path: 'breakTheRule', component: _import('studentManager/breakTheRule/breakTheRule'), name: 'breakTheRule', meta: { title: '违纪管理', icon: 'danger' }},
-      { path: 'highlighting', component: _import('studentManager/highlighting/highlighting'), name: 'highlighting', meta: { title: '突出表现管理', icon: 'good' }},
-      { path: 'otherImportant', component: _import('studentManager/otherImportant/otherImportant'), name: 'otherImportant', meta: { title: '重大事项管理', icon: 'warning' }},
-      { path: 'index', component: _import('studentManager/leave/leave'), name: 'leave', meta: { title: '请假登记', icon: 'leave' }}
+      { path: 'participation', component: _import('studentManagement/participation/participation'), name: 'participation', meta: { title: '出勤管理', icon: 'late' }},
+      { path: 'breakTheRule', component: _import('studentManagement/breakTheRule/breakTheRule'), name: 'breakTheRule', meta: { title: '违纪管理', icon: 'danger' }},
+      { path: 'highlighting', component: _import('studentManagement/highlighting/highlighting'), name: 'highlighting', meta: { title: '突出表现管理', icon: 'good' }},
+      { path: 'otherImportant', component: _import('studentManagement/otherImportant/otherImportant'), name: 'otherImportant', meta: { title: '重大事项管理', icon: 'warning' }},
+      { path: 'index', component: _import('studentManagement/leave/leave'), name: 'leave', meta: { title: '请假登记', icon: 'leave' }}
     ]
   },
   {
@@ -477,10 +442,10 @@ export const asyncRouterMap = [
       roles: ['teacher']
     },
     children: [
-      { path: 'midReviewIndex', component: _import('review/midReviewIndex'), name: 'midReviewIndex', meta: { title: '学中综合评定', icon: 'review' }},
-      { path: 'finalReviewIndex', component: _import('review/finalReviewIndex'), name: 'finalReviewIndex', meta: { title: '学末综合评定', icon: 'review' }},
-      { path: 'HRReview', component: _import('review/HRReview'), name: 'HRReview', meta: { title: '人事经理面试', icon: 'Interview' }},
-      { path: 'technologyReview', component: _import('review/projectManagerReview'), name: 'technologyReview', meta: { title: '项目经理面试', icon: 'Interview' }}
+      { path: 'midReviewIndex', component: _import('reviewSystem/midReviewIndex'), name: 'midReviewIndex', meta: { title: '学中综合评定', icon: 'review' }},
+      { path: 'finalReviewIndex', component: _import('reviewSystem/finalReviewIndex'), name: 'finalReviewIndex', meta: { title: '学末综合评定', icon: 'review' }},
+      { path: 'HRReview', component: _import('reviewSystem/HRReview'), name: 'HRReview', meta: { title: '人事经理面试', icon: 'Interview' }},
+      { path: 'technologyReview', component: _import('reviewSystem/projectManagerReview'), name: 'technologyReview', meta: { title: '项目经理面试', icon: 'Interview' }}
     ]
   },
   {
@@ -491,8 +456,8 @@ export const asyncRouterMap = [
       roles: ['schoolManager', 'teacher']
     },
     children: [
-      { path: 'midTeacherReview', component: _import('review/midTeacherReview'), name: 'midTeacherReview', meta: { title: '学中综合评定' }},
-      { path: 'finalTeacherReview', component: _import('review/finalTeacherReview'), name: 'finalTeacherReview', meta: { title: '结业综合评定' }}
+      { path: 'midTeacherReview', component: _import('reviewSystem/midTeacherReview'), name: 'midTeacherReview', meta: { title: '学中综合评定' }},
+      { path: 'finalTeacherReview', component: _import('reviewSystem/finalTeacherReview'), name: 'finalTeacherReview', meta: { title: '结业综合评定' }}
     ]
   },
   {
@@ -502,16 +467,16 @@ export const asyncRouterMap = [
       roles: ['schoolManager', 'teacher']
     },
     children: [
-      { path: 'index', component: _import('studentManager/basicInfo/basicInfo'), name: 'basicInfo', meta: { title: '学生信息管理', icon: 'studentList', noCache: true }}
+      { path: 'index', component: _import('studentManagement/basicInfo/basicInfo'), name: 'basicInfo', meta: { title: '学生信息管理', icon: 'studentList', noCache: true }}
     ]
   },
   {
-    path: '/teacherinformation',
+    path: '/teacherInformation',
     component: Layout,
     meta: {
       roles: ['teacher']
     },
-    children: [{ path: 'index', component: _import('teacherinformation/teacherinformation'), name: 'teacherinformation', meta: { title: '教师信息', icon: 'information' }}]
+    children: [{ path: 'index', component: _import('teacherInformation/teacherInformation'), name: 'teacherInformation', meta: { title: '教师信息', icon: 'information' }}]
   },
   {
     path: '/other',
@@ -538,15 +503,15 @@ export const asyncRouterMap = [
     }]
   },
   {
-    path: '/classManager',
+    path: '/classManagement',
     component: Layout,
     meta: {
       roles: ['schoolManager']
     },
     children: [{
       path: 'index',
-      component: _import('studentManager/classManager/classManager'),
-      name: 'classManager',
+      component: _import('studentManagement/classManagement/classManagement'),
+      name: 'classManagement',
       meta: { title: '班级管理', icon: 'dashboard', noCache: true }
     }]
   },
@@ -638,7 +603,7 @@ export const asyncRouterMap = [
     meta: {
       roles: ['teacher']
     },
-    children: [{ path: 'index', component: _import('studentManager/workManager/workdetail'), name: 'workdetail', meta: { title: '作业详情', icon: '2' }}]
+    children: [{ path: 'index', component: _import('studentManagement/workManagement/workdetail'), name: 'workdetail', meta: { title: '作业详情', icon: '2' }}]
   },
   { path: '*', redirect: '/404', hidden: true }
 ]

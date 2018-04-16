@@ -62,7 +62,7 @@
           this.dailyTest = this.$storage.get('midtest')
         },
         goTest(row) {
-          this.$router.push({ path: '/Exams/Exam/' + row.id })
+          this.$router.push({ path: '/tests/' + row.id })
         }
       }
     }
