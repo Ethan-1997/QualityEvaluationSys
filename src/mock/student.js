@@ -29,15 +29,22 @@ let List = []
 
 export default {
   getList: config => {
+    debugger
     List = storage.get('studentlist', [])
     const { Sprofession, Sclass, Sname, page = 1, limit = 20, sort } = param2Obj(config.url)
-
-    let mockList = List.filter(item => {
-      if (Sprofession && item.Sprofession !== Sprofession) return false
-      if (Sclass && item.Sclass !== Sclass) return false
-      if (Sname && item.Sname.indexOf(Sname) < 0) return false
-      return true
-    })
+    let mockList = null
+    if (+Sclass !== 1) {
+      mockList = List.filter(item => {
+        if (Sprofession && item.Sprofession !== Sprofession) return false
+        if (Sclass && Sclass !== 1 && item.Sclass !== Sclass) return false
+        if (Sname && item.Sname.indexOf(Sname) < 0) return false
+        return true
+      })
+    } else {
+      mockList = List.filter(item => {
+        return true
+      })
+    }
 
     if (sort === '-id') {
       mockList = mockList.reverse()
