@@ -471,12 +471,12 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '/teacherinformation',
+    path: '/teacherInformation',
     component: Layout,
     meta: {
       roles: ['teacher']
     },
-    children: [{ path: 'index', component: _import('teacherinformation/teacherinformation'), name: 'teacherinformation', meta: { title: '教师信息', icon: 'information' }}]
+    children: [{ path: 'index', component: _import('teacherInformation/teacherInformation'), name: 'teacherInformation', meta: { title: '教师信息', icon: 'information' }}]
   },
   {
     path: '/other',
