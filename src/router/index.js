@@ -80,49 +80,28 @@ export const asyncRouterMap = [
   },
 
   {
-    path: '/Exams',
+    path: '/tests',
     component: Layout,
-    meta: { roles: ['teacher'] },
-    children: [{
-      path: 'index',
-      component: _import('Exams/Exam'),
-      name: 'Exam',
-      meta: { title: '测试管理', icon: 'test' }
-    }] },
-  {
-    path: '/Exams',
-    component: Layout,
-    hidden: true,
-    meta: { roles: ['teacher'] },
-    children: [{
-      path: 'ExamAdd',
-      component: _import('Exams/ExamAdd'),
-      name: 'ExamAdd',
-      meta: { title: '制作试卷', icon: 'icon', noCache: true }
-    }]
+    meta: {
+      icon: 'test',
+      title: '学生测试管理',
+      roles: ['teacher']
+    },
+    children: [
+      { path: 'index', component: _import('testManagement/testManagementIndex'), name: 'testManagementIndex', meta: { title: '测试管理', icon: 'test' }},
+      { path: 'testAdd', component: _import('testManagement/testAdd'), name: 'testAdd', hidden: true, meta: { title: '制作试卷', icon: 'icon', noCache: true }}
+    ]
   },
   {
-    path: '/Exams/Exam/',
+    path: '/tests',
     component: Layout,
     hidden: true,
     // meta: { roles: ['student'] },
     children: [{
       path: ':id',
-      component: _import('Exams/ExamDetail'),
-      name: 'ExamDetail',
+      component: _import('testManagement/testDetail'),
+      name: 'testDetail',
       meta: { title: '试卷详情', icon: 'icon', noCache: true }
-    }]
-  },
-  {
-    path: '/Exams/Exam/',
-    component: Layout,
-    hidden: true,
-    meta: { roles: ['teacher'] },
-    children: [{
-      path: ':id/edit',
-      component: _import('Exams/ExamAdd'),
-      name: 'ExamAdd',
-      meta: { title: '制作试卷', icon: 'icon', noCache: true }
     }]
   },
 

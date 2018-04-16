@@ -307,7 +307,7 @@
           } else {
             // TODO 修改试卷名
           }
-          this.$router.push('/Exams/index')
+          this.$router.push('/tests/index')
         },
         numberToLetter(number) {
           const arr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'

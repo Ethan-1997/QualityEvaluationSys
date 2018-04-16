@@ -41,7 +41,7 @@
                 </li>
             </ul> -->
         </section>
-        <ui-raised-button label="制作试卷" primary to="/Exams/ExamAdd" style="float:right;margin:20px;"/>
+        <ui-raised-button label="制作试卷" primary to="/tests/testAdd" style="float:right;margin:20px;"/>
       </el-card>
       <el-card>
         <div slot="header" class="clearfix">
