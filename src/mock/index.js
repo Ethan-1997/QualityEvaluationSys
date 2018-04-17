@@ -20,6 +20,8 @@ import informationAPI from './information'
 import student from './student'
 import projectDefenseAPI from './projectDefense'
 import classAPI from './class'
+import logAPI from './log'
+import firstReportAPI from './firstReport'
 
 // 伟哥
 import characterAPI from './character'
@@ -31,6 +33,9 @@ import ThinkingAPI from './Thinking'
 import dailysummaryAPI from './dailysummary'
 
 import teacherinformationAPI from './teacherinformation'
+
+// 入学测试相关
+Mock.mock(/\/firstReport\/list/, 'get', firstReportAPI.getList)
 
 // 学生
 Mock.mock(/\/student\/list/, 'get', student.getList)
@@ -145,6 +150,12 @@ Mock.mock(/\/work\/list/, 'get', workAPI.getList)
 Mock.mock(/\/work\/detail/, 'get', workAPI.getWork)
 Mock.mock(/\/work\/create/, 'post', workAPI.createWork)
 Mock.mock(/\/work\/update/, 'post', workAPI.updateWork)
+
+// 日志相关
+Mock.mock(/\/log\/list/, 'get', logAPI.getList)
+Mock.mock(/\/log\/detail/, 'get', logAPI.getLog)
+Mock.mock(/\/log\/create/, 'post', logAPI.createLog)
+Mock.mock(/\/log\/update/, 'post', logAPI.updateLog)
 
 // 搜索相关
 Mock.mock(/\/search\/user/, 'get', remoteSearchAPI.searchUser)

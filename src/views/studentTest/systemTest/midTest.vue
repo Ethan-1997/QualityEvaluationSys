@@ -182,14 +182,6 @@
       },
       methods: {
         submit() {
-          const midTest = this.$storage.get('midtest')
-          for (let i = 0; i < midTest.length; i++) {
-            if (midTest[i].name === '期中测试') {
-              midTest[i].state = '已完成'
-              break
-            }
-          }
-          this.$storage.set('midtest', midTest)
           let score = 0
           let single_success = 0
           let judgment_success = 0
@@ -218,7 +210,7 @@
             judgmentSuccess: judgment_success
           }
           this.$storage.set('midTestSocre', professional)
-          this.$router.push({ path: '/midTest/index' })
+          this.$router.push({ name: 'projectDefense' })
         },
         getList() {
           fetchList().then(Response => {

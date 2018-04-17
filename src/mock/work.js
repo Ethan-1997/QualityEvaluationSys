@@ -12,6 +12,7 @@ const workList = [
     author: '曹老师',
     content: 'vue.js基础',
     submitStatus: '已提交',
+    rate: 12,
     rowFileList: [{
       name: '演示.docx',
       url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
@@ -28,6 +29,7 @@ const workList = [
     author: '曹老师',
     content: 'vue.js初级',
     submitStatus: '已提交',
+    rate: 8,
     rowFileList: [{
       name: '演示.docx',
       url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
@@ -44,6 +46,7 @@ const workList = [
     author: '曹老师',
     content: 'vue.js中级',
     submitStatus: '已提交',
+    rate: 19,
     rowFileList: [{
       name: '演示.docx',
       url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
@@ -60,6 +63,7 @@ const workList = [
     author: '王老师',
     content: 'vue.js高级',
     submitStatus: '已提交',
+    rate: 7,
     rowFileList: [{
       name: '演示.docx',
       url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
@@ -76,6 +80,7 @@ const workList = [
     author: '应老师',
     content: 'vue.js终级',
     submitStatus: '已提交',
+    rate: 8,
     rowFileList: [{
       name: '演示.docx',
       url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
@@ -89,26 +94,25 @@ export default {
   getList: config => {
     const { page = 1, limit = 20, sort, author, sclass, status } = param2Obj(config.url)
     const workTemp = storage.get('workTemp')
+    console.log(workTemp)
     if (workTemp !== 1) {
       storage.set('worklist', workList)
+
       storage.set('workTemp', 1)
     }
     List = storage.get('worklist')
-    console.log(List)
     let mockList = List.filter(item => {
-      console.log(List)
       if (author && item.author.indexOf(author) < 0) return false
       if (sclass && item.sclass !== sclass) return false
       if (status && item.status !== status) return false
       return true
     })
-    console.log(mockList)
     if (sort === '-id') {
       mockList = mockList.reverse()
     }
 
     const pageList = mockList.filter((item, index) => index < limit * page && index >= limit * (page - 1))
-    console.log(pageList)
+    console.log(storage.get('worklist'))
     return {
       total: mockList.length,
       items: pageList,

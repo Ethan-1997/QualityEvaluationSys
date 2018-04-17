@@ -2,17 +2,17 @@ import Mock from 'mockjs'
 import { param2Obj } from '@/utils'
 
 const List = []
-const count = 100
-
+const count = 3
+const Lreason = ['感冒', '家里有事', '喝喜酒']
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
-    sclass: '10' + Mock.Random.integer(1, 9),
-    sno: '@increment',
-    sname: '@cname',
-    'ssex|1': ['男', '女'],
-    Lstart: '@date',
-    Lend: '@date',
-    Lreason: '@cparagraph(2)',
+    sclass: '101',
+    sno: '101',
+    sname: '摇滚兔子',
+    ssex: '男',
+    time: '2018.9.' + +(i + 1),
+    'Lend|1-3': 3,
+    Lreason: Lreason[i],
     Laprover: '@cname'
   }))
 }

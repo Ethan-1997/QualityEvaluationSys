@@ -3,9 +3,9 @@
   <el-card>
     <div class="text item">
         <section>
-            <h2 class="box-title">我的试卷</h2>
+            <h2 class="box-title">专业集中测试</h2>
             <template>
-                <el-table style="width: 100%" :data="midtest">
+                <el-table style="width: 100%" :data="professionalTest">
                 <el-table-column label="试卷名称" width="180">
                     <template slot-scope="scope">
                         <span>{{ scope.row.name }}</span>
@@ -51,28 +51,22 @@
       data() {
         return {
           visible2: false,
-          midtest: []
+          midtest: [],
+          professionalTest: []
         }
       },
-      mounted() {
+      created() {
         this.init()
       },
       methods: {
         init() {
-          this.midtest = this.$storage.get('midtest')
-          console.log(this.midtest)
+          this.professionalTest = this.$storage.get('professionalTest')
+          console.log(3123)
+          console.log(this.professionalTest)
         },
         goTest(row) {
-          if (row.id === null) {
-            if (row.name === '期中测试') {
-              this.$router.push({ path: '/systemTest/midTest/' })
-            } else {
-              const path = '/systemTest/lastTest' + row.name.split('')[5] + '/'
-              this.$router.push({ path: path })
-            }
-          } else {
-            this.$router.push({ path: '/Exams/Exam/' + row.id })
-          }
+          const path = '/systemTest/lastTest' + row.name.split('')[5] + '/'
+          this.$router.push({ path: path })
         }
       }
     }

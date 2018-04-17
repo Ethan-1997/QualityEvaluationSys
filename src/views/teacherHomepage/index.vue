@@ -19,7 +19,7 @@
                 </div>
                 <div class="card-panel-description">
                     <div class="card-panel-text">作业管理</div>
-                    <div class="card-panel-detail">每日任务/作业</div>
+                    <div class="card-panel-detail">学生作业 </div>
                 </div>
             </div>
             </el-col>
@@ -29,8 +29,8 @@
                     <svg-icon icon-class="clipboard" class-name="card-panel-icon" />
                 </div>
                 <div class="card-panel-description">
-                    <div class="card-panel-text">点评系统</div>
-                    <div class="card-panel-detail">点评</div>
+                    <div class="card-panel-text">评定系统</div>
+                    <div class="card-panel-detail">评定</div>
                 </div>
             </div>
             </el-col>
@@ -103,8 +103,8 @@
                     <el-row :gutter="20">
                         <el-card>
                             <div slot="header" class="clearfix" style="align:center">
-                                <span><svg-icon icon-class="form" />&nbsp;每日任务概况</span>
-                                <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+                                <span><svg-icon icon-class="form" />&nbsp;学生作业概况</span>
+                                <el-button style="float: right; padding: 3px 0" type="text" @click="goToWorkManagement">更多</el-button>
                             </div>
                             <el-table :data="taskData" style="width: 100%">
                                 <el-table-column align="center" label="序号" width="65" type="index" :index="indexMethod">
@@ -114,7 +114,7 @@
                                         </span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="task" label="每日任务">
+                                <el-table-column prop="task" label="学生作业">
                                     <template slot-scope="scope">
                                         <span>
                                         {{scope.row.title}}
@@ -129,7 +129,7 @@
                                 </el-table-column>
                                 <el-table-column label="上交进度" width="130" align="center" fixed="right">
                                     <template slot-scope="scope">
-                                    <el-tag :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'">{{scope.row.submitStatus}}</el-tag>
+                                    <el-progress :percentage="scope.row.rate/20*100" :show-text="false">123</el-progress><span>{{scope.row.rate}}/20</span>
                                 </template>         
                                 </el-table-column>
                             </el-table>
@@ -142,7 +142,7 @@
                             <el-card>
                                 <div slot="header" class="clearfix" style="align:center">
                                     <span><svg-icon icon-class="user" />&nbsp;教师信息</span>
-                                    <el-button style="float: right; padding: 3px 0" type="text">修改个人信息</el-button>
+                                    <el-button style="float: right; padding: 3px 0" type="text" @click="goToInformation">修改个人信息</el-button>
                                 </div>
                                 <el-row type="flex" justify="center" :gutter="20">
                                     <el-col :span="24">
@@ -182,6 +182,7 @@
     import { fetchList } from '@/api/announcement'
     import { fetchListWork } from '@/api/work'
     import { mapGetters } from 'vuex'
+    import storage from '@/utils/storage'
     export default {
     
       data() {
@@ -190,7 +191,7 @@
           announcementDataData: null,
           taskData: null,
 
-          dynamicTags: ['今晚检查学生每日任务', '周五下午四点行政楼开会', '今天有5人迟到', '提醒课代表收作业', '前台使用的技术是Vue.js', '主要的组件是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
+          dynamicTags: ['今晚检查学生学生作业', '周五下午四点行政楼开会', '今天有5人迟到', '提醒课代表收作业', '前台使用的技术是Vue.js', '主要的组件是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
           inputVisible: false,
           inputValue: '',
     
@@ -215,17 +216,23 @@
       created() {
         this.getTaskData()
         this.getAnnouncementData()
-        if (this.$storage.get('worklist') !== null) {
-          this.taskData = this.$storage.get('worklist')
-          console.log(12)
-          console.log(this.$storage.get('worklist'))
-        } else {
-          this.getList()
-        }
+        // if (this.$storage.get('worklist') !== null) {
+    
+        //   console.log(12)
+        //   console.log(this.$storage.get('worklist'))
+        // } else {
+        //   this.getList()
+        // }
       },
       methods: {
+        goToInformation() {
+          this.$router.push({ path: '/teacherInformation/index' })
+        },
+        goToWorkManagement() {
+          this.$router.push({ path: '/workManagement/index' })
+        },
         goToStudentBasic() {
-          this.$router.push({ path: '/basicInfo/index' })
+          this.$router.push({ path: '/studentsInformation/index' })
         },
         goToDailyWork() {
           this.$router.push({ path: '/workManager/index' })
@@ -279,8 +286,7 @@
         },
         getTaskData() {
           fetchListWork().then(response => {
-            this.taskData = Response.data.taskData
-            console.log(23)
+            this.taskData = storage.get('worklist')
           })
         },
         indexMethod(index) {
