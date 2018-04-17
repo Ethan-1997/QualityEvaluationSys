@@ -104,7 +104,7 @@
                         <el-card>
                             <div slot="header" class="clearfix" style="align:center">
                                 <span><svg-icon icon-class="form" />&nbsp;学生作业概况</span>
-                                <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+                                <el-button style="float: right; padding: 3px 0" type="text" @click="goToWorkManagement">更多</el-button>
                             </div>
                             <el-table :data="taskData" style="width: 100%">
                                 <el-table-column align="center" label="序号" width="65" type="index" :index="indexMethod">
@@ -142,7 +142,7 @@
                             <el-card>
                                 <div slot="header" class="clearfix" style="align:center">
                                     <span><svg-icon icon-class="user" />&nbsp;教师信息</span>
-                                    <el-button style="float: right; padding: 3px 0" type="text">修改个人信息</el-button>
+                                    <el-button style="float: right; padding: 3px 0" type="text" @click="goToInformation">修改个人信息</el-button>
                                 </div>
                                 <el-row type="flex" justify="center" :gutter="20">
                                     <el-col :span="24">
@@ -225,6 +225,12 @@
         // }
       },
       methods: {
+        goToInformation() {
+          this.$router.push({ path: '/teacherInformation/index' })
+        },
+        goToWorkManagement() {
+          this.$router.push({ path: '/workManagement/index' })
+        },
         goToStudentBasic() {
           this.$router.push({ path: '/studentsInformation/index' })
         },
