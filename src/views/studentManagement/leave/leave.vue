@@ -1,5 +1,9 @@
 <template>
   <div class="app-container calendar-list-container">
+    <el-card>
+    <div slot="header" class="clearfix">
+      <span style="font-size:25px">突出表现管理</span>
+    </div>
     <div class="filter-container">
       <el-date-picker class="filter-item"
         v-model="listQuery.time"
@@ -117,7 +121,7 @@
       
     </el-dialog>
 
-
+    </el-card>
   </div>
 </template>
 
