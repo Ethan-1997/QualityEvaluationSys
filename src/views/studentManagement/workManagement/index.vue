@@ -1,5 +1,9 @@
 <template>
   <div class="app-container calendar-list-container">
+    <el-card>
+    <div slot="header" class="clearfix">
+      <span style="font-size:25px">突出表现管理</span>
+    </div>
     <div class="filter-container">
       <el-select clearable style="width: 150px" class="filter-item" v-model="listQuery.sclass" placeholder="请选择班级">
         <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
@@ -155,7 +159,7 @@
       </div>
       <input type="hidden"  v-model="temp.id"/>
     </el-dialog>
-
+    </el-card>
   </div>
 </template>
 
