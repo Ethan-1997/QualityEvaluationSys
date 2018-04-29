@@ -286,9 +286,10 @@
         this.init()
         if (storage.get('character') !== null) {
           this.characterOneData = storage.get('character')[0]
-          this.characterOneData = storage.get('character')[1]
-          this.characterOneData = storage.get('character')[2]
-          this.characterOneData = storage.get('character')[3]
+          this.characterTwoData = storage.get('character')[1]
+          this.characterThreeData = storage.get('character')[2]
+          this.characterFourData = storage.get('character')[3]
+          this.characterFiveData = storage.get('character')[4]
         }
       },
       methods: {
