@@ -27,7 +27,7 @@
                 </el-table-column>
                 <el-table-column label="提交状态" prop="submitStatus" width="120" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
                   <template slot-scope="scope">
-                      <el-button :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'"  @click="openUploadTask(scope.row)" >{{scope.row.submitStatus}}</el-button>
+                      <el-button :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'" >{{scope.row.submitStatus}}</el-button>
                   </template>   
                 </el-table-column>
               </el-table>
@@ -116,7 +116,7 @@ export default {
       })
     },
     filterTaskTag(value, row) {
-      return row.status === value
+      return row.submitStatus === value
     },
 
     tableRowClassName({ row, rowIndex }) {
