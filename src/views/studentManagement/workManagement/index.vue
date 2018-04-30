@@ -39,19 +39,24 @@
           <span>{{scope.row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="200px" :label="tableCol.startTime">
+      <el-table-column width="100px" align="center" :label="tableCol.startTime">
         <template slot-scope="scope">
          <span>{{scope.row.startTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="200px" align="center" :label="tableCol.endTime">
+      <el-table-column width="100px" align="center" :label="tableCol.endTime">
         <template slot-scope="scope">
           <span>{{scope.row.endTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="50px"  align="center" :label="tableCol.sclass">
+      <el-table-column width="100px"  align="center" :label="tableCol.sclass">
         <template slot-scope="scope">
           <span >{{scope.row.sclass}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="80px"  align="center"  :label="tableCol.author">
+        <template slot-scope="scope">
+          <span>{{scope.row.author}}</span>
         </template>
       </el-table-column>
       <el-table-column width="50px"  align="center" :label="tableCol.status">
@@ -59,12 +64,7 @@
           <span >{{scope.row.status}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" :label="tableCol.author">
-        <template slot-scope="scope">
-          <span>{{scope.row.author}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" :label="tableCol.operator" width="250" class-name="small-padding fixed-width">
+      <el-table-column align="center" label="操作" width="250" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="info" size="mini" @click="handledatail(scope.row)">详情</el-button>
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
@@ -105,7 +105,7 @@
         </el-row>
          <el-row :gutter="20">
            <el-col :span="12">
-             <el-form-item :label="tableCol.startTime" prop="startTime">
+             <el-form-item :label="tableCol.startTime"  prop="startTime">
               <el-date-picker v-model="temp.startTime"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" placeholder="请选择">
               </el-date-picker>
             </el-form-item>
