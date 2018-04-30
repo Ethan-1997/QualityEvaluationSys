@@ -5,7 +5,7 @@
         <template>
           <el-card>
             <div slot="header" class="clearfix">
-              <span style="font-size:25px">技术经理面试</span>
+              <span style="font-size:25px">项目经理面试</span>
             </div>
             <el-button :index="index" v-for="(buttonIndex,index) in studentFormData" :key="index" @click="setCarouselItem(index)" ref="studentSelect" style="width:9.3%;margin: 5px;line-height: 30px;text-align:center">{{buttonIndex.Sname}}</el-button>
           </el-card>

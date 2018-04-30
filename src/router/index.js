@@ -444,8 +444,8 @@ export const asyncRouterMap = [
     children: [
       { path: 'midReviewIndex', component: _import('reviewSystem/midReviewIndex'), name: 'midReviewIndex', meta: { title: '学中综合评定', icon: 'review' }},
       { path: 'finalReviewIndex', component: _import('reviewSystem/finalReviewIndex'), name: 'finalReviewIndex', meta: { title: '学末综合评定', icon: 'review' }},
-      { path: 'HRReview', component: _import('reviewSystem/HRReview'), name: 'HRReview', meta: { title: '人事经理面试', icon: 'Interview' }},
-      { path: 'technologyReview', component: _import('reviewSystem/projectManagerReview'), name: 'technologyReview', meta: { title: '项目经理面试', icon: 'Interview' }}
+      { path: 'HRReviewIndex', component: _import('reviewSystem/HRReviewIndex'), name: 'HRReviewIndex', meta: { title: '人事经理面试', icon: 'Interview' }},
+      { path: 'technologyReviewIndex', component: _import('reviewSystem/projectManagerReviewIndex'), name: 'technologyReviewIndex', meta: { title: '项目经理面试', icon: 'Interview' }}
     ]
   },
   {
@@ -457,7 +457,9 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'midTeacherReview', component: _import('reviewSystem/midTeacherReview'), name: 'midTeacherReview', meta: { title: '学中综合评定' }},
-      { path: 'finalTeacherReview', component: _import('reviewSystem/finalTeacherReview'), name: 'finalTeacherReview', meta: { title: '结业综合评定' }}
+      { path: 'finalTeacherReview', component: _import('reviewSystem/finalTeacherReview'), name: 'finalTeacherReview', meta: { title: '结业综合评定' }},
+      { path: 'HRReview', component: _import('reviewSystem/HRReview'), name: 'HRReview', meta: { title: '人事经理面试' }},
+      { path: 'projectManagerReview', component: _import('reviewSystem/projectManagerReview'), name: 'projectManagerReview', meta: { title: '项目经理面试' }}
     ]
   },
   {
