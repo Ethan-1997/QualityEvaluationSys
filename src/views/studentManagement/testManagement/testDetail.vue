@@ -204,7 +204,7 @@
         if (id === '1') {
           return 0
         } else {
-          this.exam = this.$storage.get('exam-' + id)
+          this.exam = this.$storage.get('tests-' + id)
           console.log(this.exam)
           this.questions = this.exam.questions
         }

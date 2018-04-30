@@ -6,7 +6,7 @@
       </div>
         <section>
             <template>
-                <el-table style="width: 100%" :data="exams">
+                <el-table style="width: 100%" height="330" :data="exams">
                 <el-table-column label="试卷名称" width="130">
                     <template slot-scope="scope">
                         <span>{{ scope.row.name }}</span>
@@ -19,7 +19,7 @@
                 </el-table-column>
                 <el-table-column label="上传日期" width="100">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.year }}/{{ scope.row.month }}/{{ scope.row.day }}</span>
+                        <span>{{ scope.row.date }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" width="300px">
@@ -43,13 +43,13 @@
         </section>
         <ui-raised-button label="制作试卷" primary to="/tests/testAdd" style="float:right;margin:20px;"/>
       </el-card>
-      <el-card>
+      <el-card style="margin-top:25px;">
         <div slot="header" class="clearfix">
           <span style="font-size:25px">试卷管理</span>
         </div>
         <section>
             <template>
-                <el-table style="width: 100%" :data="system_exams_mid">
+                <el-table style="width: 100%" height="180" :data="system_exams_mid">
                 <el-table-column label="试卷名称" width="130">
                     <template slot-scope="scope">
                         <span>{{ scope.row.name }}</span>
@@ -62,7 +62,7 @@
                 </el-table-column>
                 <el-table-column label="上传日期" width="130">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.year }}/{{ scope.row.month }}/{{ scope.row.day }}</span>
+                        <span>{{ scope.row.date }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center" width="300px">
@@ -93,10 +93,11 @@
           visible2: false,
           exams: [
           ],
+          date: new Date(),
           midtest: [],
           type: '',
           system_exams_mid: [
-            { name: '期末测试', year: 2018, month: 4, day: 9, display: true, id: null, state: '未完成', explain: '系统随机生成五套期末试卷' }
+            { name: '期末测试', display: true, id: null, state: '未完成', explain: '系统随机生成五套期末试卷' }
           ],
           radio2: ''
         }
@@ -138,9 +139,7 @@
           midtest.push({
             id: data.id,
             name: data.name,
-            day: data.day,
-            month: data.month,
-            year: data.year,
+            date: data.date,
             state: data.state,
             radio: '日常'
           })
@@ -191,9 +190,7 @@
             midtest.push({
               id: data.id,
               name: name,
-              day: data.day,
-              month: data.month,
-              year: data.year,
+              date: this.date.getFullYear() + '/' + (+this.date.getMonth() + +1) + '/' + this.date.getDate(),
               state: data.state,
               radio: radio
             })
@@ -263,7 +260,7 @@
                     }
                   }
                 }
-                localStorage.removeItem('exam-' + exams[i].id)
+                localStorage.removeItem('tests-' + exams[i].id)
                 exams.splice(i, 1)
                 this.exams.splice(i, 1)
               }

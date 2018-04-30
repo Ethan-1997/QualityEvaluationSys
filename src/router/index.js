@@ -258,10 +258,31 @@ export const asyncRouterMap = [
         name: 'midProfessionalKnowledgeTest',
         meta: { title: '专业测试(智育)', icon: 'test' },
         children: [
-          { path: 'midTest', component: _import('studentTest/systemTest/midTest'), name: 'systemTest-midTest', meta: { title: '笔试题', icon: 'icon' }},
+          { path: 'midIndex', component: _import('studentTest/systemTest/midIndex'), name: 'systemTest-midIndex', meta: { title: '笔试题', icon: 'icon' }},
           { path: 'projectDefenseIndex', component: _import('studentTest/midTest/projectDefense/index'), name: 'projectDefenseIndex', meta: { title: '项目答辩', icon: 'mic', noCache: true }}
         ] },
       { path: 'finProfessionalKnowledgeTest', component: _import('studentTest/midTest/index'), name: 'finalProfessionalKnowledgeTest', meta: { title: '专业集中测试', icon: 'test' }}
+    ]
+  },
+  {
+    path: '/studentTest',
+    component: Layout,
+    name: 'studentTest',
+    hidden: true,
+    meta: {
+      icon: 'test',
+      title: '学生测试',
+      roles: ['student']
+    },
+    children: [
+      {
+        path: '/admissionTestIndex/midProfessionalKnowledgeTest',
+        component: _import('studentTest/index'),
+        name: 'midProfessionalKnowledgeTest',
+        meta: { title: '专业测试(智育)', icon: 'test' },
+        children: [
+          { path: 'midTest', component: _import('studentTest/systemTest/midTest'), name: 'systemTest-midTest', meta: { title: '笔试题', icon: 'icon' }}
+        ] }
     ]
   },
   {

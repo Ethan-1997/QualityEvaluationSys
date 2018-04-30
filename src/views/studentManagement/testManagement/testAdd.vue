@@ -113,16 +113,12 @@
         return {
           isAdd: true,
           isEdit: false,
+          date: new Date(),
           exam: {
             id: new Date().getTime(),
             name: '未命名',
             display: true,
             questions: [],
-            day: new Date().getDate(),
-            month: new Date().getMonth(),
-            year: new Date().getFullYear(),
-            hour: new Date().getHours(),
-            minutes: new Date().getMinutes(),
             state: '未完成'
           },
           question: null, // 当前题目
@@ -299,6 +295,7 @@
               day: this.exam.day,
               month: this.exam.month,
               year: this.exam.year,
+              date: this.date.getFullYear() + '/' + (+this.date.getMonth() + +1) + '/' + this.date.getDate(),
               display: this.exam.display,
               state: this.exam.state
             })
