@@ -120,7 +120,7 @@
           this.$router.push({ path: '/Exams/Exam/' + id })
         },
         editTest(id) {
-          this.$router.push({ path: '/Exams/Exam/' + id + '/edit' })
+          this.$router.push({ path: '/tests/' + id + '/edit' })
         },
         init() {
           const exams = this.$storage.get('exams')

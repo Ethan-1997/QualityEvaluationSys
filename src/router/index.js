@@ -104,6 +104,18 @@ export const asyncRouterMap = [
       meta: { title: '试卷详情', icon: 'icon', noCache: true }
     }]
   },
+  {
+    path: '/tests',
+    component: Layout,
+    hidden: true,
+    // meta: { roles: ['student'] },
+    children: [{
+      path: ':id/edit',
+      component: _import('studentManagement/testManagement/testAdd'),
+      name: 'testDetail',
+      meta: { title: '试卷详情', icon: 'icon', noCache: true }
+    }]
+  },
 
   // {
   //   path: '/studentTeam',

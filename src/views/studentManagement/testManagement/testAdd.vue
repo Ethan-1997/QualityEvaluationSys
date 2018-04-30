@@ -141,7 +141,7 @@
         init() {
           if (this.$route.params.id) {
             this.isAdd = false
-            const exam = this.$storage.get('exam-' + this.$route.params.id)
+            const exam = this.$storage.get('tests-' + this.$route.params.id)
             if (exam) {
               this.exam = exam
             }
@@ -285,11 +285,11 @@
           }
         },
         save() {
-          this.$storage.set('exam-' + this.exam.id, this.exam)
+          this.$storage.set('tests-' + this.exam.id, this.exam)
           console.log(this.exam)
         },
         test() {
-          this.$storage.set('exam-' + this.exam.id, this.exam)
+          this.$storage.set('tests-' + this.exam.id, this.exam)
           console.log(this.exam)
           const exams = this.$storage.get('exams', [])
           if (this.isAdd) {
