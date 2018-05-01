@@ -116,6 +116,7 @@
 <script>
     import { format } from '@/utils/time'
     import { fetchListTest } from '@/api/testInformation'
+    import { fetchListStudentTest, updateStudentTest } from '@/api/StudentTest'
     const FILL = '___'
 
     // eslint-disable-next-line
@@ -132,6 +133,8 @@
     export default {
       data() {
         return {
+          score: 0,
+          data: {},
           questionIndex: 0,
           questions: [],
           question: {},
@@ -154,7 +157,25 @@
           }
           return types[this.question.type]
         },
-        score() {
+        startTimeStr() {
+          return format(new Date(this.startTime), 'hh:mm')
+        }
+      },
+      created() {
+        this.start()
+      },
+      mounted() {
+        // const id = this.$route.params.tid
+        // this.questions = this.exam.questions
+        // 测试
+        this.getList()
+        // 测试
+      },
+      destroyed() {
+        clearInterval(this.timer)
+      },
+      methods: {
+        score1() {
           let successCount = 0
           for (const question of this.questions) {
             if (question.type !== 'fill' && !question.userAnswer) {
@@ -189,27 +210,9 @@
               }
             }
           }
-    
-          return parseInt(100 * successCount / this.questions.length)
+          this.score = parseInt(100 * successCount / this.questions.length)
+          console.log(this.score)
         },
-        startTimeStr() {
-          return format(new Date(this.startTime), 'hh:mm')
-        }
-      },
-      created() {
-        this.start()
-      },
-      mounted() {
-        // const id = this.$route.params.tid
-        // this.questions = this.exam.questions
-        // 测试
-        this.getList()
-        // 测试
-      },
-      destroyed() {
-        clearInterval(this.timer)
-      },
-      methods: {
         getList() {
           console.log(this.$route.params.tid)
           const data = {
@@ -225,15 +228,36 @@
           })
         },
         toindex() {
-          const midtest = this.$storage.get('midtest')
-          for (let i = 0; i < midtest.length; i++) {
-            if (+midtest[i].id === +this.$route.params.id) {
-              midtest[i].state = '已完成'
-            }
+          // const midtest = this.$storage.get('midtest')
+          // for (let i = 0; i < midtest.length; i++) {
+          //   if (+midtest[i].id === +this.$route.params.id) {
+          //     midtest[i].state = '已完成'
+          //   }
+          // }
+          // console.log(midtest)
+          // this.$storage.set('midtest', midtest)
+
+          const data = {
+            sid: this.$route.params.sid
           }
-          console.log(midtest)
-          this.$storage.set('midtest', midtest)
-          this.$router.push({ name: 'dailyTestIndex' })
+          console.log(this.$route.params.sid)
+          fetchListStudentTest(data).then(response => {
+            const temp = response.data.items
+            for (const daily of temp) {
+              if (daily.tid === this.$route.params.tid) {
+                daily.sstate = '已完成'
+                daily.sgrade = this.score
+                this.data = daily
+                break
+              }
+            }
+            console.log(this.data)
+            updateStudentTest(this.data).then(res => {
+              if (res.data.data === 'success') {
+                this.$router.push({ name: 'dailyTestIndex' })
+              }
+            })
+          })
         },
         init() {
           for (const question of this.questions) {
@@ -444,6 +468,7 @@
           this.endTime = new Date()
           this.updateTime()
           clearInterval(this.timer)
+          this.score1()
         },
         numberToLetter(number) {
           const arr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'

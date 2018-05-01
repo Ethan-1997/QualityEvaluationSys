@@ -60,7 +60,7 @@
 
 <script>
     import { deleteTest } from '@/api/testInformation'
-    import { fetchListTeacherTest, deleteTeacherTest, updateTeacherTest } from '@/api/TeacherTest'
+    import { fetchListTeacherTest, updateTeacherTest } from '@/api/TeacherTest'
     import { switchDisplay } from '@/api/StudentTest'
     import { getCurrentUser } from '@/api/user'
     import { fetchList } from '@/api/class'
@@ -112,19 +112,16 @@
         getList() {
           getCurrentUser().then(response => {
             this.Tno = response.data.user.tno
-            console.log(this.Tno)
             const data = {
               Tno: this.Tno
             }
             fetchListTeacherTest(data).then(response => {
+              console.log(response.data.item)
               this.exams = response.data.item
               console.log(234)
-              console.log(this.exams)
               fetchList(this.listQuery).then(response => {
                 this.classlist = response.data.items
-                console.log(this.classlist)
               })
-            // console.log(this.list)
             })
           })
         },
@@ -135,60 +132,59 @@
             status: 1
           }
           data.tdisplay = 'true'
-          switchDisplay(infor)
-          updateTeacherTest(data).then(res => {
+          switchDisplay(infor).then(res => {
             if (res.data.data === 'success') {
               this.getList()
               this.dialogFormVisible = false
               this.$notify({
                 title: '成功',
-                message: '创建成功',
+                message: '发布成功',
                 type: 'success',
                 duration: 2000
               })
             } else {
               this.$notify({
                 title: '失败',
-                message: '创建失败',
+                message: '发布失败',
                 type: 'error',
                 duration: 2000
               })
             }
           })
+          updateTeacherTest(data)
         },
         midcancel(data) {
           const infor = {
-            Cid: data.cid,
-            Tid: data.tid,
+            cid: data.cid,
+            tid: data.tid,
             status: 0
           }
           data.tdisplay = 'false'
-          switchDisplay(infor)
-          updateTeacherTest(data).then(res => {
+          switchDisplay(infor).then(res => {
             if (res.data.data === 'success') {
               this.getList()
               this.dialogFormVisible = false
               this.$notify({
                 title: '成功',
-                message: '创建成功',
+                message: '取消成功',
                 type: 'success',
                 duration: 2000
               })
             } else {
               this.$notify({
                 title: '失败',
-                message: '创建失败',
+                message: '取消失败',
                 type: 'error',
                 duration: 2000
               })
             }
           })
+          updateTeacherTest(data)
         },
         cs() {
           console.log(this.$refs)
         },
         remove(data) {
-          deleteTeacherTest(data)
           deleteTest(data).then(res => {
             if (res.data.data === 'success') {
               this.getList()
