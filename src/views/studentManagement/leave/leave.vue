@@ -6,15 +6,15 @@
     </div>
     <div class="filter-container">
       <el-date-picker class="filter-item"
-        v-model="listQuery.time"
+        v-model="listQuery.Ltime"
         type="datetime"
         placeholder="选择日期时间">
       </el-date-picker>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
+      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.Sclass" :placeholder="tableCol.Sclass">
         <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.Sname" v-model="listQuery.Sname">
       </el-input>
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort" :placeholder="tableCol.order">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
@@ -28,29 +28,29 @@
 
     <el-table  :key='tableKey' :data="list" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.sno" width="80">
+      <el-table-column align="center" :label="tableCol.Sid" width="80">
         <template slot-scope="scope">
-          <span>{{scope.row.sno}}</span>
+          <span>{{scope.row.Sid}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="80px" align="center" :label="tableCol.sname">
+      <el-table-column width="80px" align="center" :label="tableCol.Sname">
         <template slot-scope="scope">
-          <span>{{scope.row.sname }}</span>
+          <span>{{scope.row.Sname }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="80px" align="center" :label="tableCol.sclass">
+      <el-table-column width="80px" align="center" :label="tableCol.Sclass">
         <template slot-scope="scope">
-          <span>{{scope.row.sclass}}</span>
+          <span>{{scope.row.Sclass}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px"  align="center" :label="tableCol.time">
+      <el-table-column width="100px"  align="center" :label="tableCol.Ltime">
         <template slot-scope="scope">
-          <span >{{scope.row.time}}</span>
+          <span >{{scope.row.Ltime}}</span>
         </template>
       </el-table-column>
-        <el-table-column width="100px" align="center" :label="tableCol.Lend">
+        <el-table-column width="100px" align="center" :label="tableCol.Lday">
         <template slot-scope="scope">
-          <span>{{scope.row.Lend}}</span>
+          <span>{{scope.row.Lday}}</span>
         </template>
       </el-table-column>
       <el-table-column  :label="tableCol.Lreason" min-width="95">
@@ -79,14 +79,14 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <!-- <el-form-item :label="tableCol[0]" prop="sno">
+        <!-- <el-form-item :label="tableCol[0]" prop="Sid">
           <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
             <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
             </el-option>
           </el-select>
         </el-form-item> -->
-        <el-form-item :label="tableCol.sname" prop="sname">
-          <el-input v-model="temp.sname"></el-input>
+        <el-form-item :label="tableCol.Sname" prop="Sname">
+          <el-input v-model="temp.Sname"></el-input>
         </el-form-item>
        
         <el-form-item :label="tableCol.ssex" prop="sex">
@@ -95,18 +95,18 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="tableCol.sclass" prop="sclass">
-          <el-input v-model="temp.sclass"></el-input>
+        <el-form-item :label="tableCol.Sclass" prop="Sclass">
+          <el-input v-model="temp.Sclass"></el-input>
         </el-form-item>
         <el-form-item :label="tableCol.Laprover" prop="Laprover">
           <el-input v-model="temp.Laprover"></el-input>
         </el-form-item>
-         <el-form-item :label="tableCol.time" prop="time">
-          <el-date-picker v-model="temp.time"  format="yyyy-MM-dd" placeholder="请选择生日">
+         <el-form-item :label="tableCol.Ltime" prop="Ltime">
+          <el-date-picker v-model="temp.Ltime"  format="yyyy-MM-dd" placeholder="请选择生日">
           </el-date-picker>
         </el-form-item>
-        <el-form-item :label="tableCol.Lend" prop="Lend">
-          <el-input v-model="temp.Lend"></el-input>
+        <el-form-item :label="tableCol.Lday" prop="Lday">
+          <el-input v-model="temp.Lday"></el-input>
         </el-form-item>
          <el-form-item :label="tableCol.Lreason" prop="Lreason">
             <el-input v-model="temp.Lreason"  type="textarea" :autosize="{ minRows: 5, maxRows: 4}"></el-input>
@@ -144,12 +144,12 @@ export default {
     return {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
-        sno: '学号',
-        sname: '姓名',
+        Sid: '学号',
+        Sname: '姓名',
         ssex: '性别',
-        sclass: '班级',
-        time: '请假时间',
-        Lend: '天数',
+        Sclass: '班级',
+        Ltime: '请假时间',
+        Lday: '天数',
         Lreason: '原因',
         Laprover: '批准人',
         operator: '操作',
@@ -162,10 +162,10 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        sname: undefined,
-        time: undefined,
+        Sname: undefined,
+        Ltime: undefined,
         order: '+id',
-        sclass: undefined
+        Sclass: undefined
       },
       classOptions: ['101', '102', '103', '104', '105', '106', '107', '108', '109'],
       sexOptions: ['男', '女'],
@@ -175,12 +175,12 @@ export default {
 
       showReviewer: false,
       temp: {
-        sno: undefined,
-        sname: undefined,
+        Sid: undefined,
+        Sname: undefined,
         ssex: undefined,
-        sclass: undefined,
-        time: undefined,
-        Lend: undefined,
+        Sclass: undefined,
+        Ltime: undefined,
+        Lday: undefined,
         Lreason: undefined,
         Laprover: undefined
       },
@@ -201,15 +201,15 @@ export default {
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
-      //  sno: undefined,
-      //   sname: undefined,
+      //  Sid: undefined,
+      //   Sname: undefined,
       //   ssex: undefined,
-      //   sclass: undefined,
-      //   time: undefined,
-      //   Lend: undefined,
+      //   Sclass: undefined,
+      //   Ltime: undefined,
+      //   Lday: undefined,
       //   Lreason: undefined,
       //   Laprover: undefined
-      tHeader: ['sno', 'sname', 'ssex', 'sclass', 'time', 'Lend', 'Lreason', 'Laprover']
+      tHeader: ['Sid', 'Sname', 'ssex', 'Sclass', 'Ltime', 'Lday', 'Lreason', 'Laprover']
     }
   },
   filters: {
@@ -282,12 +282,12 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        sno: undefined,
-        sname: undefined,
+        Sid: undefined,
+        Sname: undefined,
         ssex: undefined,
-        sclass: undefined,
-        time: undefined,
-        Lend: undefined,
+        Sclass: undefined,
+        Ltime: undefined,
+        Lday: undefined,
         Lreason: undefined,
         Laprover: undefined
       }
@@ -301,24 +301,24 @@ export default {
       })
     },
     createData() {
-      if (this.temp.sname === undefined || this.temp.ssex === undefined || this.temp.sclass === undefined || this.temp.time === undefined || this.temp.Lend === undefined || this.temp.Lreason === undefined) {
+      if (this.temp.Sname === undefined || this.temp.ssex === undefined || this.temp.Sclass === undefined || this.temp.Ltime === undefined || this.temp.Lday === undefined || this.temp.Lreason === undefined) {
         this.$notify({
           title: '失败',
           message: '请填写完整',
           duration: 2000
         })
       } else {
-        const months = this.temp.time.getMonth() + 1
-        const times = this.temp.time.getFullYear() + '.' + months + '.' + this.temp.time.getDate()
+        const months = this.temp.Ltime.getMonth() + 1
+        const times = this.temp.Ltime.getFullYear() + '.' + months + '.' + this.temp.Ltime.getDate()
         this.list.push({
-          sno: '101',
-          sname: this.temp.sname,
+          Sid: '101',
+          Sname: this.temp.Sname,
           ssex: this.temp.ssex,
-          sclass: this.temp.sclass,
-          Lend: this.temp.Lend,
+          Sclass: this.temp.Sclass,
+          Lday: this.temp.Lday,
           Lreason: this.temp.Lreason, // 已到、迟到、请假、未到
           Laprover: this.temp.Laprover,
-          time: times
+          Ltime: times
         })
         this.$storage.set('leaveList', this.list)
         this.$notify({
@@ -345,19 +345,19 @@ export default {
       tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
       const oldtempData = Object.assign({}, this.oldtemp)
       let times
-      if (tempData.time !== oldtempData.time) {
-        const months = tempData.time.getMonth() + 1
-        times = tempData.time.getFullYear() + '.' + months + '.' + tempData.time.getDate()
+      if (tempData.Ltime !== oldtempData.Ltime) {
+        const months = tempData.Ltime.getMonth() + 1
+        times = tempData.Ltime.getFullYear() + '.' + months + '.' + tempData.Ltime.getDate()
       } else {
-        times = oldtempData.time
+        times = oldtempData.Ltime
       }
       for (let i = 0; i < this.list.length; i++) {
-        if (this.list[i].time === oldtempData.time && this.list[i].id === oldtempData.id) {
-          this.list[i].sname = this.temp.sname
-          this.list[i].time = times
+        if (this.list[i].Ltime === oldtempData.Ltime && this.list[i].id === oldtempData.id) {
+          this.list[i].Sname = this.temp.Sname
+          this.list[i].Ltime = times
           this.list[i].ssex = this.temp.ssex
-          this.list[i].sclass = this.temp.sclass
-          this.list[i].Lend = this.temp.Lend
+          this.list[i].Sclass = this.temp.Sclass
+          this.list[i].Lday = this.temp.Lday
           this.list[i].Lreason = this.temp.Lreason
           this.list[i].Laprover = this.temp.Laprover
           this.$storage.set('leaveList', this.list)
@@ -390,10 +390,10 @@ export default {
         })
       })
     },
-    // sno: undefined,
-    //     sname: undefined,
+    // Sid: undefined,
+    //     Sname: undefined,
     //     ssex: undefined,
-    //     sclass: undefined,
+    //     Sclass: undefined,
     //     birth: undefined,
     //     saddress: undefined,
     //     sprofession: undefined,
@@ -401,7 +401,7 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const filterVal = ['sno', 'sname', 'ssex', 'sclass', 'time', 'Lend', 'Lreason', 'Laprover']
+        const filterVal = ['Sid', 'Sname', 'ssex', 'Sclass', 'Ltime', 'Lday', 'Lreason', 'Laprover']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel(this.tHeader, data, 'table-list')
         this.downloadLoading = false
