@@ -1,7 +1,7 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.aname" v-model="listQuery.atitle">
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.atitle" v-model="listQuery.atitle">
       </el-input>
       <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.atime" v-model="listQuery.atime">
       </el-input>
@@ -17,6 +17,11 @@
 
     <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
+      <el-table-column width="200px" align="center" :label="tableCol.ano">
+        <template slot-scope="scope">
+          <span>{{scope.row.ano }}</span>
+        </template>
+      </el-table-column>
       <el-table-column width="200px" align="center" :label="tableCol.atitle">
         <template slot-scope="scope">
           <span>{{scope.row.atitle }}</span>
@@ -27,15 +32,15 @@
           <span>{{scope.row.acontent}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" align="center" :label="tableCol.atime">
+      <el-table-column width="100px" align="center" :label="tableCol.atime" >
         <template slot-scope="scope">
-         <span>{{scope.row.atime}}</span>
+         <span>{{DateTimeFormatter(scope.row.atime)}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.$index)">{{$t('table.delete')}}
+          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row.ano)">{{$t('table.delete')}}
           </el-button>
         </template>
       </el-table-column>
@@ -59,7 +64,7 @@
         </el-form-item>
         
          <el-form-item :label="tableCol.atime" prop="atime">
-          <el-date-picker v-model="temp.atime"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" placeholder="请选择">
+          <el-date-picker v-model="temp.atime"  format="yyyy年MM月dd日"  value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择">
           </el-date-picker>
         </el-form-item>
        <el-form-item>
@@ -83,9 +88,9 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/announcement'
+import { fetchList, updateAnnouncement, createAnnouncement, deleteAnnouncement } from '@/api/announcement'
+import moment from 'moment'
 import waves from '@/directive/waves' // 水波纹指令
-import storage from '@/utils/storage'
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
 import compare from '@/utils/compare'
@@ -143,7 +148,7 @@ export default {
       pvData: [],
       rules: {
         type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
+        // timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false,
@@ -170,6 +175,12 @@ export default {
     this.getList()
   },
   methods: {
+    // 时间格式化
+    DateTimeFormatter(value) {
+      if (value != null) {
+        return moment(value).format('YYYY-MM-DD')
+      }
+    },
     selected(data) {
       this.tableData = data.results
       this.tableHeader = data.header
@@ -181,26 +192,35 @@ export default {
           duration: 2000
         })
       } else {
+        for (let j = 0; data.results[j] != null; j++) {
+          // 去掉导入内容的主键
+          delete data.results[j].ano
+          createAnnouncement(data.results[j]).then(res => {
+
+          })
+        }
+        this.getList()
         this.$message({
-          message: '操作成功',
+          message: '导入成功',
           type: 'success'
         })
-        console.log(this.list)
-        console.log(this.tableData)
-        console.log(this.list.length)
-        let j, len
-        for (j = 0, len = this.tableData.length; j < len; j++) {
-          this.list.push(this.tableData[j])
-        }
-        this.list.concat(this.tableData)
-        console.log(this.list.length)
+
+        // console.log(this.list)
+        // console.log(this.tableData)
+        // console.log(this.list.length)
+        // let j, len
+        // for (j = 0, len = this.tableData.length; j < len; j++) {
+        //   this.list.push(this.tableData[j])
+        // }
+        // this.list.concat(this.tableData)
+        // console.log(this.list.length)
       }
     },
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
-        console.log(this.list)
+        // console.log(this.list)
         this.total = response.data.total
         this.listLoading = false
       })
@@ -240,24 +260,35 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.ano = this.list[0].ano + 1
-          this.list.unshift(this.temp)
-          storage.set('announcementList', this.list)
-          console.log(this.list)
-          this.dialogFormVisible = false
-          this.$notify({
-            title: '成功',
-            message: '创建成功',
-            type: 'success',
-            duration: 2000
+          // this.temp.ano = this.list[0].ano + 1
+          // this.list.unshift(this.temp)
+          // storage.set('announcementList', this.list)
+          // console.log(this.list)
+          createAnnouncement(this.temp).then(res => {
+            if (res.data.data === 'success') {
+              this.getList()
+              this.dialogFormVisible = false
+              this.$notify({
+                title: '成功',
+                message: '创建成功',
+                type: 'success',
+                duration: 2000
+              })
+            } else {
+              this.$notify({
+                title: '失败',
+                message: '创建失败',
+                type: 'error',
+                duration: 2000
+              })
+            }
           })
         }
       })
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      console.log(this.temp)
-      this.temp.timestamp = new Date(this.temp.timestamp)
+      // this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -267,37 +298,50 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          for (const v of this.list) {
-            if (v.ano === this.temp.ano) {
-              const index = this.list.indexOf(v)
-              this.list.splice(index, 1, this.temp)
-              storage.set('announcementList', this.list)
-              break
+          // const tempData = Object.assign({}, this.temp)
+          // tempData.timestamp = +new Date(tempData.timestamp)
+          // 调用接口
+          updateAnnouncement(this.temp).then(res => {
+            if (res.data.data === 'success') {
+              this.dialogFormVisible = false
+              this.getList()
+              this.$notify({
+                title: '成功',
+                message: '更新成功',
+                type: 'success',
+                duration: 2000
+              })
+            } else {
+              this.$notify({
+                title: '失败',
+                message: '更新失败',
+                type: 'error',
+                duration: 2000
+              })
             }
-          }
-          this.dialogFormVisible = false
-          this.$notify({
-            title: '成功',
-            message: '更新成功',
-            type: 'success',
-            duration: 2000
           })
         }
       })
     },
-    handleDelete(index) {
+    handleDelete(ano) {
       this.$confirm('是否删除该公告?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.list.splice(index, 1)
-        this.$storage.set('announcementList', this.list)
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        deleteAnnouncement({ 'ano': ano }).then(res => {
+          if (res.data.data === 'success') {
+            this.getList()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          } else {
+            this.$message({
+              type: 'info',
+              message: '删除失败'
+            })
+          }
         })
       }).catch(() => {
         this.$message({

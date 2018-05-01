@@ -1,83 +1,83 @@
 <template>
   <div class="dashboard-editor-container">
     
-  <el-row :gutter="20">
-    <el-col>
-        <el-card style="font-size:20px">
-          <div slot="header" class="clearfix">
-            <span><svg-icon icon-class="form" />&nbsp;学生作业</span>
-          </div>
-           <el-table :data="taskData" style="width:94%;margin:0px auto;font-size:16px" :row-class-name="tableRowClassName">
-                <el-table-column align="center" label="序号" width="65"  :index="indexMethod" >  
-                  <template slot-scope="scope">
-                      <span> {{scope.row.id}}</span>
-                  </template> 
-                </el-table-column>
-                <el-table-column label="任务" >
-                  <template slot-scope="scope">
-                      <span>{{scope.row.title}}</span>&nbsp;
-                      <el-button type="primary" plain size="mini" @click="openTaskDetail(scope.row)">{{'详情'}}</el-button>
-                  </template> 
-                </el-table-column>
-                <el-table-column label="截止时间" width="200" align="center"> 
-                  <template slot-scope="scope">
-                    <i class="el-icon-time"></i>
-                      <span>{{scope.row.endTime}}</span>
-                  </template>      
-                </el-table-column>
-                <el-table-column label="提交状态" prop="submitStatus" width="120" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
-                  <template slot-scope="scope">
-                      <el-button :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'"  @click="openUploadTask(scope.row)" >{{scope.row.submitStatus}}</el-button>
-                  </template>   
-                </el-table-column>
-              </el-table>
-        </el-card>
-    </el-col>
-  </el-row>
-  <el-dialog title="提交任务" :visible.sync="uploadTask" width="420px" center>
-    <el-upload
-      class="upload-demo"
-      action="https://jsonplaceholder.typicode.com/posts/"
-      :on-change="handleChange"
-      :file-list="fileList"
-      drag
-      :on-remove="removeFile"
-      ref="uploadForm">
-      <i class="el-icon-upload"></i>
-      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-    </el-upload>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="uploadTask = false">取 消</el-button>
-      <el-button type="primary" @click="closeUploadTask">确 定</el-button>
-    </span>
-  </el-dialog>
+    <el-row :gutter="20">
+      <el-col>
+          <el-card style="font-size:20px">
+            <div slot="header" class="clearfix">
+              <span><svg-icon icon-class="form" />&nbsp;学生作业</span>
+            </div>
+            <el-table :data="taskData" style="width:94%;margin:0px auto;font-size:16px" :row-class-name="tableRowClassName">
+                  <el-table-column align="center" label="序号" width="65"  :index="indexMethod" >  
+                    <template slot-scope="scope">
+                        <span> {{scope.row.id}}</span>
+                    </template> 
+                  </el-table-column>
+                  <el-table-column label="任务" >
+                    <template slot-scope="scope">
+                        <span>{{scope.row.title}}</span>&nbsp;
+                        <el-button type="primary" plain size="mini" @click="openTaskDetail(scope.row)">{{'详情'}}</el-button>
+                    </template> 
+                  </el-table-column>
+                  <el-table-column label="截止时间" width="200" align="center"> 
+                    <template slot-scope="scope">
+                      <i class="el-icon-time"></i>
+                        <span>{{scope.row.endTime}}</span>
+                    </template>      
+                  </el-table-column>
+                  <el-table-column label="提交状态" prop="submitStatus" width="120" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
+                    <template slot-scope="scope">
+                        <el-button :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'" @click="openUploadTask(scope.row)">{{scope.row.submitStatus}}</el-button>
+                    </template>   
+                  </el-table-column>
+                </el-table>
+          </el-card>
+      </el-col>
+    </el-row>
+    <el-dialog title="提交任务" :visible.sync="uploadTask" width="420px" center>
+      <el-upload
+        class="upload-demo"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :on-change="handleChange"
+        :file-list="fileList"
+        drag
+        :on-remove="removeFile"
+        ref="uploadForm">
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+      </el-upload>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="uploadTask = false">取 消</el-button>
+        <el-button type="primary" @click="closeUploadTask">确 定</el-button>
+      </span>
+    </el-dialog>
 
-  <el-dialog title="任务详情" :visible.sync="taskDetail" width="50%" left> 
-    <el-row :gutter="20">
-      <el-col :span="5"><div class="taskDetail-left">标题:</div></el-col>
-      <el-col :span="17"><div class="taskDetail-right">{{taskTitle}}</div></el-col>
-      <el-col :span="2"></el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="5"><div class="taskDetail-left">发布者:</div></el-col>
-      <el-col :span="17"><div class="taskDetail-right">{{taskAuthor}}</div></el-col>
-      <el-col :span="2"></el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="5"><div class="taskDetail-left">截止时间:</div></el-col>
-      <el-col :span="17"><div class="taskDetail-right">{{taskFinishedTime}}</div></el-col>
-      <el-col :span="2"></el-col>
-    </el-row>
-    <el-row :gutter="20">
-      <el-col :span="5"><div class="taskDetail-left">任务详情:</div></el-col>
-      <el-col :span="17"><div class="taskDetail-right">{{taskDetailText}}</div></el-col>
-      <el-col :span="2"></el-col>
-    </el-row>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="taskDetail = false">取 消</el-button>
-      <el-button type="primary" @click="closeTaskDetail">确 定</el-button>
-    </span>
-  </el-dialog>
+    <el-dialog title="任务详情" :visible.sync="taskDetail" width="50%" left> 
+      <el-row :gutter="20">
+        <el-col :span="5"><div class="taskDetail-left">标题:</div></el-col>
+        <el-col :span="17"><div class="taskDetail-right">{{taskTitle}}</div></el-col>
+        <el-col :span="2"></el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="5"><div class="taskDetail-left">发布者:</div></el-col>
+        <el-col :span="17"><div class="taskDetail-right">{{taskAuthor}}</div></el-col>
+        <el-col :span="2"></el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="5"><div class="taskDetail-left">截止时间:</div></el-col>
+        <el-col :span="17"><div class="taskDetail-right">{{taskFinishedTime}}</div></el-col>
+        <el-col :span="2"></el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="5"><div class="taskDetail-left">任务详情:</div></el-col>
+        <el-col :span="17"><div class="taskDetail-right">{{taskDetailText}}</div></el-col>
+        <el-col :span="2"></el-col>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="taskDetail = false">取 消</el-button>
+        <el-button type="primary" @click="closeTaskDetail">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -116,7 +116,7 @@ export default {
       })
     },
     filterTaskTag(value, row) {
-      return row.status === value
+      return row.submitStatus === value
     },
 
     tableRowClassName({ row, rowIndex }) {

@@ -1,5 +1,6 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+// import { DH_UNABLE_TO_CHECK_GENERATOR } from 'constants'
 
 const user = {
   state: {
@@ -53,9 +54,12 @@ const user = {
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password).then(response => {
           const data = response.data
-          commit('SET_TOKEN', data.token)
-          setToken(response.data.token)
-          resolve()
+          if (response.data.token !== undefined) {
+            commit('SET_TOKEN', data.token)
+            setToken(response.data.token)
+            resolve(data)
+          }
+          resolve(data)
         }).catch(error => {
           reject(error)
         })

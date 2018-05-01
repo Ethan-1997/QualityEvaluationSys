@@ -235,17 +235,16 @@
           this.$router.push({ path: '/studentsInformation/index' })
         },
         goToDailyWork() {
-          this.$router.push({ path: '/workManager/index' })
+          this.$router.push({ path: '/workManagement/index' })
         },
         goToReviewe() {
-          this.$router.push({ path: '/teacherReview/index' })
+          this.$router.push({ path: '/reviewSystem/midReviewIndex' })
         },
         goToLeave() {
-          this.$router.push({ path: '/leave/index' })
+          this.$router.push({ path: '/dailyPerformance/index' })
         },
         goToParticipation() {
           this.$router.push({ path: '/dailyPerformance/participation' })
-          console.log(888)
         },
         goToAnnocument() {
           this.$router.push({ path: '/other/announcement' })

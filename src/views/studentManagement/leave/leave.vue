@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <el-card>
     <div slot="header" class="clearfix">
-      <span style="font-size:25px">突出表现管理</span>
+      <span style="font-size:25px">请假登记</span>
     </div>
     <div class="filter-container">
       <el-date-picker class="filter-item"

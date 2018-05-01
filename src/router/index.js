@@ -104,6 +104,18 @@ export const asyncRouterMap = [
       meta: { title: '试卷详情', icon: 'icon', noCache: true }
     }]
   },
+  {
+    path: '/tests',
+    component: Layout,
+    hidden: true,
+    // meta: { roles: ['student'] },
+    children: [{
+      path: ':id/edit',
+      component: _import('studentManagement/testManagement/testAdd'),
+      name: 'testDetail',
+      meta: { title: '试卷详情', icon: 'icon', noCache: true }
+    }]
+  },
 
   // {
   //   path: '/studentTeam',
@@ -246,10 +258,31 @@ export const asyncRouterMap = [
         name: 'midProfessionalKnowledgeTest',
         meta: { title: '专业测试(智育)', icon: 'test' },
         children: [
-          { path: 'midTest', component: _import('studentTest/systemTest/midTest'), name: 'systemTest-midTest', meta: { title: '笔试题', icon: 'icon' }},
+          { path: 'midIndex', component: _import('studentTest/systemTest/midIndex'), name: 'systemTest-midIndex', meta: { title: '笔试题', icon: 'icon' }},
           { path: 'projectDefenseIndex', component: _import('studentTest/midTest/projectDefense/index'), name: 'projectDefenseIndex', meta: { title: '项目答辩', icon: 'mic', noCache: true }}
         ] },
       { path: 'finProfessionalKnowledgeTest', component: _import('studentTest/midTest/index'), name: 'finalProfessionalKnowledgeTest', meta: { title: '专业集中测试', icon: 'test' }}
+    ]
+  },
+  {
+    path: '/studentTest',
+    component: Layout,
+    name: 'studentTest',
+    hidden: true,
+    meta: {
+      icon: 'test',
+      title: '学生测试',
+      roles: ['student']
+    },
+    children: [
+      {
+        path: '/admissionTestIndex/midProfessionalKnowledgeTest',
+        component: _import('studentTest/index'),
+        name: 'midProfessionalKnowledgeTest',
+        meta: { title: '专业测试(智育)', icon: 'test' },
+        children: [
+          { path: 'midTest', component: _import('studentTest/systemTest/midTest'), name: 'systemTest-midTest', meta: { title: '笔试题', icon: 'icon' }}
+        ] }
     ]
   },
   {
@@ -277,6 +310,7 @@ export const asyncRouterMap = [
       roles: ['student']
     },
     children: [
+      { path: 'selfReview', component: _import('reviewSystem/selfReview'), name: 'selfReview', meta: { title: '学生自评', icon: 'review', noCache: true }},
       { path: 'votw', component: _import('studentTeam/index'), name: 'student-team', meta: { title: '评定小组投票', icon: 'vote' }},
       { path: 'studentsReview', component: _import('reviewSystem/studentGroupReview'), name: 'groupReview', meta: { title: '学生小组评定', icon: 'review', noCache: true }}
     ]
@@ -444,8 +478,8 @@ export const asyncRouterMap = [
     children: [
       { path: 'midReviewIndex', component: _import('reviewSystem/midReviewIndex'), name: 'midReviewIndex', meta: { title: '学中综合评定', icon: 'review' }},
       { path: 'finalReviewIndex', component: _import('reviewSystem/finalReviewIndex'), name: 'finalReviewIndex', meta: { title: '学末综合评定', icon: 'review' }},
-      { path: 'HRReview', component: _import('reviewSystem/HRReview'), name: 'HRReview', meta: { title: '人事经理面试', icon: 'Interview' }},
-      { path: 'technologyReview', component: _import('reviewSystem/projectManagerReview'), name: 'technologyReview', meta: { title: '项目经理面试', icon: 'Interview' }}
+      { path: 'HRReviewIndex', component: _import('reviewSystem/HRReviewIndex'), name: 'HRReviewIndex', meta: { title: '人事经理面试', icon: 'Interview' }},
+      { path: 'technologyReviewIndex', component: _import('reviewSystem/projectManagerReviewIndex'), name: 'technologyReviewIndex', meta: { title: '项目经理面试', icon: 'Interview' }}
     ]
   },
   {
@@ -457,7 +491,9 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'midTeacherReview', component: _import('reviewSystem/midTeacherReview'), name: 'midTeacherReview', meta: { title: '学中综合评定' }},
-      { path: 'finalTeacherReview', component: _import('reviewSystem/finalTeacherReview'), name: 'finalTeacherReview', meta: { title: '结业综合评定' }}
+      { path: 'finalTeacherReview', component: _import('reviewSystem/finalTeacherReview'), name: 'finalTeacherReview', meta: { title: '结业综合评定' }},
+      { path: 'HRReview', component: _import('reviewSystem/HRReview'), name: 'HRReview', meta: { title: '人事经理面试' }},
+      { path: 'projectManagerReview', component: _import('reviewSystem/projectManagerReview'), name: 'projectManagerReview', meta: { title: '项目经理面试' }}
     ]
   },
   {

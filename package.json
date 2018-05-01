@@ -28,6 +28,7 @@
     "marked": "^0.3.19",
     "mockjs": "1.0.1-beta3",
     "module": "^1.2.5",
+    "moment": "^2.22.1",
     "muse-ui": "^2.1.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
