@@ -7,7 +7,7 @@ const workList = [
     title: 'vue.js第一讲',
     startTime: '2018-09-01',
     endTime: '2018-09-05',
-    sclass: 'vue',
+    Cid: 'vue',
     status: '发布',
     author: '曹老师',
     content: 'vue.js基础',
@@ -24,7 +24,7 @@ const workList = [
     title: 'vue.js第二讲',
     startTime: '2018-09-05',
     endTime: '2018-09-08',
-    sclass: 'vue',
+    Cid: 'vue',
     status: '发布',
     author: '曹老师',
     content: 'vue.js初级',
@@ -41,7 +41,7 @@ const workList = [
     title: 'vue.js第三讲',
     startTime: '2018-09-5',
     endTime: '2018-09-10',
-    sclass: 'vue',
+    Cid: 'vue',
     status: '发布',
     author: '曹老师',
     content: 'vue.js中级',
@@ -58,7 +58,7 @@ const workList = [
     title: 'vue.js第四讲',
     startTime: '2018-09-10',
     endTime: '2018-09-15',
-    sclass: 'vue',
+    Cid: 'vue',
     status: '发布',
     author: '王老师',
     content: 'vue.js高级',
@@ -75,7 +75,7 @@ const workList = [
     title: 'vue.js第五讲',
     startTime: '2018-09-15',
     endTime: '2018-09-20',
-    sclass: 'vue',
+    Cid: 'vue',
     status: '发布',
     author: '应老师',
     content: 'vue.js终级',
@@ -92,7 +92,7 @@ let List = []
 
 export default {
   getList: config => {
-    const { page = 1, limit = 20, sort, author, sclass, status } = param2Obj(config.url)
+    const { page = 1, limit = 20, sort, author, Cid, status } = param2Obj(config.url)
     const workTemp = storage.get('workTemp')
     console.log(workTemp)
     if (workTemp !== 1) {
@@ -103,7 +103,7 @@ export default {
     List = storage.get('worklist')
     let mockList = List.filter(item => {
       if (author && item.author.indexOf(author) < 0) return false
-      if (sclass && item.sclass !== sclass) return false
+      if (Cid && item.Cid !== Cid) return false
       if (status && item.status !== status) return false
       return true
     })

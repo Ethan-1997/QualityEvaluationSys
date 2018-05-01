@@ -64,7 +64,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
+      <el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
           <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.$index)">{{$t('table.delete')}}
