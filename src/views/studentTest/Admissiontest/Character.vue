@@ -287,6 +287,8 @@
             s.sstatus = s.sstatus + 33
             if (s.sstatus === 99) {
               s.sstatus = 100
+            } else if (s.sstatus > 100) {
+              s.sstatus = 33
             }
             s.scharacter = JSON.stringify(character)
             updateStudentGrade(s)
