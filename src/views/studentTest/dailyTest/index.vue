@@ -13,7 +13,7 @@
                 </el-table-column>
                 <el-table-column label="上传日期" width="280">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.year }}/{{ scope.row.month }}/{{ scope.row.day }}</span>
+                        <span>{{ scope.row.date }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="类型">

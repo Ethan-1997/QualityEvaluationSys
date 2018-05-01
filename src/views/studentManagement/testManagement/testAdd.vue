@@ -113,16 +113,12 @@
         return {
           isAdd: true,
           isEdit: false,
+          date: new Date(),
           exam: {
             id: new Date().getTime(),
             name: '未命名',
             display: true,
             questions: [],
-            day: new Date().getDate(),
-            month: new Date().getMonth(),
-            year: new Date().getFullYear(),
-            hour: new Date().getHours(),
-            minutes: new Date().getMinutes(),
             state: '未完成'
           },
           question: null, // 当前题目
@@ -141,7 +137,7 @@
         init() {
           if (this.$route.params.id) {
             this.isAdd = false
-            const exam = this.$storage.get('exam-' + this.$route.params.id)
+            const exam = this.$storage.get('tests-' + this.$route.params.id)
             if (exam) {
               this.exam = exam
             }
@@ -285,11 +281,11 @@
           }
         },
         save() {
-          this.$storage.set('exam-' + this.exam.id, this.exam)
+          this.$storage.set('tests-' + this.exam.id, this.exam)
           console.log(this.exam)
         },
         test() {
-          this.$storage.set('exam-' + this.exam.id, this.exam)
+          this.$storage.set('tests-' + this.exam.id, this.exam)
           console.log(this.exam)
           const exams = this.$storage.get('exams', [])
           if (this.isAdd) {
@@ -299,6 +295,7 @@
               day: this.exam.day,
               month: this.exam.month,
               year: this.exam.year,
+              date: this.date.getFullYear() + '/' + (+this.date.getMonth() + +1) + '/' + this.date.getDate(),
               display: this.exam.display,
               state: this.exam.state
             })
