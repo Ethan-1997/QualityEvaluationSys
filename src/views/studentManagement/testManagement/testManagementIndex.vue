@@ -60,11 +60,6 @@
                       {{ scope.row.explain }}
                     </template>
                 </el-table-column>
-                <el-table-column label="上传日期" width="130">
-                    <template slot-scope="scope">
-                        <span>{{ scope.row.date }}</span>
-                    </template>
-                </el-table-column>
                 <el-table-column label="操作" align="center" width="300px">
                     <template slot-scope="scope">
                         <el-button type="success" @click="midissue_system(scope.row)" v-if="scope.row.display">发布</el-button>
