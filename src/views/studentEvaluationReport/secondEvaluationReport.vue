@@ -79,13 +79,13 @@
                 <el-row :gutter="20"  type="flex" justify="center">
                   <el-col :xs="24" :sm="24" :lg="8">
                     <div style="width:100%">
-                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="100"  color="#67c23a"></el-progress></div>
+                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="up/(up+notup)*100"  color="#67c23a"></el-progress></div>
                       <div style="width:126px;text-align:center;margin:5px auto 0 auto">上交情况</div>
                     </div>
                   </el-col>
                   <el-col :xs="24" :sm="24" :lg="8">
                     <div style="width:100%">
-                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="0"  color="#F56C6C"></el-progress></div>
+                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="notup/(up+notup)*100"  color="#F56C6C"></el-progress></div>
                       <div style="width:126px;text-align:center;margin:5px auto 0 auto">未上交情况</div>
                     </div>
                   </el-col>
@@ -280,6 +280,7 @@
 </template>
 
 <script>
+import { getAllInfoBySid } from '@/api/studentwork'
 import TeacherReviewResults from './components/TeacherReviewResults'
 import DailyPerformanceSummary from './components/DailyPerformanceSummary'
 import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
@@ -304,6 +305,9 @@ export default {
       arrived: 0,
       unarrived: 0,
       later: 0,
+      up: 0,
+      allinfo: null,
+      notup: 0,
       classTeacherAssessment: [55, 66, 76, 88, 50],
       lecturerAssessment: [30, 40, 50, 70, 55],
       assistantAssessment: [55, 60, 70, 40, 55],
@@ -376,9 +380,18 @@ export default {
           const data = response.data.items[0]
           this.midTest = JSON.parse(data.midtest)
         })
+        getAllInfoBySid({ sid: data }).then(response => {
+          this.allinfo = response.data.items
+          for (let i = 0; i < this.allinfo.length; i++) {
+            if (this.allinfo[i].submitStatus === '已提交') {
+              this.up++
+            } else {
+              this.notup++
+            }
+          }
+        })
       })
     }
-
   }
 }
 

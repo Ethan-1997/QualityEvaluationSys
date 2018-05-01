@@ -79,13 +79,13 @@
                 <el-row :gutter="20"  type="flex" justify="center">
                   <el-col :xs="24" :sm="24" :lg="8">
                     <div style="width:100%">
-                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="100"  color="#67c23a"></el-progress></div>
+                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="up/(up+notup)*100"  color="#67c23a"></el-progress></div>
                       <div style="width:126px;text-align:center;margin:5px auto 0 auto">上交情况</div>
                     </div>
                   </el-col>
                   <el-col :xs="24" :sm="24" :lg="8">
                     <div style="width:100%">
-                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="0"  color="#F56C6C"></el-progress></div>
+                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="notup/(up+notup)*100"  color="#F56C6C"></el-progress></div>
                       <div style="width:126px;text-align:center;margin:5px auto 0 auto">未上交情况</div>
                     </div>
                   </el-col>
@@ -293,6 +293,7 @@ import { getOtherImportant } from '@/api/otherImportant'
 import { getHighlighting } from '@/api/highlighting'
 import { fetchListStudentGrade } from '@/api/StudentGrade'
 import { getCurrentUser } from '@/api/user'
+import { getAllInfoBySid } from '@/api/studentwork'
 export default {
   data() {
     return {
@@ -307,7 +308,9 @@ export default {
       breakRuleNumber: 3,
       highLightingNumber: 5,
       majorIssuesNumber: 2,
-
+      allinfo: null,
+      up: 0,
+      notup: 0,
       lastTestScore1: {
         score: 0
       },
@@ -324,16 +327,16 @@ export default {
         score: 0
       },
       lastTestAvg: 0,
-      classTeacherAssessment: [55, 66, 76, 88, 50],
-      lecturerAssessment: [30, 40, 50, 70, 55],
-      assistantAssessment: [55, 60, 70, 40, 55],
+      classTeacherAssessment: [55, 80, 76, 88, 50],
+      lecturerAssessment: [30, 40, 50, 40, 55],
+      assistantAssessment: [55, 30, 70, 40, 55],
       studentAssessment: [80, 55, 75, 44, 77],
       selfAssessment: [60, 75, 60, 80, 50],
       dailyCount: null,
-      projectManagerReviewResults: [55, 60, 70, 40, 55],
+      projectManagerReviewResults: [55, 60, 50, 40, 55],
       HRReviewResults: [55, 66, 76, 88, 50, 90],
 
-      comprehensiveQualityData: [60, 80, 50, 60, 75]
+      comprehensiveQualityData: [60, 75, 50, 80, 75]
 
     }
   },
@@ -398,6 +401,16 @@ export default {
           this.lastTestScore4 = data.lasttest4
           this.lastTestScore5 = data.lasttest5
           this.init()
+        })
+        getAllInfoBySid({ sid: data }).then(response => {
+          this.allinfo = response.data.items
+          for (let i = 0; i < this.allinfo.length; i++) {
+            if (this.allinfo[i].submitStatus === '已提交') {
+              this.up++
+            } else {
+              this.notup++
+            }
+          }
         })
       })
     },
