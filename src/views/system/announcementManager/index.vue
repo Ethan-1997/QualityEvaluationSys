@@ -17,7 +17,7 @@
 
     <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column width="200px" align="center" :label="tableCol.ano">
+      <el-table-column width="80px" align="center" :label="tableCol.ano">
         <template slot-scope="scope">
           <span>{{scope.row.ano }}</span>
         </template>
@@ -29,7 +29,7 @@
       </el-table-column>
       <el-table-column min-width="150px" :label="tableCol.acontent">
         <template slot-scope="scope">
-          <span>{{scope.row.acontent}}</span>
+          <el-alert title="" type="info" :closable="false">{{scope.row.acontent}}</el-alert>
         </template>
       </el-table-column>
       <el-table-column width="100px" align="center" :label="tableCol.atime" >
@@ -121,14 +121,10 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        sort: '+id',
+        sort: '-id',
         title: undefined,
         time: undefined
       },
-      classOptions: ['101', '102', '103', '104', '105', '106', '107', '108', '109'],
-      sexOptions: ['男', '女'],
-      deptOptions: ['javaweb', '大数据', '前端工程师'],
-
       sortOptions: [{ label: '升序排序', key: '+id' }, { label: '降序排序', key: '-id' }],
 
       showReviewer: false,
@@ -196,7 +192,6 @@ export default {
           // 去掉导入内容的主键
           delete data.results[j].ano
           createAnnouncement(data.results[j]).then(res => {
-
           })
         }
         this.getList()

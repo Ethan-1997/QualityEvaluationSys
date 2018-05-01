@@ -29,7 +29,7 @@
           <span>{{scope.row.tname }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="50px" :label="tableCol.tsex">
+      <el-table-column width="50px" align="center" :label="tableCol.tsex">
         <template slot-scope="scope">
          <span>{{scope.row.tsex}}</span>
         </template>
@@ -41,18 +41,18 @@
       </el-table-column>
       <el-table-column min-width="110px"  align="center" :label="tableCol.tintroduce">
         <template slot-scope="scope">
-          <span >{{scope.row.tintroduce}}</span>
+          <el-alert title="" type="info" :closable="false">{{scope.row.tintroduce}}</el-alert>
         </template>
       </el-table-column>
-      <el-table-column width="150px" :label="tableCol.twage">
+      <el-table-column width="150px" align="center" :label="tableCol.twage">
         <template slot-scope="scope">
-          <span>{{scope.row.twage}}</span>
+          <el-alert title="" type="warning" :closable="false">{{scope.row.twage}}</el-alert>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
+      <el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.$index)">{{$t('table.delete')}}
+          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row.tno)">{{$t('table.delete')}}
           </el-button>
         </template>
       </el-table-column>
@@ -111,7 +111,7 @@
 </template>
 
 <script>
-import { fetchList, createTeacher, updateTeacher } from '@/api/teacher'
+import { getTeacherData, createTeacher, updateTeacher, deleteTeacher } from '@/api/teacher'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -205,6 +205,7 @@ export default {
     selected(data) {
       this.tableData = data.results
       this.tableHeader = data.header
+      console.log(this.tableData)
       if (!compare(this.tableHeader, this.tHeader)) {
         this.$notify({
           title: '失败',
@@ -213,19 +214,32 @@ export default {
           duration: 2000
         })
       } else {
+        for (let j = 0; data.results[j] != null; j++) {
+          // 去掉导入内容的主键
+          delete data.results[j].tno
+          createTeacher(data.results[j]).then(res => {
+          })
+        }
+        this.getList()
         this.$message({
-          message: '操作成功',
+          message: '导入成功',
           type: 'success'
         })
+
         // console.log(this.list)
         // console.log(this.tableData)
         // console.log(this.list.length)
-        createTeacher(this.tableData)
+        // let j, len
+        // for (j = 0, len = this.tableData.length; j < len; j++) {
+        //   this.list.push(this.tableData[j])
+        // }
+        // this.list.concat(this.tableData)
+        // console.log(this.list.length)
       }
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      getTeacherData(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
@@ -264,17 +278,24 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.tno = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createTeacher(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
+          createTeacher(this.temp).then(res => {
+            if (res.data.data === 'success') {
+              this.getList()
+              this.dialogFormVisible = false
+              this.$notify({
+                title: '成功',
+                message: '创建成功',
+                type: 'success',
+                duration: 2000
+              })
+            } else {
+              this.$notify({
+                title: '失败',
+                message: '创建失败',
+                type: 'error',
+                duration: 2000
+              })
+            }
           })
         }
       })
@@ -313,17 +334,25 @@ export default {
         }
       })
     },
-    handleDelete(index) {
+    handleDelete(tno) {
       this.$confirm('此操作将永久删除该职工, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.list.splice(index, 1)
-        this.$storage.set('teacherlist', this.list)
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        deleteTeacher({ 'tno': tno }).then(res => {
+          if (res.data.data === 'success') {
+            this.getList()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          } else {
+            this.$message({
+              type: 'info',
+              message: '删除失败'
+            })
+          }
         })
       }).catch(() => {
         this.$message({
