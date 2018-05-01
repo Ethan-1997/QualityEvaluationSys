@@ -39,6 +39,14 @@ export function createStudentWork(data) {
   })
 }
 
+export function averageGrade(data) {
+  return request({
+    url: '/studentwork/averageOfWork',
+    method: 'post',
+    params: data
+  })
+}
+
 export function updateStudentWork(data) {
   return request({
     url: '/studentwork/update',

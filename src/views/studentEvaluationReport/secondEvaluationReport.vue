@@ -91,7 +91,7 @@
                   </el-col>
                   <el-col :xs="24" :sm="24" :lg="8">
                     <div style="width:100%">
-                      <div style="width:126px;height:126px;text-align:center;margin:0px auto;line-height:126px;font-size:50px">100</div>
+                      <div style="width:126px;height:126px;text-align:center;margin:0px auto;line-height:126px;font-size:50px">{{agrade}}</div>
                       <div style="width:126px;text-align:center;margin:5px auto 0 auto">作业平均分</div>
                     </div>
                   </el-col>
@@ -280,7 +280,7 @@
 </template>
 
 <script>
-import { getAllInfoBySid } from '@/api/studentwork'
+import { getAllInfoBySid, averageGrade } from '@/api/studentwork'
 import TeacherReviewResults from './components/TeacherReviewResults'
 import DailyPerformanceSummary from './components/DailyPerformanceSummary'
 import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
@@ -324,7 +324,9 @@ export default {
       examinationGrade1: 0,
       examinationGrade2: 0,
       examinationGrade3: 0,
-      examinationGrade4: 0
+      examinationGrade4: 0,
+
+      agrade: 0
     }
   },
   created() {
@@ -368,6 +370,9 @@ export default {
         })
         getHighlighting({ sid: data }).then(response => {
           this.highLightList = response.data
+        })
+        averageGrade({ sid: data }).then(response => {
+          this.agrade = response.data.average
         })
         getOtherImportant({ sid: data }).then(response => {
           this.greatList = response.data
