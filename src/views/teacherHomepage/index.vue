@@ -245,7 +245,6 @@
         },
         goToParticipation() {
           this.$router.push({ path: '/dailyPerformance/participation' })
-          console.log(888)
         },
         goToAnnocument() {
           this.$router.push({ path: '/other/announcement' })

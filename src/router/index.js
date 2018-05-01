@@ -277,6 +277,7 @@ export const asyncRouterMap = [
       roles: ['student']
     },
     children: [
+      { path: 'selfReview', component: _import('reviewSystem/selfReview'), name: 'selfReview', meta: { title: '学生自评', icon: 'review', noCache: true }},
       { path: 'votw', component: _import('studentTeam/index'), name: 'student-team', meta: { title: '评定小组投票', icon: 'vote' }},
       { path: 'studentsReview', component: _import('reviewSystem/studentGroupReview'), name: 'groupReview', meta: { title: '学生小组评定', icon: 'review', noCache: true }}
     ]

@@ -5,7 +5,7 @@
       <span style="font-size:25px">突出表现管理</span>
     </div>
     <div class="filter-container">
-      <el-select clearable style="width: 150px" class="filter-item" v-model="listQuery.sclass" placeholder="请选择班级">
+      <el-select clearable style="width: 150px" class="filter-item" v-model="listQuery.Cid" placeholder="请选择班级">
         <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
@@ -49,19 +49,14 @@
           <span>{{scope.row.endTime}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px"  align="center" :label="tableCol.sclass">
+      <el-table-column width="100px"  align="center" :label="tableCol.Cid">
         <template slot-scope="scope">
-          <span >{{scope.row.sclass}}</span>
+          <span >{{scope.row.Cid}}</span>
         </template>
       </el-table-column>
       <el-table-column width="80px"  align="center"  :label="tableCol.author">
         <template slot-scope="scope">
           <span>{{scope.row.author}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="50px"  align="center" :label="tableCol.status">
-        <template slot-scope="scope">
-          <span >{{scope.row.status}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="250" class-name="small-padding fixed-width">
@@ -87,21 +82,20 @@
         <el-row :gutter="20">
           <el-col :span="12">
              <el-form-item :label="tableCol.author" prop="author">
-              <el-select class="filter-item" v-model="temp.author" placeholder="请选择">
+              <el-select class="filter-item" v-model="temp.author" placeholder="请选择老师">
                 <el-option v-for="item in  authorOptions" :key="item" :label="item" :value="item">
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item :label="tableCol.status" prop="status">
-              <el-select class="filter-item" v-model="temp.status" placeholder="请选择">
-                <el-option v-for="item in  statusOptions" :key="item.key" :label="item.label" :value="item.key">
+             <el-form-item :label="tableCol.Cid" prop="Cid">
+              <el-select class="filter-item" v-model="temp.Cid" placeholder="请选择班级">
+                <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
-         
         </el-row>
          <el-row :gutter="20">
            <el-col :span="12">
@@ -116,9 +110,7 @@
               </el-date-picker>
             </el-form-item>
            </el-col>
-         
         </el-row>
-
           <el-row :gutter="20">
             <el-col :span="24">
              <el-form-item :label="tableCol.annex" prop="annex">
@@ -139,13 +131,10 @@
             </el-form-item>
           </el-col>
         </el-row>
-
-
          <el-row :gutter="20">
             <el-col :span="24">
              <el-form-item :label="tableCol.content" prop="content">
              <textarea v-model="temp.content" rows="10" cols="80">
-
              </textarea>
             </el-form-item>
           </el-col>
@@ -194,7 +183,7 @@ export default {
         submitTime: '提交时间',
         history: '历史',
         annex: '附件',
-        sclass: '班级',
+        Cid: '班级',
         author: '作者',
         course: '课程'
       },
@@ -208,7 +197,7 @@ export default {
         author: undefined,
         status: undefined,
         order: '+id',
-        sclass: undefined,
+        Cid: undefined,
         course: undefined
       },
       classOptions: ['101', '102', '103', '104', '105', '106', '107', '108', '109'],
@@ -359,7 +348,7 @@ export default {
         title: this.temp.title,
         startTime: this.temp.startTime,
         endTime: this.temp.endTime,
-        sclass: this.temp.sclass,
+        Cid: this.temp.Cid,
         status: this.temp.status,
         author: this.temp.author
       })
@@ -390,6 +379,7 @@ export default {
                 const index = this.list.indexOf(v)
                 console.log(this.temp)
                 this.list.splice(index, 1, this.temp)
+                this.$storage.set('worklist', this.list)
                 break
               }
             }
@@ -427,7 +417,7 @@ export default {
     // sno: undefined,
     //     sname: undefined,
     //     ssex: undefined,
-    //     sclass: undefined,
+    //     Cid: undefined,
     //     birth: undefined,
     //     saddress: undefined,
     //     sprofession: undefined,
