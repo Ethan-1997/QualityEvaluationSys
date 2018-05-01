@@ -40,9 +40,9 @@
               </el-table>
             </el-row>
             <el-row :gutter="20">
-              <el-form :model="selfReviewForm" status-icon :rules="selfReviewRules" ref="selfReviewForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="自我总结" prop="selfSummary">
-                  <el-input type="textarea" v-model="selfReviewForm.selfSummary" :rows="5"></el-input>
+              <el-form :model="selfReviewForm" status-icon :rules="selfReviewRules" ref="selfReviewForm" label-width="100px" label-position class="demo-ruleForm">
+                <el-form-item label="自我总结" prop="summary">
+                  <el-input type="textarea" v-model="selfReviewForm.summary" :rows="5"></el-input>
                 </el-form-item>
                 <el-form-item>
                   <el-row :gutter="20">
@@ -50,7 +50,7 @@
                       <div>&nbsp;</div>
                     </el-col>
                     <el-col :span="4">
-                      <el-button type="primary" style="width:100%;height:45px" @click="saveButton">保存</el-button>
+                      <el-button type="primary" style="width:100%;height:45px" @click="submitForm">保存</el-button>
                     </el-col>
                   </el-row>
                 </el-form-item>
@@ -70,51 +70,54 @@ export default {
       selfReviewData: [{
         reviewProject: '综合知识学习能力',
         projectDetail: '对基础知识和专业知识的接受程度，是否能深刻理解基础知识的重要性。',
-        projectRate: 0
+        projectRate: this.grade1
       }, {
         reviewProject: '项目开发能力',
         projectDetail: '对于项目的分析的能力，以及新项目的架构能力，并且能熟练合理的运用专业知识，大胆且谨慎的使用技术。',
-        projectRate: 0
+        projectRate: this.grade2
       }, {
         reviewProject: '合作沟通能力',
         projectDetail: '能快速的融入团队，能在团队中进行深刻的交流，拥有较好的交际能力。',
-        projectRate: 0
+        projectRate: this.grade3
       }, {
         reviewProject: '日常表现自评',
         projectDetail: '包括考勤，违纪等日常表现和学生作业及作业等学习任务的评价。',
-        projectRate: 0
+        projectRate: this.grade4
       }, {
         reviewProject: '素质素养自评',
         projectDetail: '对自身素质素养的评定，认为自身的素养道德如何。',
-        projectRate: 0
+        projectRate: this.grade5
       }],
       selfReviewForm: {
-        selfSummary: ''
+        summary: ''
       },
       selfReviewRules: {
-        selfSummary: [
-          { required: true, message: '请填写活动形式', trigger: 'blur' }
+        summary: [
+          { required: true, message: '请填写自我总结', trigger: 'blur' }
         ]
-      }
+      },
+      grade1: 0,
+      grade2: 0,
+      grade3: 0,
+      grade4: 0,
+      grade5: 0
     }
   },
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$alert('提交成功！', '提示', {
-            confirmButtonText: '确定',
-            type: 'success',
-            center: true
-          })
-        } else {
-          this.$message({
-            message: '请填写完整',
-            type: 'warning'
-          })
-          return false
-        }
-      })
+    submitForm() {
+      if (this.selfReviewForm.summary === '') {
+        this.$notify({
+          title: '失败',
+          message: '请填写完整',
+          duration: 2000
+        })
+      } else {
+        this.grade1 = this.selfReviewData[0].projectRate
+        this.grade2 = this.selfReviewData[1].projectRate
+        this.grade3 = this.selfReviewData[2].projectRate
+        this.grade4 = this.selfReviewData[3].projectRate
+        this.grade5 = this.selfReviewData[4].projectRate
+      }
     }
   }
 }
