@@ -7,11 +7,19 @@ export function getStudentData(query) {
     params: query
   })
 }
+
+export function getStudentByUid() {
+  return request({
+    url: '/student/get',
+    method: 'post'
+  })
+}
+
 export function createStudent(data) {
   return request({
     url: '/student/create',
     method: 'post',
-    data
+    params: data
   })
 }
 
@@ -19,7 +27,15 @@ export function updateStudent(data) {
   return request({
     url: '/student/update',
     method: 'post',
-    data
+    params: data
+  })
+}
+
+export function deleteStudent(data) {
+  return request({
+    url: '/student/delete',
+    method: 'post',
+    params: data
   })
 }
 

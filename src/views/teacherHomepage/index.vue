@@ -202,7 +202,7 @@
           listQuery: {
             page: 1,
             limit: 15,
-            sort: '+id',
+            sort: '-id',
             title: undefined,
             time: undefined
           }
