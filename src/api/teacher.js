@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function fetchList(query) {
+export function getTeacherData(query) {
   return request({
     url: '/teacher/list',
     method: 'get',
@@ -8,10 +8,10 @@ export function fetchList(query) {
   })
 }
 
-export function fetchTeacher() {
+export function getTeacherByUid() {
   return request({
-    url: '/teacher/detail',
-    method: 'get'
+    url: '/student/get',
+    method: 'post'
   })
 }
 
@@ -19,7 +19,7 @@ export function createTeacher(data) {
   return request({
     url: '/teacher/create',
     method: 'post',
-    data
+    params: data
   })
 }
 
@@ -27,6 +27,14 @@ export function updateTeacher(data) {
   return request({
     url: '/teacher/update',
     method: 'post',
-    data
+    params: data
+  })
+}
+
+export function deleteTeacher(data) {
+  return request({
+    url: '/teacher/delete',
+    method: 'post',
+    params: data
   })
 }

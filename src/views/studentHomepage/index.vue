@@ -235,7 +235,7 @@
           listQuery: {
             page: 1,
             limit: 5,
-            sort: '+id',
+            sort: '-id',
             title: undefined,
             time: undefined
           },

@@ -2,7 +2,7 @@
   <div class="app-container calendar-list-container">
     <el-card>
     <div slot="header" class="clearfix">
-      <span style="font-size:25px">突出表现管理</span>
+      <span style="font-size:25px">作业管理</span>
     </div>
     <div class="filter-container">
       <el-select clearable style="width: 150px" class="filter-item" v-model="listQuery.Cid" placeholder="请选择班级">
@@ -23,7 +23,7 @@
       </el-select>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">{{$t('table.add')}}</el-button>
-      <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-upload2" @click="handleDownload">{{$t('table.export')}}</el-button>
+      <el-button class="filter-item" type="primary" :loading="downloadLoading" v-waves icon="el-icon-download" @click="handleDownload">{{$t('table.export')}}</el-button>
       <upload-excel-component class="filter-item" v-waves @on-selected-file='selected'></upload-excel-component>
     </div>
 
