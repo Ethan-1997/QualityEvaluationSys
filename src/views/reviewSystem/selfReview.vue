@@ -9,17 +9,17 @@
           <el-row :gutter="20">
             <el-col :xs="24" :sm="24" :lg="8">
               <el-card>
-                <svg-icon icon-class="peoples" />&nbsp;班级:vue.js
+                <svg-icon icon-class="peoples" />&nbsp;班级:{{listQuery.sclass}}
               </el-card>
             </el-col>
             <el-col :xs="24" :sm="24" :lg="8">
               <el-card>
-                <svg-icon icon-class="people" />&nbsp;姓名:摇滚兔子
+                <svg-icon icon-class="people" />&nbsp;姓名:{{listQuery.sname}}
               </el-card>
             </el-col>
             <el-col :xs="24" :sm="24" :lg="8">
               <el-card>
-                <i class="el-icon-info"/>&nbsp;学号:16147131
+                <i class="el-icon-info"/>&nbsp;学号:{{listQuery.sid}}
               </el-card>
             </el-col>
           </el-row>
@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import { fetchReviewGradeList, updateReviewGrade } from '@/api/reviewgrade'
+import { getCurrentUser } from '@/api/user'
 export default {
   data() {
     return {
@@ -96,14 +98,44 @@ export default {
           { required: true, message: '请填写自我总结', trigger: 'blur' }
         ]
       },
-      grade1: 0,
-      grade2: 0,
-      grade3: 0,
-      grade4: 0,
-      grade5: 0
+      listQuery: {
+        type: 'self',
+        sid: null,
+        sclass: null,
+        sname: null
+      },
+      temp: {
+        grade1: null,
+        grade2: null,
+        grade3: null,
+        grade4: null,
+        grade5: null,
+        text: '',
+        submitstatus: null
+      }
+
     }
   },
+  created() {
+    this.getList()
+  },
   methods: {
+    getList() {
+      getCurrentUser().then(response => {
+        this.listQuery.sclass = response.data.user.sclass
+        this.listQuery.sname = response.data.user.sname
+        this.listQuery.sid = response.data.user.sid
+        fetchReviewGradeList(this.listQuery).then(response => {
+          this.selfReviewData[0].projectRate = response.data.items[0].grade1
+          this.selfReviewData[1].projectRate = response.data.items[0].grade2
+          this.selfReviewData[2].projectRate = response.data.items[0].grade3
+          this.selfReviewData[3].projectRate = response.data.items[0].grade4
+          this.selfReviewData[4].projectRate = response.data.items[0].grade5
+          this.selfReviewForm.summary = response.data.items[0].text
+          this.temp = response.data.items[0]
+        })
+      })
+    },
     submitForm() {
       if (this.selfReviewForm.summary === '') {
         this.$notify({
@@ -112,11 +144,19 @@ export default {
           duration: 2000
         })
       } else {
-        this.grade1 = this.selfReviewData[0].projectRate
-        this.grade2 = this.selfReviewData[1].projectRate
-        this.grade3 = this.selfReviewData[2].projectRate
-        this.grade4 = this.selfReviewData[3].projectRate
-        this.grade5 = this.selfReviewData[4].projectRate
+        this.temp.grade1 = this.selfReviewData[0].projectRate
+        this.temp.grade2 = this.selfReviewData[1].projectRate
+        this.temp.grade3 = this.selfReviewData[2].projectRate
+        this.temp.grade4 = this.selfReviewData[3].projectRate
+        this.temp.grade5 = this.selfReviewData[4].projectRate
+        this.temp.text = this.selfReviewForm.summary
+        this.temp.submitstatus = '已评定'
+        console.log(this.temp)
+        updateReviewGrade(this.temp).then(res => {
+          if (res.data.data === 'success') {
+            console.log('success')
+          }
+        })
       }
     }
   }
