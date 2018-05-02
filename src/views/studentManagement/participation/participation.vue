@@ -10,11 +10,11 @@
         type="date"
         placeholder="选择日期">
       </el-date-picker>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.Sclass" :placeholder="tableCol.Sclass">
+      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
         <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.Sname" v-model="listQuery.Sname">
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
       </el-input>
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort" :placeholder="tableCol.sort">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
@@ -33,19 +33,19 @@
           <span>{{scope.row.date}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="80px" align="center" :label="tableCol.Sname">
+      <el-table-column width="80px" align="center" :label="tableCol.sname">
         <template slot-scope="scope">
-          <span>{{scope.row.Sname }}</span>
+          <span>{{scope.row.sname }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="80px" align="center" :label="tableCol.Sclass">
+      <el-table-column width="80px" align="center" :label="tableCol.sclass">
         <template slot-scope="scope">
-          <span>{{scope.row.Sclass}}</span>
+          <span>{{scope.row.sclass}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.Sid" width="80">
+      <el-table-column align="center" :label="tableCol.sid" width="80">
         <template slot-scope="scope">
-          <span>{{scope.row.Sid}}</span>
+          <span>{{scope.row.sid}}</span>
         </template>
       </el-table-column>
      <el-table-column align="center" prop="time" sortable :label="tableCol.time" width="80">
@@ -80,14 +80,14 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <!-- <el-form-item :label="tableCol[0]" prop="Sid">
+        <!-- <el-form-item :label="tableCol[0]" prop="sid">
           <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
             <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
             </el-option>
           </el-select>
         </el-form-item> -->
-        <el-form-item :label="tableCol.Sname" prop="Sname">
-          <el-input v-model="temp.Sname"></el-input>
+        <el-form-item :label="tableCol.sname" prop="sname">
+          <el-input v-model="temp.sname"></el-input>
         </el-form-item>
        
         <el-form-item :label="tableCol.ssex" prop="sex">
@@ -96,8 +96,8 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="tableCol.Sclass" prop="Sclass">
-          <el-input v-model="temp.Sclass"></el-input>
+        <el-form-item :label="tableCol.sclass" prop="sclass">
+          <el-input v-model="temp.sclass"></el-input>
         </el-form-item>
         <el-form-item :label="tableCol.date" prop="date">
           <el-date-picker
@@ -152,7 +152,7 @@
 </template>
 
 <script>
-import { fetchListDaily } from '@/api/participation'
+import { fetchListDaily, createParticipation } from '@/api/participation'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -171,10 +171,10 @@ export default {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
         date: '日期',
-        Sid: '学号',
-        Sname: '姓名',
+        sid: '学号',
+        sname: '姓名',
         ssex: '性别',
-        Sclass: '班级',
+        sclass: '班级',
         sprofession: '专业',
         time: '时间',
         status: '考勤状态', // 已到、迟到、请假、未到
@@ -188,22 +188,22 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        Sname: undefined,
+        sname: undefined,
         time: undefined,
         order: '+id',
-        Sclass: undefined
+        sclass: undefined
       },
-      classOptions: ['101', '102', '103', '104', '105', '106', '107', '108', '109'],
+      classOptions: ['vue.js', 'javaweb', '大数据', '云计算'],
       sexOptions: ['男', '女'],
       sortOptions: [{ label: '升序排序', key: '+id' }, { label: '降序排序', key: '-id' }],
-      courseOptions: ['javaweb', '大数据', '云计算'],
+      courseOptions: ['javaweb', '大数据', '云计算', 'vue.js'],
       statusOptions: ['已到', '迟到', '请假', '未到'],
       showReviewer: false,
       temp: {
-        Sid: undefined,
-        Sname: undefined,
+        sid: undefined,
+        sname: undefined,
         ssex: undefined,
-        Sclass: undefined,
+        sclass: undefined,
         sprofession: undefined,
         time: undefined,
         status: undefined, // 已到、迟到、请假、未到
@@ -227,15 +227,15 @@ export default {
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
-      // Sid: undefined,
-      //   Sname: undefined,
+      // sid: undefined,
+      //   sname: undefined,
       //   ssex: undefined,
-      //   Sclass: undefined,
+      //   sclass: undefined,
       //   sprofession: undefined,
       //   time: undefined,
       //   status: undefined, // 已到、迟到、请假、未到
       //   reason: undefined
-      tHeader: ['Sid', 'Sname', 'ssex', 'Sclass', 'sprofession', 'time', 'status', 'reason']
+      tHeader: ['sid', 'sname', 'ssex', 'sclass', 'sprofession', 'time', 'status', 'reason']
     }
   },
   filters: {
@@ -250,12 +250,7 @@ export default {
 
   },
   created() {
-    if (this.$storage.get('dailyInit') === true) {
-      console.log(2)
-      this.list = this.$storage.get('dailyList')
-    } else {
-      this.getList()
-    }
+    this.getList()
     console.log(this.list)
   },
   methods: {
@@ -285,12 +280,12 @@ export default {
       this.listLoading = true
       fetchListDaily(this.listQuery).then(response => {
         this.list = response.data.items
-        this.$storage.set('dailyInit', true)
-        this.$storage.set('dailyList', response.data.items)
+        console.log(response.data.items)
         this.total = response.data.total
         this.listLoading = false
       })
     },
+
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
@@ -305,10 +300,10 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        Sid: undefined,
-        Sname: undefined,
+        sid: undefined,
+        sname: undefined,
         ssex: undefined,
-        Sclass: undefined,
+        sclass: undefined,
         sprofession: undefined,
         status: undefined, // 已到、迟到、请假、未到
         reason: undefined,
@@ -325,7 +320,7 @@ export default {
       })
     },
     createData() {
-      if (this.temp.Sname === undefined || this.temp.ssex === undefined || this.temp.Sclass === undefined || this.temp.time === undefined || this.temp.status === undefined || this.temp.date === undefined) {
+      if (this.temp.sname === undefined || this.temp.ssex === undefined || this.temp.sclass === undefined || this.temp.time === undefined || this.temp.status === undefined || this.temp.date === undefined) {
         this.$notify({
           title: '失败',
           message: '请填写完整',
@@ -334,18 +329,16 @@ export default {
       } else {
         const months = this.temp.date.getMonth() + 1
         const dates = this.temp.date.getFullYear() + '.' + months + '.' + this.temp.date.getDate()
-        this.list.push({
-          Sid: '101',
-          Sname: this.temp.Sname,
-          ssex: this.temp.ssex,
-          Sclass: this.temp.Sclass,
-          sprofession: this.temp.sprofession,
+        const list = {
+          sid: this.temp.sid,
+          sname: this.temp.sname,
+          sclass: this.temp.sclass,
           status: this.temp.status, // 已到、迟到、请假、未到
           reason: this.temp.reason,
           time: this.temp.time,
           date: dates
-        })
-        this.$storage.set('dailyList', this.list)
+        }
+        createParticipation(list)
         this.$notify({
           title: '成功',
           message: '创建成功',
@@ -381,10 +374,10 @@ export default {
       for (let i = 0; i < this.list.length; i++) {
         if (this.list[i].date === oldtempData.date && this.list[i].id === oldtempData.id) {
           console.log(this.list[i].date)
-          this.list[i].Sname = this.temp.Sname
+          this.list[i].sname = this.temp.sname
           this.list[i].time = this.temp.time
           this.list[i].ssex = this.temp.ssex
-          this.list[i].Sclass = this.temp.Sclass
+          this.list[i].sclass = this.temp.sclass
           this.list[i].sprofession = this.temp.sprofession
           this.list[i].status = this.temp.status // 已到、迟到、请假、未到
           this.list[i].reason = this.temp.reason
@@ -428,7 +421,7 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const filterVal = ['Sid', 'Sname', 'ssex', 'Sclass', 'sprofession', 'time', 'status', 'reason']
+        const filterVal = ['sid', 'sname', 'ssex', 'sclass', 'sprofession', 'time', 'status', 'reason']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel(this.tHeader, data, 'table-list')
         this.downloadLoading = false
