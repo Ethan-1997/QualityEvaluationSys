@@ -19,7 +19,7 @@ export function createOtherImportant(data) {
   return request({
     url: '/otherImportant/create',
     method: 'post',
-    data
+    params: data
   })
 }
 
@@ -27,6 +27,6 @@ export function updateOtherImportant(data) {
   return request({
     url: '/otherImportant/update',
     method: 'post',
-    data
+    params: data
   })
 }

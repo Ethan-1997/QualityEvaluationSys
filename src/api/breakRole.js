@@ -19,7 +19,7 @@ export function createBreakRole(data) {
   return request({
     url: '/breakRole/create',
     method: 'post',
-    data
+    params: data
   })
 }
 
@@ -27,6 +27,6 @@ export function updateBreakRole(data) {
   return request({
     url: '/breakRole/update',
     method: 'post',
-    data
+    params: data
   })
 }
