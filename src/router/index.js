@@ -455,16 +455,14 @@ export const asyncRouterMap = [
   },
   {
     path: '/projectDefense',
+    hidden: true,
     component: Layout,
     meta: {
       roles: ['teacher']
     },
-    children: [{
-      path: 'review',
-      component: _import('reviewSystem/examinationReview'),
-      name: 'projectDefenseReview',
-      meta: { title: '项目答辩评定', icon: 'dashboard', noCache: true }
-    }]
+    children: [
+      { path: 'review', component: _import('reviewSystem/examinationReview'), name: 'projectDefenseReview', meta: { title: '项目答辩评定', icon: 'dashboard', noCache: true }}
+    ]
   },
 
   {
@@ -493,9 +491,9 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'midReviewIndex', component: _import('reviewSystem/midReviewIndex'), name: 'midReviewIndex', meta: { title: '学中综合评定', icon: 'review' }},
-      { path: 'finalReviewIndex', component: _import('reviewSystem/finalReviewIndex'), name: 'finalReviewIndex', meta: { title: '学末综合评定', icon: 'review' }},
+      { path: 'finalReviewIndex', component: _import('reviewSystem/finalReviewIndex'), name: 'finalReviewIndex', meta: { title: '结业综合评定', icon: 'review' }},
       { path: 'HRReviewIndex', component: _import('reviewSystem/HRReviewIndex'), name: 'HRReviewIndex', meta: { title: '人事经理面试', icon: 'Interview' }},
-      { path: 'technologyReviewIndex', component: _import('reviewSystem/projectManagerReviewIndex'), name: 'technologyReviewIndex', meta: { title: '项目经理面试', icon: 'Interview' }}
+      { path: 'projectManagerIndex', component: _import('reviewSystem/projectManagerReviewIndex'), name: 'projectManagerIndex', meta: { title: '项目经理面试', icon: 'Interview' }}
     ]
   },
   {
