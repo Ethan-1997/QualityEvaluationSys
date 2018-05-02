@@ -7,21 +7,20 @@
             <span style="font-size:25px">学中综合评定</span>
           </div>
           <el-table :data="reviewTable" border style="width: 100%">
-            <el-table-column prop="name" label="班级" align="center">
-              
+            <el-table-column prop="name" width="200px" label="班级" align="center">
+              <template slot-scope="scope">
+                <el-alert title="" type="success" center :closable="false">{{scope.row.name}}</el-alert>
+              </template>
             </el-table-column>
             <el-table-column prop="number" label="人数" align="center">
-
-            </el-table-column>
-            <el-table-column prop="haveEvaluation" label="已评价" align="center">
-
-            </el-table-column>
-            <el-table-column prop="notEvaluation" label="未评价" align="center">
-
-            </el-table-column>
-            <el-table-column prop="routerButton" label="评价" align="center">
               <template slot-scope="scope">
-                <el-button @click="goToDeatil(scope.row)" type="primary">评定</el-button>
+                <el-alert title="" type="info" center :closable="false">{{scope.row.number}}</el-alert>
+              </template>
+            </el-table-column>
+            <el-table-column prop="routerButton" width="300px" label="评定" align="center">
+              <template slot-scope="scope">
+                <el-button @click="goToProject(scope.row)" type="primary">项目答辩</el-button>
+                <el-button @click="goToDeatil(scope.row)" type="primary">综合评定</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -37,10 +36,8 @@ export default {
     return {
       reviewTable: [
         {
-          name: 'vue一班',
-          number: 20,
-          haveEvaluation: 0,
-          notEvaluation: 20,
+          name: 'vue.js',
+          number: 10,
           routerButton: 'router'
         }
       ]
@@ -49,6 +46,9 @@ export default {
   methods: {
     goToDeatil(row) {
       this.$router.push({ name: 'midTeacherReview' })
+    },
+    goToProject(row) {
+      this.$router.push({ name: 'projectDefenseReview' })
     }
   }
 }

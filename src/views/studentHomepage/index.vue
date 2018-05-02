@@ -166,8 +166,8 @@
                             <div style="line-height:28px;width:150px;margin:0px auto">
                                 <img style="width:150px;height:150px;border-radius:75px" :src="avatar"/>
                             </div>
-                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;摇滚兔子</div>
-                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<i class="el-icon-info"/>&nbsp;&nbsp;学号:&nbsp;&nbsp;16147131</div>
+                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;{{sname}}</div>
+                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<i class="el-icon-info"/>&nbsp;&nbsp;学号:&nbsp;&nbsp;{{sid}}</div>
                             <div style="line-height:28px;width:150px;margin:0px auto"><el-button type="primary" :plain="signInButton" @click="open2" :disabled="signIn" style="width:150px">{{signInText}}</el-button></div>
                             </div>
                         </el-col>
@@ -195,6 +195,7 @@
 
 <script>
     import { fetchListWork } from '@/api/work'
+    import { getCurrentUser } from '@/api/user'
     import { fetchList } from '@/api/announcement'
     import { mapGetters } from 'vuex'
     import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
@@ -211,7 +212,8 @@
           taskData: null,
           active: null,
           announcementData: null,
-
+          sname: null,
+          sid: null,
           midComprehensiveQualityData: [60, 75, 60, 80, 50],
           finalComprehensiveQualityData: [60, 80, 50, 60, 75],
 
@@ -276,6 +278,7 @@
         this.$refs.gradeTabsThree.chart.resize()
       },
       created() {
+        this.getUserInfo()
         this.getTaskData()
         this.getAnnouncementData()
         this.$nextTick(() => {
@@ -413,6 +416,12 @@
                 this.highlightData[i - 1] = this.highLightList[length - i]
               }
             }
+          })
+        },
+        getUserInfo() {
+          getCurrentUser().then(response => {
+            this.sname = response.data.user.sname
+            this.sid = response.data.user.sid
           })
         },
         clickTab() {

@@ -14,7 +14,7 @@
             </div>
           </el-col>
           <el-col :xl="10" :lg="8" :md="8" :sm="12">
-            <div class="infor-name">摇滚兔子</div>
+            <div class="infor-name">{{List.sname}}</div>
           </el-col>
           <el-col :xl="9" :lg="7" :md="7" :sm="24" style="height:1px;">
             <el-button type="text" @click="dialogFormVisible = true" style="margin:140px 0px 0px 45px;">修改密码</el-button>
@@ -49,7 +49,7 @@
               <el-col :xl="0" :sm="1" style="height:1px;"></el-col>
               <el-col :xl="20" :sm="23">
                     <div v-if="text_sex" class="infor-font-right">
-                    {{List.id}}
+                    {{List.sid}}
                     </div>
               </el-col>
             </el-row>
@@ -68,7 +68,7 @@
               <el-col :xl="0" :sm="1" style="height:1px;"></el-col>
               <el-col :xl="20" :sm="23">
                     <div v-if="text_sex" class="infor-font-right">
-                    {{List.class}}
+                    {{List.sclass}}
                     </div>
               </el-col>
             </el-row>
@@ -105,19 +105,19 @@
               </el-col>
               <el-col :xl="0" :sm="1" style="height:1px;"></el-col>
               <el-col :xl="18" :sm="23">
-                    <div v-if="text_signature">
-                      <div style="float:left;" class="infor-font-right">{{List.signature}}</div>
-                      <div class="infor-font-right"><a @click="alter_signature_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 填写</a></div>
+                    <div v-if="text_ssignature">
+                      <div style="float:left;" class="infor-font-right">{{List.ssignature}}</div>
+                      <div class="infor-font-right"><a @click="alter_ssignature_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 填写</a></div>
                     </div>
                     <div style="margin-top:42px;" v-else>
                       <el-input
                         placeholder="请输入内容"
-                        v-model="input_signature"
+                        v-model="input_ssignature"
                         clearable>
                       </el-input>
                       <div style="margin-top:20px;">
-                        <el-button type="primary" style="float:left;" size="small" @click="alter_signature_hid(type)">保存</el-button>
-                        <el-button size="small" @click="alter_signature_hid(null)">取消</el-button>
+                        <el-button type="primary" style="float:left;" size="small" @click="alter_ssignature_hid(type)">保存</el-button>
+                        <el-button size="small" @click="alter_ssignature_hid(null)">取消</el-button>
                       </div>
                     </div>
               </el-col>
@@ -137,21 +137,23 @@
               </el-col>
               <el-col :xl="0" :sm="1" style="height:1px;"></el-col>
               <el-col :xl="20" :sm="23">
-                    <div v-if="text_time">
-                    <div style="float:left;" class="infor-font-right">{{List.time}}</div>
-                    <div class="infor-font-right"><a @click="alter_time_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 设置</a></div>
+                    <div v-if="text_birth">
+                    <div style="float:left;" class="infor-font-right">{{List.birth}}</div>
+                    <div class="infor-font-right"><a @click="alter_birth_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 设置</a></div>
                     </div>
                     <div style="margin-top:42px;" v-else>
                       <div class="block">
                         <el-date-picker
                           v-model="value1"
                           type="date"
+                          format="yyyy/M/d"
+                          value-format="yyyy/M/d"
                           placeholder="选择日期">
                         </el-date-picker>
                       </div>
                       <div style="margin-top:20px;">
-                        <el-button type="primary" style="float:left;" size="small" @click="alter_time_hid(type)">保存</el-button>
-                        <el-button size="small" @click="alter_time_hid(null)">取消</el-button>
+                        <el-button type="primary" style="float:left;" size="small" @click="alter_birth_hid(type)">保存</el-button>
+                        <el-button size="small" @click="alter_birth_hid(null)">取消</el-button>
                       </div>
                     </div>
               </el-col>
@@ -170,19 +172,19 @@
               </el-col>
               <el-col :xl="0" :sm="1" style="height:1px;"></el-col>
               <el-col :xl="20" :sm="23">
-                    <div v-if="text_home">
-                    <div style="float:left;" class="infor-font-right">{{List.home}}</div>
-                    <div class="infor-font-right"><a @click="alter_home_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-circle-plus-outline"></i> 添加居住地</a></div>
+                    <div v-if="text_saddress">
+                    <div style="float:left;" class="infor-font-right">{{List.saddress}}</div>
+                    <div class="infor-font-right"><a @click="alter_saddress_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-circle-plus-outline"></i> 添加居住地</a></div>
                     </div>
                     <div style="margin-top:42px;" v-else>
                       <el-input
                         style="width:150px;"
                         placeholder="请输入内容"
-                        v-model="input_home"
+                        v-model="input_saddress"
                         clearable>
                       </el-input>
-                      <el-button type="primary" style="margin-left:10px;" size="small" @click="alter_home_hid(type)">保存</el-button>
-                      <el-button size="small" @click="alter_home_hid(null)">取消</el-button>
+                      <el-button type="primary" style="margin-left:10px;" size="small" @click="alter_saddress_hid(type)">保存</el-button>
+                      <el-button size="small" @click="alter_saddress_hid(null)">取消</el-button>
                     </div>
               </el-col>
             </el-row>
@@ -200,19 +202,19 @@
               </el-col>
               <el-col :xl="0" :sm="1" style="height:1px;"></el-col>
               <el-col :xl="20" :sm="23">
-                    <div v-if="text_phone">
-                    <div style="float:left;" class="infor-font-right">{{List.phone}}</div>
-                    <div class="infor-font-right"><a @click="alter_phone_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 修改</a></div>
+                    <div v-if="text_stel">
+                    <div style="float:left;" class="infor-font-right">{{List.stel}}</div>
+                    <div class="infor-font-right"><a @click="alter_stel_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-edit"></i> 修改</a></div>
                     </div>
                     <div style="margin-top:42px;" v-else>
                       <el-input
                         style="width:150px;"
                         placeholder="请输入内容"
-                        v-model="input_phone"
+                        v-model="input_stel"
                         clearable>
                       </el-input>
-                      <el-button type="primary" style="margin-left:10px;" size="small" @click="alter_phone_hid(type)">保存</el-button>
-                      <el-button size="small" @click="alter_phone_hid(null)">取消</el-button>
+                      <el-button type="primary" style="margin-left:10px;" size="small" @click="alter_stel_hid(type)">保存</el-button>
+                      <el-button size="small" @click="alter_stel_hid(null)">取消</el-button>
                     </div>
               </el-col>
             </el-row>
@@ -230,9 +232,9 @@
               </el-col>
               <el-col :xl="0" :sm="1" style="height:1px;"></el-col>
               <el-col :xl="20" :sm="23">
-                    <div v-if="text_pro">
-                    <div style="float:left;" class="infor-font-right">{{List.pro}}</div>
-                    <div class="infor-font-right"><a @click="alter_pro_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-circle-plus-outline"></i> 添加职业经历</a></div>
+                    <div v-if="text_careerexperience">
+                    <div style="float:left;" class="infor-font-right">{{List.careerexperience}}</div>
+                    <div class="infor-font-right"><a @click="alter_careerexperience_show" class="router-font">&nbsp;&nbsp;&nbsp;&nbsp;<i class="el-icon-circle-plus-outline"></i> 添加职业经历</a></div>
                     </div>
                     <div style="margin-top:42px;" v-else>
                       <el-input
@@ -247,8 +249,8 @@
                         v-model="input_position"
                         clearable>
                       </el-input>
-                      <el-button type="primary" style="margin-left:10px;" size="small" @click="alter_pro_hid(type)">保存</el-button>
-                      <el-button size="small" @click="alter_pro_hid(null)">取消</el-button>
+                      <el-button type="primary" style="margin-left:10px;" size="small" @click="alter_careerexperience_hid(type)">保存</el-button>
+                      <el-button size="small" @click="alter_careerexperience_hid(null)">取消</el-button>
                     </div>
               </el-col>
             </el-row>
@@ -256,7 +258,9 @@
           </el-col>
           <el-col :xl="1" style="background:blue;"></el-col>
         </el-row>
-        <el-row>
+
+
+        <!-- <el-row>
           <el-col :xl="5" :lg="24" style="height:1px;">
           </el-col>
           <el-col :xl="18" class="infor-fen">
@@ -287,7 +291,9 @@
             <div></div>
           </el-col>
           <el-col :xl="1" style="background:blue;"></el-col>
-        </el-row>
+        </el-row> -->
+
+
         <el-row>
           <el-col :xl="5" :lg="24" style="height:100px;">
           </el-col>
@@ -303,40 +309,37 @@
 </template>
 <script>
 import PanThumb from '@/components/PanThumb'
-import updateInformation from '@/api/information'
-import { fetchList } from '@/api/information'
+import { getCurrentUser } from '@/api/user'
+import { updateStudent } from '@/api/student'
 import { mapGetters } from 'vuex'
 export default {
   components: { PanThumb },
   data() {
     return {
       List: {
-        signature: null,
-        time: null,
-        home: null,
-        phone: null,
-        company: null,
-        position: null,
-        pro: null,
-        intro: null
+        ssignature: null,
+        birth: null,
+        saddress: null,
+        stel: null,
+        careerexperience: null
       },
       imageUrl: '',
       radio: '1',
       type: 'save',
       value1: '',
       text_sex: true,
-      text_signature: true,
-      text_time: true,
-      text_home: true,
-      text_phone: true,
-      text_pro: true,
-      text_intro: true,
-      input_signature: '',
-      input_home: '',
-      input_phone: '',
+      text_ssignature: true,
+      text_birth: true,
+      text_saddress: true,
+      text_stel: true,
+      text_careerexperience: true,
+      // text_intro: true,
+      input_ssignature: '',
+      input_saddress: '',
+      input_stel: '',
       input_company: '',
       input_position: '',
-      textarea_intro: '',
+      // textarea_intro: '',
       emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3',
       dialogFormVisible: false,
       form: {
@@ -381,100 +384,117 @@ export default {
       }
       return isJPG && isLt2M
     },
-    alter_signature_show() {
-      this.text_signature = false
-      this.input_signature = this.List.signature
+    alter_ssignature_show() {
+      this.text_ssignature = false
+      this.input_ssignature = this.List.ssignature
     },
-    alter_signature_hid(type) {
+    alter_ssignature_hid(type) {
       if (type === 'save') {
         console.log(1)
-        this.List.signature = this.input_signature
-        updateInformation(this.List)
+        this.List.ssignature = this.input_ssignature
+        updateStudent(this.List).then(res => {
+          if (res.data.data === 'success') {
+            console.log('success')
+          }
+        })
       } else {
-        this.input_signature = this.List.signature
+        this.input_ssignature = this.List.ssignature
       }
-      this.text_signature = true
+      this.text_ssignature = true
     },
-    alter_time_show() {
-      this.text_time = false
-      this.value1 = this.List.time
+    alter_birth_show() {
+      this.text_birth = false
+      this.value1 = this.List.birth
     },
-    alter_time_hid(type) {
+    alter_birth_hid(type) {
       if (type === 'save') {
-        if (this.input_phone === '') {
-          this.input_phone = '未知'
+        if (this.input_birth === '') {
+          this.input_birth = '未知'
         }
-        const months = this.value1.getMonth() + 1
-        const times = this.value1.getFullYear() + '-' + months + '-' + this.value1.getDate()
-        console.log(1)
-        this.List.time = times
-        updateInformation(this.List)
+        this.List.birth = this.value1
+        updateStudent(this.List).then(res => {
+          if (res.data.data === 'success') {
+            console.log('success')
+          }
+        })
       }
-      this.text_time = true
+      this.text_birth = true
     },
-    alter_home_show() {
-      this.text_home = false
-      this.input_home = this.List.home
+    alter_saddress_show() {
+      this.text_saddress = false
+      this.input_saddress = this.List.saddress
     },
-    alter_home_hid(type) {
+    alter_saddress_hid(type) {
       if (type === 'save') {
-        this.List.home = this.input_home
-        updateInformation(this.List)
+        this.List.saddress = this.input_saddress
+        updateStudent(this.List).then(res => {
+          if (res.data.data === 'success') {
+            console.log('success')
+          }
+        })
       } else {
-        this.input_home = this.List.home
+        this.input_saddress = this.List.saddress
       }
-      this.text_home = true
+      this.text_saddress = true
     },
-    alter_phone_show() {
-      this.text_phone = false
-      this.input_phone = this.List.phone
+    alter_stel_show() {
+      this.text_stel = false
+      this.input_stel = this.List.stel
     },
-    alter_phone_hid(type) {
+    alter_stel_hid(type) {
       if (type === 'save') {
         console.log(1)
-        this.List.phone = this.input_phone
-        updateInformation(this.List)
+        this.List.stel = this.input_stel
+        updateStudent(this.List).then(res => {
+          if (res.data.data === 'success') {
+            console.log('success')
+          }
+        })
       } else {
-        this.input_phone = this.List.phone
+        this.input_stel = this.List.stel
       }
-      this.text_phone = true
+      this.text_stel = true
     },
-    alter_pro_show() {
-      this.text_pro = false
+    alter_careerexperience_show() {
+      this.text_careerexperience = false
       this.input_company = this.List.company
       this.input_position = this.List.position
     },
-    alter_pro_hid(type) {
+    alter_careerexperience_hid(type) {
       if (type === 'save') {
         console.log(1)
         this.List.company = this.input_company
         this.List.position = this.input_position
-        const pro = this.List.company + '-' + this.List.position
-        this.List.pro = pro
-        updateInformation(this.List)
+        const careerexperience = this.List.company + '-' + this.List.position
+        this.List.careerexperience = careerexperience
+        updateStudent(this.List).then(res => {
+          if (res.data.data === 'success') {
+            console.log('success')
+          }
+        })
       } else {
         this.input_company = this.List.company
         this.input_position = this.List.position
       }
-      this.text_pro = true
+      this.text_careerexperience = true
     },
-    alter_intro_show() {
-      this.text_intro = false
-      this.textarea_intro = this.List.intro
-    },
-    alter_intro_hid(type) {
-      if (type === 'save') {
-        console.log(1)
-        this.List.intro = this.textarea_intro
-        updateInformation(this.List)
-      } else {
-        this.textarea_intro = this.List.intro
-      }
-      this.text_intro = true
-    },
+    // alter_intro_show() {
+    //   this.text_intro = false
+    //   this.textarea_intro = this.List.intro
+    // },
+    // alter_intro_hid(type) {
+    //   if (type === 'save') {
+    //     console.log(1)
+    //     this.List.intro = this.textarea_intro
+    //     updateInformation(this.List)
+    //   } else {
+    //     this.textarea_intro = this.List.intro
+    //   }
+    //   this.text_intro = true
+    // },
     getList() {
-      fetchList().then(Response => {
-        this.List = Response.data.items
+      getCurrentUser().then(Response => {
+        this.List = Response.data.user
         console.log(this.List)
       })
     },

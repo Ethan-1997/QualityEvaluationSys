@@ -7,6 +7,8 @@
     <div class="filter-container">
       <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
       </el-input>
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sid" v-model="listQuery.sid">
+      </el-input>
       <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sdept" :placeholder="tableCol.sdept">
         <el-option v-for="item in deptOptions" :key="item" :label="item" :value="item">
         </el-option>
@@ -96,20 +98,17 @@
         <el-form-item :label="tableCol.sid" prop="sid">
           <el-input v-model="temp.sid"></el-input>
         </el-form-item>
-        <el-form-item :label="tableCol.ssex" prop="sid">
+        <el-form-item :label="tableCol.ssex" prop="ssex">
            <el-select class="filter-item" v-model="temp.ssex" placeholder="请选择">
             <el-option v-for="item in  sexOptions" :key="item" :label="item" :value="item">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item :label="tableCol.sclass" prop="sclass">
-           <el-autocomplete
-            v-model="temp.sclass"
-            :fetch-suggestions="querySearch"
-            placeholder="请输入内容"
-            :trigger-on-focus="true"
-            @select="handleSelect"
-          ></el-autocomplete>
+           <el-select clearable style="width: 90px" class="filter-item" v-model="temp.sclass" :placeholder="tableCol.sclass">
+              <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
+              </el-option>
+            </el-select>
         </el-form-item>
          <el-form-item :label="tableCol.birth" prop="birth">
           <el-date-picker v-model="temp.birth"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" placeholder="请选择生日">
@@ -177,6 +176,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
+        sid: undefined,
         sname: undefined,
         sdept: undefined,
         sort: '+id',
@@ -215,7 +215,7 @@ export default {
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
-      tHeader: ['sid', 'sname', 'ssex', 'sclass', 'birth', 'saddress', 'sdept', 'stime']
+      tHeader: ['sname', 'sdept', 'sclass', 'sid', 'ssex', 'birth', 'saddress', 'stime']
     }
   },
   filters: {
@@ -268,6 +268,11 @@ export default {
         for (let j = 0; data.results[j] != null; j++) {
           // 去掉导入内容的主键
           createStudent(data.results[j]).then(res => {
+            if (res.data.data === 'success') {
+              console.log('success')
+            } else {
+              console.log('error')
+            }
           })
         }
         this.getList()
@@ -275,16 +280,6 @@ export default {
           message: '导入成功',
           type: 'success'
         })
-
-        // console.log(this.list)
-        // console.log(this.tableData)
-        // console.log(this.list.length)
-        // let j, len
-        // for (j = 0, len = this.tableData.length; j < len; j++) {
-        //   this.list.push(this.tableData[j])
-        // }
-        // this.list.concat(this.tableData)
-        // console.log(this.list.length)
       }
     },
     getList() {
@@ -425,7 +420,7 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const filterVal = ['sid', 'sname', 'ssex', 'sclass', 'birth', 'saddress', 'sdept', 'stime']
+        const filterVal = ['sname', 'sdept', 'sclass', 'sid', 'ssex', 'birth', 'saddress', 'stime']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel(this.tHeader, data, '学生信息')
         this.downloadLoading = false

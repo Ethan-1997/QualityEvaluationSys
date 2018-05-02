@@ -30,3 +30,12 @@ export function updateUser(data) {
     data
   })
 }
+
+export function getCurrentUser(token) {
+  return request({
+    url: '/user/getCurrentUser',
+    method: 'get',
+    params: { token }
+  })
+}
+

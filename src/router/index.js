@@ -310,9 +310,25 @@ export const asyncRouterMap = [
       roles: ['student']
     },
     children: [
-      { path: 'selfReview', component: _import('reviewSystem/selfReview'), name: 'selfReview', meta: { title: '学生自评', icon: 'review', noCache: true }},
-      { path: 'votw', component: _import('studentTeam/index'), name: 'student-team', meta: { title: '评定小组投票', icon: 'vote' }},
-      { path: 'studentsReview', component: _import('reviewSystem/studentGroupReview'), name: 'groupReview', meta: { title: '学生小组评定', icon: 'review', noCache: true }}
+      {
+        path: '/studentReview/midStudentReviewIndex',
+        component: _import('reviewSystem/midStudentReview'),
+        name: 'midStudentReviewIndex',
+        meta: { title: '学中评定', icon: 'review' },
+        children: [
+          { path: 'midvotw', component: _import('studentTeam/midindex'), name: 'midStudentGroup', meta: { title: '评定小组投票', icon: 'vote' }},
+          { path: 'midstudentsReview', component: _import('reviewSystem/midStudentGroupReview'), name: 'midGroupReview', meta: { title: '学生小组评定', icon: 'review', noCache: true }}
+        ] },
+      {
+        path: '/studentReview/finalStudentReviewIndex',
+        component: _import('reviewSystem/finalStudentReview'),
+        name: 'finalStudentReviewIndex',
+        meta: { title: '结题评定', icon: 'review' },
+        children: [
+          { path: 'selfReview', component: _import('reviewSystem/selfReview'), name: 'selfReview', meta: { title: '学生自评', icon: 'review', noCache: true }},
+          { path: 'votw', component: _import('studentTeam/index'), name: 'student-team', meta: { title: '评定小组投票', icon: 'vote' }},
+          { path: 'studentsReview', component: _import('reviewSystem/studentGroupReview'), name: 'groupReview', meta: { title: '学生小组评定', icon: 'review', noCache: true }}
+        ] }
     ]
   },
   {
@@ -439,16 +455,14 @@ export const asyncRouterMap = [
   },
   {
     path: '/projectDefense',
+    hidden: true,
     component: Layout,
     meta: {
       roles: ['teacher']
     },
-    children: [{
-      path: 'review',
-      component: _import('reviewSystem/examinationReview'),
-      name: 'projectDefenseReview',
-      meta: { title: '项目答辩评定', icon: 'dashboard', noCache: true }
-    }]
+    children: [
+      { path: 'review', component: _import('reviewSystem/examinationReview'), name: 'projectDefenseReview', meta: { title: '项目答辩评定', icon: 'dashboard', noCache: true }}
+    ]
   },
 
   {
@@ -477,9 +491,9 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'midReviewIndex', component: _import('reviewSystem/midReviewIndex'), name: 'midReviewIndex', meta: { title: '学中综合评定', icon: 'review' }},
-      { path: 'finalReviewIndex', component: _import('reviewSystem/finalReviewIndex'), name: 'finalReviewIndex', meta: { title: '学末综合评定', icon: 'review' }},
+      { path: 'finalReviewIndex', component: _import('reviewSystem/finalReviewIndex'), name: 'finalReviewIndex', meta: { title: '结业综合评定', icon: 'review' }},
       { path: 'HRReviewIndex', component: _import('reviewSystem/HRReviewIndex'), name: 'HRReviewIndex', meta: { title: '人事经理面试', icon: 'Interview' }},
-      { path: 'technologyReviewIndex', component: _import('reviewSystem/projectManagerReviewIndex'), name: 'technologyReviewIndex', meta: { title: '项目经理面试', icon: 'Interview' }}
+      { path: 'projectManagerIndex', component: _import('reviewSystem/projectManagerReviewIndex'), name: 'projectManagerIndex', meta: { title: '项目经理面试', icon: 'Interview' }}
     ]
   },
   {
