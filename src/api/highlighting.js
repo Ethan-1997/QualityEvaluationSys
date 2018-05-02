@@ -19,7 +19,7 @@ export function createHighlighting(data) {
   return request({
     url: '/highlighting/create',
     method: 'post',
-    data
+    params: data
   })
 }
 
@@ -27,6 +27,6 @@ export function updateHighlighting(data) {
   return request({
     url: '/highlighting/update',
     method: 'post',
-    data
+    params: data
   })
 }

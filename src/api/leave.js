@@ -19,7 +19,7 @@ export function createLeave(data) {
   return request({
     url: '/leave/create',
     method: 'post',
-    data
+    params: data
   })
 }
 
@@ -27,6 +27,6 @@ export function updateLeave(data) {
   return request({
     url: '/leave/update',
     method: 'post',
-    data
+    params: data
   })
 }
