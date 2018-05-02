@@ -30,3 +30,11 @@ export function updateHighlighting(data) {
     params: data
   })
 }
+
+export function deleteHighlighting(data) {
+  return request({
+    url: '/highlighting/delete',
+    method: 'post',
+    params: data // 配置接口数据 一定要用params
+  })
+}
