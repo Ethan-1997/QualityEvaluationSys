@@ -47,25 +47,28 @@
 </div>
 </template>
 <script>
-    export default {
-      data() {
-        return {
-          visible2: false,
-          dailyTest: []
-        }
-      },
-      mounted() {
-        this.init()
-      },
-      methods: {
-        init() {
-          this.dailyTest = this.$storage.get('midtest')
-        },
-        goTest(row) {
-          this.$router.push({ path: '/tests/' + row.id })
-        }
-      }
+import { fetchListStudentTest } from '@/api/StudentTest'
+export default {
+  data() {
+    return {
+      visible2: false,
+      dailyTest: []
     }
+  },
+  mounted() {
+    this.init()
+  },
+  methods: {
+    getList() {
+      fetchListStudentTest().then(response => {
+        this.dailyTest = response.data.items
+      })
+    },
+    goTest(row) {
+      this.$router.push({ path: '/tests/' + row.Tid + '/' + row.Sid })
+    }
+  }
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

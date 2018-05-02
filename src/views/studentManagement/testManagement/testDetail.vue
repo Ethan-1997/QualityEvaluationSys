@@ -115,6 +115,7 @@
 
 <script>
     import { format } from '@/utils/time'
+    import { fetchListTest } from '@/api/testInformation'
     const FILL = '___'
 
     // eslint-disable-next-line
@@ -200,14 +201,9 @@
         this.init()
       },
       mounted() {
-        const id = this.$route.params.id
-        if (id === '1') {
-          return 0
-        } else {
-          this.exam = this.$storage.get('tests-' + id)
-          console.log(this.exam)
-          this.questions = this.exam.questions
-        }
+        const id = this.$route.params.Tid
+        this.getList(id)
+        this.questions = this.exam.questions
         this.question = this.questions[this.questionIndex]
         // 测试
     
@@ -217,6 +213,12 @@
         clearInterval(this.timer)
       },
       methods: {
+        getList(id) {
+          fetchListTest(id).then(response => {
+            this.exam = response.data.items
+            // console.log(this.list)
+          })
+        },
         toindex() {
           const midtest = this.$storage.get('midtest')
           for (let i = 0; i < midtest.length; i++) {

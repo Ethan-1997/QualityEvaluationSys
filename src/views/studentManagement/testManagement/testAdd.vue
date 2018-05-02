@@ -93,6 +93,8 @@
 </template>
 
 <script>
+    import { fetchListTest, createTest, updateTest } from '@/api/testInformation'
+    import { createTeacherTest, updateTeacherTest } from '@/api/TeacherTest'
     // eslint-disable-next-line
     Array.prototype.contains = function (obj) {
       var i = this.length
@@ -111,14 +113,13 @@
     export default {
       data() {
         return {
-          isAdd: true,
           isEdit: false,
           date: new Date(),
           exam: {
-            id: new Date().getTime(),
             name: '未命名',
             display: true,
             questions: [],
+            isAdd: true,
             state: '未完成'
           },
           question: null, // 当前题目
@@ -131,23 +132,22 @@
         }
       },
       mounted() {
-        this.init()
+        if (this.$route.params.Tid) {
+          this.getList()
+        }
       },
       methods: {
-        init() {
-          if (this.$route.params.id) {
-            this.isAdd = false
-            const exam = this.$storage.get('tests-' + this.$route.params.id)
-            if (exam) {
-              this.exam = exam
-            }
-          }
-
-          //            this.addJudgment()
-          //            this.addSingle()
-          //            this.addMutiple()
-          //            this.addAq()
-          //            this.addFill()
+        getList() { // 获取试卷信息
+          fetchListTest().then(response => { // 学生学号
+            this.exam = response.data.items
+            // console.log(this.list)
+          })
+        },
+        getListStudentTest() { // 获取试卷信息
+          fetchListTest().then(response => { // 学生学号
+            this.exams = response.data.items
+            // console.log(this.list)
+          })
         },
         finish() {
           const question = {
@@ -285,24 +285,60 @@
           console.log(this.exam)
         },
         test() {
-          this.$storage.set('tests-' + this.exam.id, this.exam)
-          console.log(this.exam)
-          const exams = this.$storage.get('exams', [])
-          if (this.isAdd) {
-            exams.push({
-              id: this.exam.id,
-              name: this.exam.name,
-              day: this.exam.day,
-              month: this.exam.month,
-              year: this.exam.year,
-              date: this.date.getFullYear() + '/' + (+this.date.getMonth() + +1) + '/' + this.date.getDate(),
-              display: this.exam.display,
-              state: this.exam.state
+          // this.$storage.set('tests-' + this.exam.id, this.exam)
+          // console.log(this.exam)
+          const exams = {
+            Tno: this.$route.params.Tno,
+            Tid: this.exam.Tid,
+            name: this.exam.name,
+            date: this.date.getFullYear() + '/' + (+this.date.getMonth() + +1) + '/' + this.date.getDate()
+          }
+          this.exam.testType = '日常'
+          if (this.exam.isAdd === true) {
+            createTeacherTest(exams)
+            // this.$storage.set('exams', exams)
+            // console.log(this.exam.id)
+            this.exam.isAdd = false
+            createTest(this.exam).then(res => {
+              if (res.data.data === 'success') {
+                this.getList()
+                this.dialogFormVisible = false
+                this.$notify({
+                  title: '成功',
+                  message: '创建成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              } else {
+                this.$notify({
+                  title: '失败',
+                  message: '创建失败',
+                  type: 'error',
+                  duration: 2000
+                })
+              }
             })
-            this.$storage.set('exams', exams)
-            console.log(this.exam.id)
           } else {
-            // TODO 修改试卷名
+            updateTeacherTest(exams)
+            updateTest(this.exam).then(res => {
+              if (res.data.data === 'success') {
+                this.getList()
+                this.dialogFormVisible = false
+                this.$notify({
+                  title: '成功',
+                  message: '更新成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              } else {
+                this.$notify({
+                  title: '失败',
+                  message: '更新失败',
+                  type: 'error',
+                  duration: 2000
+                })
+              }
+            })
           }
           this.$router.push('/tests/index')
         },
