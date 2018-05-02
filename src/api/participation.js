@@ -30,9 +30,9 @@ export function updateParticipation(data) {
     params: data
   })
 }
-export function deleteAnnouncement(data) {
+export function deleteParticipation(data) {
   return request({
-    url: '/announcement/delete',
+    url: '/participation/delete',
     method: 'post',
     params: data // 配置接口数据 一定要用params
   })

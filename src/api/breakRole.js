@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchListBreakRule(query) {
   return request({
-    url: '/breakRole/list',
+    url: '/breakrule/list',
     method: 'get',
     params: query
   })
@@ -10,14 +10,14 @@ export function fetchListBreakRule(query) {
 
 export function fetchBreakRole() {
   return request({
-    url: '/breakRole/detail',
+    url: '/breakrule/detail',
     method: 'get'
   })
 }
 
 export function createBreakRole(data) {
   return request({
-    url: '/breakRole/create',
+    url: '/breakrule/create',
     method: 'post',
     params: data
   })
@@ -25,8 +25,15 @@ export function createBreakRole(data) {
 
 export function updateBreakRole(data) {
   return request({
-    url: '/breakRole/update',
+    url: '/breakrule/update',
     method: 'post',
     params: data
+  })
+}
+export function deleteBreakRole(data) {
+  return request({
+    url: '/breakrule/delete',
+    method: 'post',
+    params: data // 配置接口数据 一定要用params
   })
 }
