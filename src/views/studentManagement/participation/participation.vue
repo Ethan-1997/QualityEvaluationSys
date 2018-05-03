@@ -300,9 +300,7 @@ export default {
       this.temp = {
         sid: undefined,
         sname: undefined,
-        ssex: undefined,
         sclass: undefined,
-        sprofession: undefined,
         status: undefined, // 已到、迟到、请假、未到
         reason: undefined,
         time: undefined,
