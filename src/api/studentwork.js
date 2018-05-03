@@ -8,6 +8,14 @@ export function getStatisticsByWid(query) {
   })
 }
 
+export function getAllInfoBySid(query) {
+  return request({
+    url: '/studentwork/selectStudentInfoAndWorkInfoBySid',
+    method: 'post',
+    params: query
+  })
+}
+
 export function fetchStudentWorkList(query) {
   return request({
     url: '/studentwork/list',
