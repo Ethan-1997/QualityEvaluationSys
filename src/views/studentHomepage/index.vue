@@ -59,6 +59,7 @@
                             <el-tab-pane label="日常出勤" :data="dailyList">
                                 <div>
                                     <el-alert  v-for="item in dailyList" 
+                                    :key="item.pid"
                                     :title="item.status"
                                     :type="item.status | statusFilter"
                                     show-icon :closable="false"
@@ -140,7 +141,9 @@
                             </div>
                             <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;{{sname}}</div>
                             <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<i class="el-icon-info"/>&nbsp;&nbsp;学号:&nbsp;&nbsp;{{sid}}</div>
-                            <div style="line-height:28px;width:150px;margin:0px auto"><el-button type="primary" :plain="signInButton" @click="open2" :disabled="signIn" style="width:150px">{{signInText}}</el-button></div>
+                            <div style="line-height:28px;width:150px;margin:0px auto">
+                                <el-button type="primary" :plain="signInButton" @click="creatdata" :disabled="signIn" style="width:150px">{{signInText}}</el-button>
+                            </div>
                             </div>
                         </el-col>
                         </el-row>
@@ -171,7 +174,7 @@
     import { fetchList } from '@/api/announcement'
     import { mapGetters } from 'vuex'
     import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
-    import { getDailysummary } from '@/api/participation'
+    import { getDailysummary, createParticipation } from '@/api/participation'
     import { getBreakRole } from '@/api/breakRole'
     import { getOtherImportant } from '@/api/otherImportant'
     import { getHighlighting } from '@/api/highlighting'
@@ -180,11 +183,23 @@
     
       data() {
         return {
+          temp: {
+            sid: undefined,
+            sname: undefined,
+            sclass: undefined,
+            time: undefined,
+            status: undefined, // 已到、迟到、请假、未到
+            reason: undefined,
+            date: undefined
+          },
+          content: '无',
           taskData: null,
           active: null,
           announcementData: null,
           sname: null,
           sid: null,
+          sclass: null,
+          statu: null,
           midComprehensiveQualityData: [60, 75, 60, 80, 50],
           finalComprehensiveQualityData: [60, 80, 50, 60, 75],
 
@@ -264,6 +279,8 @@
           getCurrentUser().then(response => {
             this.sname = response.data.user.sname
             this.sid = response.data.user.sid
+            this.sclass = response.data.user.sclass
+            console.log(response.data.user)
             getDailysummary({ sid: this.sid, sort: '-id' }).then(response => {
               this.dailyList = [response.data.items[0], response.data.items[1], response.data.items[2], response.data.items[3], response.data.items[4]]
               console.log(this.dailyList)
@@ -331,10 +348,38 @@
           this.$message({
             message: '签到成功!',
             type: 'success'
+    
           })
           this.signIn = true
           this.signInText = '已签到'
           this.signInButton = true
+        },
+        creatdata() {
+          const date = new Date()
+          if (+date.getHours() < 9) {
+            this.statu = '已到'
+          } else if (+date.getMinutes() === 0 && +date.getSeconds() === 0) {
+            this.statu = '已到'
+          } else {
+            this.statu = '迟到'
+          }
+          const temp = {
+            sid: this.sid,
+            sname: this.sname,
+            sclass: this.sclass,
+            time: date.getHours() + ':' + (+date.getMinutes() + +1) + ':' + (+date.getSeconds() - +1),
+            date: date.getFullYear() + '/' + (+date.getMonth() + +1) + '/' + (+date.getDay() - +1),
+            status: this.statu,
+            reason: this.content
+          }
+          console.log(124124112424123124)
+          console.log(temp)
+          createParticipation(temp)
+          this.$message({
+            message: '签到成功!',
+            type: 'success'
+    
+          })
         },
 
         breakRuleTable({ row, rowIndex }) {
