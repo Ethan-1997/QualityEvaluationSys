@@ -63,7 +63,7 @@
       </el-table-column>
       <el-table-column align="center" prop="fileList" :label="tableCol.fileList" width="100">
         <template slot-scope="scope">
-          <el-button type="info" size="mini" @click="fileDownload(scope.row.fileList)">作业下载</el-button>
+          <el-button type="info" size="mini" :disabled="scope.row.stuFileList === null || scope.row.stuFileList === undefined || scope.row.stuFileList === ''" @click="fileDownload(scope.row.stuFileList)">作业下载</el-button>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="grade" :label="tableCol.grade" width="100">
@@ -80,6 +80,8 @@
         </template>
       </el-table-column> -->
     </el-table>
+
+
 
     <div class="pagination-container">
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
@@ -105,6 +107,24 @@
     </el-dialog>
 
     </el-card>
+
+
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose">
+          <el-upload
+              class="upload-demo"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :on-preview="handlePreview"
+              :file-list="filelist">
+            </el-upload>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -149,6 +169,8 @@ export default {
         reason: '备注',
         sort: '排序方式'
       },
+      filelist: null,
+      dialogVisible: false,
       studentlength: null,
       studentdata: null,
       allStudentWork: null,
@@ -216,6 +238,12 @@ export default {
     })
   },
   methods: {
+    handlePreview(file) {
+      window.open(file.url)
+    },
+    handleClose(done) {
+      done()
+    },
     selected(data) {
       this.tableData = data.results
       this.tableHeader = data.header
@@ -254,6 +282,14 @@ export default {
     },
     fileDownload(fileList) {
       console.log(fileList)
+      this.dialogVisible = true
+      if (fileList === null || fileList === undefined || fileList === '') {
+        this.filelist = undefined
+      } else {
+        this.filelist = JSON.parse(fileList)
+      }
+
+      console.log(this.filelist)
     },
     snamefilters(sid) {
       for (let i = 0; i < this.studentlength; i++) {

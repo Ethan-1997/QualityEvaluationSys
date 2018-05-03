@@ -232,7 +232,7 @@
         //   console.log(12)
         //   console.log(this.$storage.get('worklist'))
         // } else {
-        //   this.getList()
+        this.getList()
         // }
       },
       methods: {

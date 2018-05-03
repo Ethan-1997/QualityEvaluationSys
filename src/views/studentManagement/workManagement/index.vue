@@ -115,17 +115,18 @@
         </el-row>
           <el-row :gutter="20">
             <el-col :span="24">
-             <el-form-item :label="tableCol.annex" prop="annex">
+             <el-form-item :label="tableCol.annex" prop="filelist">
                <el-upload
                     ref="upload"
                     action="https://upload.qiniup.com"
                     multiple
                     :auto-upload="false"
                     :data="uptoken"
-                    :file-list="temp.annex"
-                    :on-success="handleUploadSuccess"
+                    :file-list="temp.filelist"
+                    :on-success="handleUploadSuccess" 
                     :before-upload="beforeUpload"
                     :on-preview="handlePreview"
+                    :on-remove="handleRemove"
                     >
                     <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                     <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
@@ -210,6 +211,7 @@ export default {
         content: undefined, // 文章内容
         startTime: undefined,
         endTime: undefined,
+        filelist: undefined,
         cid: undefined,
         cname: undefined,
         author: undefined,
@@ -257,12 +259,14 @@ export default {
         }
       })
     },
+    handleRemove(file, fileList) {
+      this.temp.filelist = JSON.stringify(fileList)
+    },
     handleUploadSuccess(response, file, fileList) {
       // p6k20rdt2.bkt.clouddn.com/FoiCdTJ3kxLZGCICyUZn7VlV9DiF?attname=123.exe
       // 获取文件名 file.name  获取hash值 response.key
       file.url = global.downloadhost + response.key + '?attname' + file.name
-      this.temp.annex = fileList
-      console.log(response, file, fileList)
+      this.temp.filelist = JSON.stringify(fileList)
     },
     selected(data) {
       this.tableData = data.results
@@ -293,12 +297,15 @@ export default {
         this.list = response.data.items
         this.listLoading = false
         for (let i = 0; i < this.list.length; i++) {
+          this.list[i].filelist = JSON.parse(this.list[i].filelist)
+          if (this.list[i].filelist === null) { this.list[i].filelist = undefined }
           this.wid = this.list[i].wid
           getStatisticsByWid({ wid: this.wid }).then(response => {
             this.list[i].submit = response.data.complete
             this.list[i].sum = response.data.total
           })
         }
+        console.log(this.list)
       })
     },
     handleFilter() {
@@ -319,6 +326,7 @@ export default {
         content: undefined, // 文章内容
         startTime: undefined,
         endTime: undefined,
+        filelist: undefined,
         cid: undefined,
         cname: undefined,
         author: undefined
@@ -369,7 +377,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-
+      console.log(this.temp, row)
       this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
