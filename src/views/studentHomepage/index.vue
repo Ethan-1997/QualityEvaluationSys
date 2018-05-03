@@ -28,17 +28,10 @@
                             <el-button style="float: right; padding: 3px 0" type="text" @click="showStudentWork">更多</el-button>
                         </div>
                         <el-table :data="taskData" style="width: 100%" :row-class-name="tableRowClassName">
-                            <el-table-column align="center" label="序号" width="65" type="index" :index="indexMethod">
-                              <template slot-scope="scope">
-                                <span>
-                                  {{scope.row.id}}
-                                </span>
-                              </template>
-                            </el-table-column>
-                            <el-table-column prop="title" label="学生作业">
+                            <el-table-column prop="title" label="作业标题">
                               
                             </el-table-column>
-                            <el-table-column label="截止时间"  width="130" align="center">
+                            <el-table-column label="截止时间"  width="200" align="center">
                                 <template slot-scope="scope">
                                     <i class="el-icon-time"></i>
                                     <span>{{scope.row.endTime}}</span>
@@ -194,7 +187,7 @@
 </template>
 
 <script>
-    import { fetchWorkInfoList } from '@/api/work'
+    import { getAllInfoBySid } from '@/api/studentwork'
     import { getCurrentUser } from '@/api/user'
     import { fetchList } from '@/api/announcement'
     import { mapGetters } from 'vuex'
@@ -202,7 +195,6 @@
     import { fetchListDaily } from '@/api/participation'
     import { fetchListBreakRule } from '@/api/breakRole'
     import { fetchListGreat } from '@/api/otherImportant'
-    import storage from '@/utils/storage'
     import { fetchListHighLight } from '@/api/highlighting'
     import CharacterTestGrade from './components/CharacterTestGrade'
     export default {
@@ -279,7 +271,6 @@
       },
       created() {
         this.getUserInfo()
-        this.getTaskData()
         this.getAnnouncementData()
         this.$nextTick(() => {
           this.$refs.gradeTabsOne.chart.resize()
@@ -287,13 +278,6 @@
           this.$refs.gradeTabsThree.chart.resize()
         })
         this.init()
-        if (storage.get('character') !== null) {
-          this.characterOneData = storage.get('character')[0]
-          this.characterTwoData = storage.get('character')[1]
-          this.characterThreeData = storage.get('character')[2]
-          this.characterFourData = storage.get('character')[3]
-          this.characterFiveData = storage.get('character')[4]
-        }
       },
       methods: {
         init() {
@@ -423,6 +407,10 @@
             this.sname = response.data.user.sname
             this.sid = response.data.user.sid
           })
+          getAllInfoBySid({ sid: this.sid }).then(response => {
+            this.taskData = [response.data.items[0], response.data.items[1], response.data.items[2], response.data.items[3], response.data.items[4]]
+            console.log(response.data)
+          })
         },
         clickTab() {
           this.$nextTick(() => {
@@ -493,12 +481,6 @@
             return 'success-row'
           }
           return ''
-        },
-
-        getTaskData() {
-          fetchWorkInfoList().then(response => {
-            this.taskData = storage.get('worklist')
-          })
         },
         filterTaskTag(value, row) {
           return row.submitStatus === value

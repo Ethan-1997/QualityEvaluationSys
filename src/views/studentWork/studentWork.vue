@@ -16,17 +16,17 @@
                   </el-table-column>
                   <el-table-column label="开始时间" width="200" align="center"> 
                     <template slot-scope="scope">
-                      <el-alert :title="scope.row.starttime" type="info" :closable="false"></el-alert>
+                      <el-alert :title="scope.row.startTime" type="info" :closable="false"></el-alert>
                     </template>      
                   </el-table-column>
                   <el-table-column label="截止时间" width="200" align="center"> 
                     <template slot-scope="scope">
-                      <el-alert :title="scope.row.endtime" type="info" :closable="false"></el-alert>
+                      <el-alert :title="scope.row.endTime" type="info" :closable="false"></el-alert>
                     </template>      
                   </el-table-column>
                   <el-table-column label="提交状态" prop="submitStatus" width="120" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
                     <template slot-scope="scope">
-                        <el-button :type="scope.row.submitstatus === '已提交' ? 'success' : 'warning'" @click="openUploadTask(scope.row)">{{scope.row.submitstatus === '已提交' ? '已提交' : '未提交'}}</el-button>
+                        <el-button :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'" @click="openUploadTask(scope.row)">{{scope.row.submitStatus}}</el-button>
                     </template>   
                   </el-table-column>
                 </el-table>
@@ -80,8 +80,8 @@
   </div>
 </template>
 <script>
-import { fetchWorkInfoList } from '@/api/work'
-import { fetchStudentWorkList } from '@/api/studentwork'
+import { getAllInfoBySid } from '@/api/studentwork'
+import { getCurrentUser } from '@/api/user'
 import { getToken } from '@/api/qiniu'
 import storage from '@/utils/storage'
 export default {
@@ -97,7 +97,8 @@ export default {
       taskFinishedTime: null,
       taskDetailText: null,
       uploadTask: false,
-      taskDetail: false
+      taskDetail: false,
+      sid: null
     }
   },
   created() {
@@ -105,18 +106,17 @@ export default {
   },
   methods: {
     getList() {
-      fetchWorkInfoList().then(Response => {
-        this.taskData = Response.data.items
-        console.log(this.taskData)
-      })
-      fetchStudentWorkList().then(Response => {
-        console.log(Response.data.items)
+      getCurrentUser().then(response => {
+        this.sid = response.data.user.sid
+        getAllInfoBySid({ sid: this.sid }).then(response => {
+          this.taskData = response.data.items
+          console.log(response.data)
+        })
       })
     },
     filterTaskTag(value, row) {
       return row.submitStatus === value
     },
-
     tableRowClassName({ row, rowIndex }) {
       if (row.submitStatus === '已提交') {
         return 'success-row'
@@ -128,7 +128,7 @@ export default {
       this.temp = Object.assign({}, row) // copy obj
       this.taskTitle = this.temp.title
       this.taskAuthor = this.temp.author
-      this.taskFinishedTime = this.temp.endtime
+      this.taskFinishedTime = this.temp.endTime
       this.taskDetailText = this.temp.content
       this.taskDetail = true
     },
