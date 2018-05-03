@@ -18,7 +18,7 @@
         </el-option>
       </el-select>
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort" :placeholder="tableCol.order">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
+        <el-option v-for="item in sortOptions" :key="item"  :label="item.label" :value="item.key">
         </el-option>
       </el-select>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>

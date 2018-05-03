@@ -53,7 +53,7 @@
                     <span><svg-icon icon-class="table" />&nbsp;系统公告</span>
                     <el-button style="float: right; padding: 3px 0" type="text" @click="goToAnnocument" >更多</el-button>
                 </div>
-                <el-table :data="announcementDataData" style="width: 100%"  >
+                <el-table :data="announcementData" style="width: 100%"  >
                     <el-table-column prop="atitle" label="公告"> 
                     </el-table-column>
                     <el-table-column fixed="right" prop="atime" label="发布日期" width="100" align="center"> 
@@ -107,29 +107,22 @@
                                 <el-button style="float: right; padding: 3px 0" type="text" @click="goToWorkManagement">更多</el-button>
                             </div>
                             <el-table :data="taskData" style="width: 100%">
-                                <el-table-column align="center" label="序号" width="65" type="index" :index="indexMethod">
-                                    <template slot-scope="scope">
-                                        <span>
-                                        {{scope.row.id}}
-                                        </span>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column prop="task" label="学生作业">
+                                <el-table-column prop="title" width="150px" align="center" label="学生作业">
                                     <template slot-scope="scope">
                                         <span>
                                         {{scope.row.title}}
                                         </span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="截止时间" width="130" align="center">
+                                <el-table-column  prop="endtime" label="截止时间" align="center">
                                     <template slot-scope="scope">
                                         <i class="el-icon-time"></i>
-                                        <span>{{scope.row.endTime}}</span>
+                                        <span>{{scope.row.endtime}}</span>
                                     </template>            
                                 </el-table-column>
-                                <el-table-column label="上交进度" width="130" align="center" fixed="right">
+                                <el-table-column label="上交进度" width="150px" align="center" fixed="right">
                                     <template slot-scope="scope">
-                                    <el-progress :percentage="scope.row.rate/20*100" :show-text="false">123</el-progress><span>{{scope.row.rate}}/20</span>
+                                    <el-progress :percentage="scope.row.submit/scope.row.sum*100" :show-text="false"></el-progress><span>{{scope.row.submit}}/{{scope.row.sum}}</span>
                                 </template>         
                                 </el-table-column>
                             </el-table>
@@ -150,8 +143,8 @@
                                             <div style="line-height:28px;width:150px;margin:0px auto">
                                                 <img style="width:150px;height:150px;border-radius:75px" :src="avatar"/>
                                             </div>
-                                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;摇滚兔子</div>
-                                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<i class="el-icon-info"/>&nbsp;&nbsp;工号:&nbsp;&nbsp;16147131</div>
+                                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;{{tname}}</div>
+                                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<i class="el-icon-info"/>&nbsp;&nbsp;工号:&nbsp;&nbsp;{{tno}}</div>
                                         </div>
                                     </el-col>
                                 </el-row>
@@ -180,18 +173,19 @@
 
 <script>
     import { fetchList } from '@/api/announcement'
-    import { fetchListWork } from '@/api/work'
+    import { fetchWorkInfoList } from '@/api/work'
+    import { getStatisticsByWid } from '@/api/studentwork'
     import { mapGetters } from 'vuex'
     import { fetchListDaily } from '@/api/participation'
     
-    import storage from '@/utils/storage'
+    import { getCurrentUser } from '@/api/user'
     export default {
     
       data() {
         return {
           dailyList: null,
           active: null,
-          announcementDataData: null,
+          announcementData: null,
           taskData: null,
           participation: [],
           askForLeave: 0,
@@ -210,10 +204,15 @@
           listQuery: {
             page: 1,
             limit: 15,
-            sort: '-id',
-            title: undefined,
-            time: undefined
-          }
+            sort: '-id'
+          },
+          taskQuery: {
+            page: 1,
+            limit: 5
+          },
+          wid: null,
+          tno: null,
+          tname: null
         }
       },
       computed: {
@@ -222,9 +221,12 @@
         ])
       },
       created() {
-        this.getList()
-        this.getTaskData()
         this.getAnnouncementData()
+        this.getTaskData()
+        getCurrentUser().then(response => {
+          this.tno = response.data.user.tno
+          this.tname = response.data.user.tname
+        })
         // if (this.$storage.get('worklist') !== null) {
     
         //   console.log(12)
@@ -331,12 +333,19 @@
         },
         getAnnouncementData() {
           fetchList(this.listQuery).then(response => {
-            this.announcementDataData = response.data.items
+            this.announcementData = response.data.items
           })
         },
         getTaskData() {
-          fetchListWork().then(response => {
-            this.taskData = storage.get('worklist')
+          fetchWorkInfoList(this.taskQuery).then(response => {
+            this.taskData = response.data.items
+            for (let i = 0; i < this.taskData.length; i++) {
+              this.wid = this.taskData[i].wid
+              getStatisticsByWid({ wid: this.wid }).then(response => {
+                this.taskData[i].submit = response.data.complete
+                this.taskData[i].sum = response.data.total
+              })
+            }
           })
         },
         indexMethod(index) {

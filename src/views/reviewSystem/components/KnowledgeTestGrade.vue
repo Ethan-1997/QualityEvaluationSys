@@ -44,7 +44,6 @@ export default {
     console.log(this.$nextTick)
     this.$nextTick(() => {
       this.chart.resize()
-      console.log(123123)
     })
   },
   beforeDestroy() {

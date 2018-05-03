@@ -15,6 +15,14 @@ export function getStudentByUid() {
   })
 }
 
+export function getStudentByCid(query) {
+  return request({
+    url: '/student/getstudent',
+    method: 'get',
+    params: query
+  })
+}
+
 export function createStudent(data) {
   return request({
     url: '/student/create',
