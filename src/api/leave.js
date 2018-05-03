@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchListLeave(query) {
   return request({
-    url: '/leave/list',
+    url: '/later/list',
     method: 'get',
     params: query
   })
@@ -10,23 +10,30 @@ export function fetchListLeave(query) {
 
 export function fetchLeave() {
   return request({
-    url: '/leave/detail',
+    url: '/later/detail',
     method: 'get'
   })
 }
 
 export function createLeave(data) {
   return request({
-    url: '/leave/create',
+    url: '/later/create',
     method: 'post',
-    data
+    params: data
   })
 }
 
 export function updateLeave(data) {
   return request({
-    url: '/leave/update',
+    url: '/later/update',
     method: 'post',
-    data
+    params: data
+  })
+}
+export function deleteLeave(data) {
+  return request({
+    url: '/later/delete',
+    method: 'post',
+    params: data // 配置接口数据 一定要用params
   })
 }

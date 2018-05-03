@@ -5,13 +5,15 @@
       <span style="font-size:25px">学生信息管理</span>
     </div>
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.Sname" v-model="listQuery.Sname">
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
       </el-input>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.Sprofession" :placeholder="tableCol.Sprofession">
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sid" v-model="listQuery.sid">
+      </el-input>
+      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sdept" :placeholder="tableCol.sdept">
         <el-option v-for="item in deptOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.Sclass" :placeholder="tableCol.Sclass">
+      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
         <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
@@ -27,30 +29,30 @@
 
     <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column width="100px" align="center" :label="tableCol.Sname">
+      <el-table-column width="100px" align="center" :label="tableCol.sname">
         <template slot-scope="scope">
-          <el-tag>{{scope.row.Sname }}</el-tag>
+          <el-tag>{{scope.row.sname }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.Sprofession" width="95">
+      <el-table-column align="center" :label="tableCol.sdept" width="95">
         <template slot-scope="scope">
-          <span>{{scope.row.Sprofession}}</span>
+          <span>{{scope.row.sdept}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="80px" align="center" :label="tableCol.Sclass">
+      <el-table-column width="80px" align="center" :label="tableCol.sclass">
         <template slot-scope="scope">
-          <span>{{scope.row.Sclass}}</span>
+          <span>{{scope.row.sclass}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.Sno" width="80">
+      <el-table-column align="center" :label="tableCol.sid" width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.Sno}}</span>
+          <span>{{scope.row.sid}}</span>
         </template>
       </el-table-column>
       
-      <el-table-column width="50px" align="center" :label="tableCol.Ssex">
+      <el-table-column width="50px" align="center" :label="tableCol.ssex">
         <template slot-scope="scope">
-         <span>{{scope.row.Ssex}}</span>
+         <span>{{scope.row.ssex}}</span>
         </template>
       </el-table-column>
       <el-table-column width="100px"  align="center" :label="tableCol.birth">
@@ -58,20 +60,20 @@
           <span >{{scope.row.birth}}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="150px" :label="tableCol.Saddress">
+      <el-table-column min-width="150px" :label="tableCol.saddress">
         <template slot-scope="scope">
-          <span>{{scope.row.Saddress}}</span>
+          <span>{{scope.row.saddress}}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" :label="tableCol.Stime" width="100">
+      <el-table-column class-name="status-col" :label="tableCol.stime" width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.Stime}}</span>
+          <span>{{scope.row.stime}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.$index)">{{$t('table.delete')}}
+          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row.sid)">{{$t('table.delete')}}
           </el-button>
         </template>
       </el-table-column>
@@ -84,46 +86,45 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <!-- <el-form-item :label="tableCol[0]" prop="sno">
+        <!-- <el-form-item :label="tableCol[0]" prop="sid">
           <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
             <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
             </el-option>
           </el-select>
         </el-form-item> -->
-        <el-form-item :label="tableCol.Sname" prop="Sname">
-          <el-input v-model="temp.Sname"></el-input>
+        <el-form-item :label="tableCol.sname" prop="sname">
+          <el-input v-model="temp.sname"></el-input>
         </el-form-item>
-       
-        <el-form-item :label="tableCol.Ssex" prop="Ssex">
-           <el-select class="filter-item" v-model="temp.Ssex" placeholder="请选择">
+        <el-form-item :label="tableCol.sid" prop="sid">
+          <el-input v-model="temp.sid"></el-input>
+        </el-form-item>
+        <el-form-item :label="tableCol.ssex" prop="ssex">
+           <el-select class="filter-item" v-model="temp.ssex" placeholder="请选择">
             <el-option v-for="item in  sexOptions" :key="item" :label="item" :value="item">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="tableCol.Sclass" prop="Sclass">
-           <el-autocomplete
-            v-model="temp.Sclass"
-            :fetch-suggestions="querySearch"
-            placeholder="请输入内容"
-            :trigger-on-focus="true"
-            @select="handleSelect"
-          ></el-autocomplete>
+        <el-form-item :label="tableCol.sclass" prop="sclass">
+           <el-select clearable style="width: 90px" class="filter-item" v-model="temp.sclass" :placeholder="tableCol.sclass">
+              <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
+              </el-option>
+            </el-select>
         </el-form-item>
          <el-form-item :label="tableCol.birth" prop="birth">
           <el-date-picker v-model="temp.birth"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" placeholder="请选择生日">
           </el-date-picker>
         </el-form-item>
-        <el-form-item :label="tableCol.Saddress" prop="Saddress">
-          <el-input v-model="temp.Saddress"></el-input>
+        <el-form-item :label="tableCol.saddress" prop="saddress">
+          <el-input v-model="temp.saddress"></el-input>
         </el-form-item>
-         <el-form-item :label="tableCol.Sprofession" prop="Sprofession">
-           <el-select class="filter-item" v-model="temp.Sprofession" placeholder="请选择">
+         <el-form-item :label="tableCol.sdept" prop="sdept">
+           <el-select class="filter-item" v-model="temp.sdept" placeholder="请选择">
             <el-option v-for="item in  deptOptions" :key="item" :label="item" :value="item">
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :label="tableCol.Stime" prop="Stime">
-           <el-date-picker v-model="temp.Stime" format="yyyy年" value-format="yyyy">
+        <el-form-item :label="tableCol.stime" prop="stime">
+           <el-date-picker v-model="temp.stime" format="yyyy年" value-format="yyyy">
            </el-date-picker>
         </el-form-item>
       </el-form>
@@ -140,12 +141,11 @@
 </template>
 
 <script>
-import { getStudentData, createStudent, updateStudent } from '@/api/student'
+import { getStudentData, createStudent, updateStudent, deleteStudent } from '@/api/student'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
 import compare from '@/utils/compare'
-import Mock from 'mockjs'
 export default {
   name: 'complexTable',
   directives: {
@@ -158,14 +158,14 @@ export default {
     return {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
-        Sno: '学号',
-        Sname: '姓名',
-        Ssex: '性别',
-        Sclass: '班级',
+        sid: '学号',
+        sname: '姓名',
+        ssex: '性别',
+        sclass: '班级',
         birth: '生日',
-        Saddress: '地址',
-        Sprofession: '专业',
-        Stime: '入学时间',
+        saddress: '地址',
+        sdept: '专业',
+        stime: '入学时间',
         operator: '操作',
         order: '排序规则'
       },
@@ -176,27 +176,28 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        Sname: undefined,
-        Sprofession: undefined,
-        order: '+id',
-        Sclass: undefined
+        sid: undefined,
+        sname: undefined,
+        sdept: undefined,
+        sort: '+id',
+        sclass: undefined
       },
-      classOptions: ['101', '102', '103', '104', '105', '106', '107', '108', '109'],
+      classOptions: ['vue.js'],
       sexOptions: ['男', '女'],
-      deptOptions: ['javaweb', '大数据', '前端工程师'],
+      deptOptions: ['前端', '后端'],
 
       sortOptions: [{ label: '升序排序', key: '+id' }, { label: '降序排序', key: '-id' }],
 
       showReviewer: false,
       temp: {
-        Sno: undefined,
-        Sname: undefined,
-        Ssex: undefined,
-        Sclass: undefined,
+        sid: undefined,
+        sname: undefined,
+        ssex: undefined,
+        sclass: undefined,
         birth: undefined,
-        Saddress: undefined,
-        Sprofession: undefined,
-        Stime: undefined
+        saddress: undefined,
+        sdept: undefined,
+        stime: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -214,7 +215,7 @@ export default {
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
-      tHeader: ['Sno', 'Sname', 'Ssex', 'Sclass', 'birth', 'Saddress', 'Sprofession', 'Stime']
+      tHeader: ['sname', 'sdept', 'sclass', 'sid', 'ssex', 'birth', 'saddress', 'stime']
     }
   },
   filters: {
@@ -255,6 +256,7 @@ export default {
     selected(data) {
       this.tableData = data.results
       this.tableHeader = data.header
+      console.log(this.tableData)
       if (!compare(this.tableHeader, this.tHeader)) {
         this.$notify({
           title: '失败',
@@ -263,26 +265,28 @@ export default {
           duration: 2000
         })
       } else {
+        for (let j = 0; data.results[j] != null; j++) {
+          // 去掉导入内容的主键
+          createStudent(data.results[j]).then(res => {
+            if (res.data.data === 'success') {
+              console.log('success')
+            } else {
+              console.log('error')
+            }
+          })
+        }
+        this.getList()
         this.$message({
-          message: '操作成功',
+          message: '导入成功',
           type: 'success'
         })
-        console.log(this.list)
-        console.log(this.tableData)
-        console.log(this.list.length)
-        let j, len
-        for (j = 0, len = this.tableData.length; j < len; j++) {
-          this.list.push(this.tableData[j])
-          this.$storage.set('studentlist', this.list)
-        }
-        this.list.concat(this.tableData)
-        console.log(this.list.length)
       }
     },
     getList() {
       this.listLoading = true
       getStudentData(this.listQuery).then(response => {
         this.list = response.data.items
+        console.log(this.list)
         this.total = response.data.total
         this.listLoading = false
       })
@@ -301,14 +305,14 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        Sno: undefined,
-        Sname: undefined,
-        Ssex: undefined,
-        Sclass: undefined,
+        sid: undefined,
+        sname: undefined,
+        ssex: undefined,
+        sclass: undefined,
         birth: undefined,
-        Saddress: undefined,
-        Sprofession: undefined,
-        Stime: undefined
+        saddress: undefined,
+        sdept: undefined,
+        stime: undefined
       }
     },
     handleCreate() {
@@ -322,29 +326,24 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.Sno = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          this.temp.Simage = Mock.Random.dataImage('200x200', '头像')
-          this.temp.studyRate1 = 0
-          this.temp.studyRate2 = 0
-          this.temp.studyRate3 = 0
-          this.temp.developRate1 = 0
-          this.temp.developRate2 = 0
-          this.temp.developRate3 = 0
-          this.temp.daliyRate1 = 0
-          this.temp.daliyRate2 = 0
-          this.temp.daliyRate3 = 0
-          this.temp.remark = ''
-          createStudent(this.temp).then(() => {
-            console.log('in')
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
+          createStudent(this.temp).then(res => {
+            if (res.data.data === 'success') {
+              this.getList()
+              this.dialogFormVisible = false
+              this.$notify({
+                title: '成功',
+                message: '创建成功',
+                type: 'success',
+                duration: 2000
+              })
+            } else {
+              this.$notify({
+                title: '失败',
+                message: '创建失败',
+                type: 'error',
+                duration: 2000
+              })
+            }
           })
         }
       })
@@ -383,17 +382,25 @@ export default {
         }
       })
     },
-    handleDelete(index) {
+    handleDelete(sid) {
       this.$confirm('此操作将永久删除该学生, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.list.splice(index, 1)
-        this.$storage.set('studentlist', this.list)
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        deleteStudent({ 'sid': sid }).then(res => {
+          if (res.data.data === 'success') {
+            this.getList()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          } else {
+            this.$message({
+              type: 'info',
+              message: '删除失败'
+            })
+          }
         })
       }).catch(() => {
         this.$message({
@@ -402,18 +409,18 @@ export default {
         })
       })
     },
-    // sno: undefined,
+    // sid: undefined,
     //     sname: undefined,
     //     ssex: undefined,
     //     sclass: undefined,
     //     birth: undefined,
     //     saddress: undefined,
-    //     Sprofession: undefined,
+    //     sdept: undefined,
     //     stime: undefined
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const filterVal = ['Sno', 'Sname', 'Ssex', 'Sclass', 'birth', 'Saddress', 'Sprofession', 'Stime']
+        const filterVal = ['sname', 'sdept', 'sclass', 'sid', 'ssex', 'birth', 'saddress', 'stime']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel(this.tHeader, data, '学生信息')
         this.downloadLoading = false

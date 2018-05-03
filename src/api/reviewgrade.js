@@ -1,39 +1,38 @@
 import request from '@/utils/request'
 
-export function fetchListHighLight(query) {
+export function fetchReviewGradeList(query) {
   return request({
-    url: '/highlighting/list',
+    url: '/reviewgrade/list',
     method: 'get',
     params: query
   })
 }
 
-export function fetchHighlighting() {
+export function getReviewGrade() {
   return request({
-    url: '/highlighting/detail',
+    url: '/reviewgrade/detail',
     method: 'get'
   })
 }
 
-export function createHighlighting(data) {
+export function createReviewGrade(data) {
   return request({
-    url: '/highlighting/create',
+    url: '/reviewgrade/create',
     method: 'post',
     params: data
   })
 }
 
-export function updateHighlighting(data) {
+export function updateReviewGrade(data) {
   return request({
-    url: '/highlighting/update',
+    url: '/reviewgrade/update',
     method: 'post',
     params: data
   })
 }
-
-export function deleteHighlighting(data) {
+export function deleteReviewGrade(data) {
   return request({
-    url: '/highlighting/delete',
+    url: '/reviewgrade/delete',
     method: 'post',
     params: data // 配置接口数据 一定要用params
   })

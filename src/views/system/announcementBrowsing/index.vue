@@ -28,7 +28,7 @@
       </el-table-column>
       <el-table-column min-width="150px" :label="tableCol.acontent">
         <template slot-scope="scope">
-          <span>{{scope.row.acontent}}</span>
+          <el-alert title="" type="info" :closable="false">{{scope.row.acontent}}</el-alert>
         </template>
       </el-table-column>
       <el-table-column width="100px" align="center" :label="tableCol.atime">
@@ -36,13 +36,6 @@
          <span>{{scope.row.atime}}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.$index)">{{$t('table.delete')}}
-          </el-button>
-        </template>
-      </el-table-column> -->
     </el-table>
 
     <div class="pagination-container">
@@ -119,7 +112,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        order: '+id',
+        sort: '-id',
         title: undefined,
         time: undefined
       },
@@ -201,6 +194,7 @@ export default {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
+        console.log(this.list)
         this.total = response.data.total
         this.listLoading = false
       })

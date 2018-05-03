@@ -8,10 +8,11 @@ export function fetchList(query) {
   })
 }
 
-export function fetchUser() {
+export function fetchUser(query) {
   return request({
-    url: '/user/detail',
-    method: 'get'
+    url: '/user/get',
+    method: 'get',
+    params: query
   })
 }
 
@@ -30,3 +31,12 @@ export function updateUser(data) {
     data
   })
 }
+
+export function getCurrentUser(token) {
+  return request({
+    url: '/user/getCurrentUser',
+    method: 'get',
+    params: { token }
+  })
+}
+

@@ -6,15 +6,17 @@
     </div>
     <div class="filter-container">
       <el-date-picker class="filter-item"
-        v-model="listQuery.time"
+        v-model="listQuery.date"
         type="date"
-        placeholder="选择日期">
+        format="yyyy/M/d"
+        placeholder="选择日期时间"
+        value-format="yyyy/M/d">
       </el-date-picker>
       <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
         <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
+      <el-input @keyup.enter.native="handleFilter" style="width: 120px;" class="filter-item" placeholder="请输入学号" v-model="listQuery.sid">
       </el-input>
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort" :placeholder="tableCol.sort">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
@@ -43,9 +45,9 @@
           <span>{{scope.row.sclass}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.sno" width="80">
+      <el-table-column align="center" :label="tableCol.sid" width="80">
         <template slot-scope="scope">
-          <span>{{scope.row.sno}}</span>
+          <span>{{scope.row.sid}}</span>
         </template>
       </el-table-column>
      <el-table-column align="center" prop="time" sortable :label="tableCol.time" width="80">
@@ -58,16 +60,16 @@
           <el-tag :type="scope.row.status === '已到' ? 'success' : scope.row.status === '未到' ? 'danger' : scope.row.status === '迟到' ? 'warning' : 'info'">{{scope.row.status}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="tableCol.note" min-width="95">
+      <el-table-column :label="tableCol.reason" min-width="95">
         <template slot-scope="scope">
-          <el-alert type="info" :closable="false">{{scope.row.note}}</el-alert>
+          <el-alert title="" type="info" :closable="false">{{scope.row.reason}}</el-alert>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.$index)">{{$t('table.delete')}}
+          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row.pid)">{{$t('table.delete')}}
           </el-button>
         </template>
       </el-table-column>
@@ -80,46 +82,33 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <!-- <el-form-item :label="tableCol[0]" prop="sno">
+        <!-- <el-form-item :label="tableCol[0]" prop="sid">
           <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
             <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
             </el-option>
           </el-select>
         </el-form-item> -->
         <el-form-item :label="tableCol.sname" prop="sname">
-          <el-input v-model="temp.sname"></el-input>
+          <el-input v-model="temp.sname" width="200px"  placeholder="请输入姓名"></el-input>
         </el-form-item>
-       
-        <el-form-item :label="tableCol.ssex" prop="sex">
-           <el-select class="filter-item" v-model="temp.ssex" placeholder="请选择">
-            <el-option v-for="item in  sexOptions" :key="item" :label="item" :value="item">
-            </el-option>
-          </el-select>
+        <el-form-item :label="tableCol.sid" prop="sid">
+          <el-input v-model="temp.sid" width="150px"  placeholder="请输入学号"></el-input>
         </el-form-item>
         <el-form-item :label="tableCol.sclass" prop="sclass">
-          <el-input v-model="temp.sclass"></el-input>
+          <el-select clearable style="width: 90px" class="filter-item" v-model="temp.sclass" :placeholder="tableCol.sclass">
+            <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item :label="tableCol.date" prop="date">
           <el-date-picker
             v-model="temp.date"
-            type="datetime"
-            format="yyyy-MM-dd"
-            placeholder="选择日期">
+            type="date"
+            format="yyyy/M/d"
+            placeholder="选择日期时间"
+            value-format="yyyy/M/d">
           </el-date-picker>
         </el-form-item>
-         <el-form-item :label="tableCol.sprofession" prop="sprofession">
-           <el-select class="filter-item" v-model="temp.sprofession" placeholder="请选择">
-            <el-option v-for="item in  courseOptions" :key="item" :label="item" :value="item">
-            </el-option>
-          </el-select>
-        </el-form-item>
-           <el-form-item :label="tableCol.status" prop="status">
-            <el-select class="filter-item" v-model="temp.status" placeholder="请选择">
-              <el-option v-for="item in  statusOptions" :key="item" :label="item" :value="item">
-              </el-option>
-            </el-select>
-        </el-form-item>
-
         <el-form-item :label="tableCol.time" prop="time">
            <el-time-picker
             v-model="temp.time"
@@ -129,12 +118,20 @@
             placeholder="选择时间">
           </el-time-picker>
         </el-form-item>
-        <el-form-item :label="tableCol.note" prop="note">
+        <el-form-item :label="tableCol.status" prop="status">
+            <el-select class="filter-item" v-model="temp.status" placeholder="请选择">
+              <el-option v-for="item in  statusOptions" :key="item" :label="item" :value="item">
+              </el-option>
+            </el-select>
+        </el-form-item>
+
+        
+        <el-form-item :label="tableCol.reason" prop="reason">
          <el-input
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4}"
             placeholder="请输入内容"
-            v-model="temp.note">
+            v-model="temp.reason">
           </el-input>
         </el-form-item>
         
@@ -152,7 +149,7 @@
 </template>
 
 <script>
-import { fetchListDaily } from '@/api/participation'
+import { fetchListDaily, createParticipation, updateParticipation, deleteParticipation } from '@/api/participation'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -171,14 +168,14 @@ export default {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
         date: '日期',
-        sno: '学号',
+        sid: '学号',
         sname: '姓名',
         ssex: '性别',
         sclass: '班级',
         sprofession: '专业',
         time: '时间',
         status: '考勤状态', // 已到、迟到、请假、未到
-        note: '备注',
+        reason: '备注',
         sort: '排序方式'
       },
       tableKey: 0,
@@ -188,26 +185,26 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        sname: undefined,
-        time: undefined,
-        order: '+id',
+        sid: undefined,
+        date: undefined,
+        sort: '-id',
         sclass: undefined
       },
-      classOptions: ['101', '102', '103', '104', '105', '106', '107', '108', '109'],
+      classOptions: ['vue.js', '大数据', 'javaweb'],
       sexOptions: ['男', '女'],
       sortOptions: [{ label: '升序排序', key: '+id' }, { label: '降序排序', key: '-id' }],
-      courseOptions: ['javaweb', '大数据', '云计算'],
+      courseOptions: ['前端', '后端'],
       statusOptions: ['已到', '迟到', '请假', '未到'],
       showReviewer: false,
       temp: {
-        sno: undefined,
+        sid: undefined,
         sname: undefined,
         ssex: undefined,
         sclass: undefined,
         sprofession: undefined,
         time: undefined,
         status: undefined, // 已到、迟到、请假、未到
-        note: undefined,
+        reason: undefined,
         date: undefined
       },
       dialogFormVisible: false,
@@ -227,15 +224,15 @@ export default {
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
-      // sno: undefined,
+      // sid: undefined,
       //   sname: undefined,
       //   ssex: undefined,
       //   sclass: undefined,
       //   sprofession: undefined,
       //   time: undefined,
       //   status: undefined, // 已到、迟到、请假、未到
-      //   note: undefined
-      tHeader: ['sno', 'sname', 'ssex', 'sclass', 'sprofession', 'time', 'status', 'note']
+      //   reason: undefined
+      tHeader: ['date', 'sname', 'sclass', 'sid', 'time', 'status', 'reason']
     }
   },
   filters: {
@@ -250,12 +247,7 @@ export default {
 
   },
   created() {
-    if (this.$storage.get('dailyInit') === true) {
-      console.log(2)
-      this.list = this.$storage.get('dailyList')
-    } else {
-      this.getList()
-    }
+    this.getList()
     console.log(this.list)
   },
   methods: {
@@ -270,27 +262,28 @@ export default {
           duration: 2000
         })
       } else {
+        for (let j = 0; data.results[j] != null; j++) {
+          // 去掉导入内容的主键
+          createParticipation(data.results[j]).then(res => {
+          })
+        }
+        this.getList()
         this.$message({
-          message: '操作成功',
+          message: '导入成功',
           type: 'success'
         })
-        let j, len
-        for (j = 0, len = this.tableData.length; j < len; j++) {
-          this.list.push(this.tableData[j])
-        }
-        this.list.concat(this.tableData)
       }
     },
     getList() {
       this.listLoading = true
       fetchListDaily(this.listQuery).then(response => {
         this.list = response.data.items
-        this.$storage.set('dailyInit', true)
-        this.$storage.set('dailyList', response.data.items)
+        console.log(response.data.items)
         this.total = response.data.total
         this.listLoading = false
       })
     },
+
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
@@ -305,13 +298,13 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        sno: undefined,
+        sid: undefined,
         sname: undefined,
         ssex: undefined,
         sclass: undefined,
         sprofession: undefined,
         status: undefined, // 已到、迟到、请假、未到
-        note: undefined,
+        reason: undefined,
         time: undefined,
         date: undefined
       }
@@ -325,35 +318,29 @@ export default {
       })
     },
     createData() {
-      if (this.temp.sname === undefined || this.temp.ssex === undefined || this.temp.sclass === undefined || this.temp.time === undefined || this.temp.status === undefined || this.temp.date === undefined) {
-        this.$notify({
-          title: '失败',
-          message: '请填写完整',
-          duration: 2000
-        })
-      } else {
-        const months = this.temp.date.getMonth() + 1
-        const dates = this.temp.date.getFullYear() + '.' + months + '.' + this.temp.date.getDate()
-        this.list.push({
-          sno: '101',
-          sname: this.temp.sname,
-          ssex: this.temp.ssex,
-          sclass: this.temp.sclass,
-          sprofession: this.temp.sprofession,
-          status: this.temp.status, // 已到、迟到、请假、未到
-          note: this.temp.note,
-          time: this.temp.time,
-          date: dates
-        })
-        this.$storage.set('dailyList', this.list)
-        this.$notify({
-          title: '成功',
-          message: '创建成功',
-          type: 'success',
-          duration: 2000
-        })
-      }
-      this.dialogFormVisible = false
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          createParticipation(this.temp).then(res => {
+            if (res.data.data === 'success') {
+              this.getList()
+              this.dialogFormVisible = false
+              this.$notify({
+                title: '成功',
+                message: '创建成功',
+                type: 'success',
+                duration: 2000
+              })
+            } else {
+              this.$notify({
+                title: '失败',
+                message: '创建失败',
+                type: 'error',
+                duration: 2000
+              })
+            }
+          })
+        }
+      })
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
@@ -367,51 +354,48 @@ export default {
       })
     },
     updateData() {
-      // debugger
-      const tempData = Object.assign({}, this.temp)
-      tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-      const oldtempData = Object.assign({}, this.oldtemp)
-      let dates
-      if (tempData.date !== oldtempData.date) {
-        const months = tempData.date.getMonth() + 1
-        dates = tempData.date.getFullYear() + '.' + months + '.' + tempData.date.getDate()
-      } else {
-        dates = oldtempData.date
-      }
-      for (let i = 0; i < this.list.length; i++) {
-        if (this.list[i].date === oldtempData.date && this.list[i].id === oldtempData.id) {
-          console.log(this.list[i].date)
-          this.list[i].sname = this.temp.sname
-          this.list[i].time = this.temp.time
-          this.list[i].ssex = this.temp.ssex
-          this.list[i].sclass = this.temp.sclass
-          this.list[i].sprofession = this.temp.sprofession
-          this.list[i].status = this.temp.status // 已到、迟到、请假、未到
-          this.list[i].note = this.temp.note
-          this.list[i].date = dates
-          this.$storage.set('dailyList', this.list)
-          break
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          updateParticipation(tempData).then(() => {
+            for (const v of this.list) {
+              if (v.pid === this.temp.pid) {
+                const index = this.list.indexOf(v)
+                this.list.splice(index, 1, this.temp)
+                break
+              }
+            }
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
         }
-      }
-      this.dialogFormVisible = false
-      this.$notify({
-        title: '成功',
-        message: '更新成功',
-        type: 'success',
-        duration: 2000
       })
     },
-    handleDelete(index) {
-      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+    handleDelete(pid) {
+      this.$confirm('此操作将永久删除该学生, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.list.splice(index, 1)
-        this.$storage.set('dailyList', this.list)
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        deleteParticipation({ 'pid': pid }).then(res => {
+          if (res.data.data === 'success') {
+            this.getList()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          } else {
+            this.$message({
+              type: 'info',
+              message: '删除失败'
+            })
+          }
         })
       }).catch(() => {
         this.$message({
@@ -428,7 +412,7 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const filterVal = ['sno', 'sname', 'ssex', 'sclass', 'sprofession', 'time', 'status', 'note']
+        const filterVal = ['date', 'sname', 'sclass', 'sid', 'time', 'status', 'reason']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel(this.tHeader, data, 'table-list')
         this.downloadLoading = false

@@ -19,7 +19,7 @@ export function createParticipation(data) {
   return request({
     url: '/participation/create',
     method: 'post',
-    data
+    params: data
   })
 }
 
@@ -27,6 +27,13 @@ export function updateParticipation(data) {
   return request({
     url: '/participation/update',
     method: 'post',
-    data
+    params: data
+  })
+}
+export function deleteParticipation(data) {
+  return request({
+    url: '/participation/delete',
+    method: 'post',
+    params: data // 配置接口数据 一定要用params
   })
 }

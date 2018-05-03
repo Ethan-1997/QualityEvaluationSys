@@ -6,15 +6,17 @@
     </div>
     <div class="filter-container">
       <el-date-picker class="filter-item"
-        v-model="listQuery.time"
-        type="datetime"
-        placeholder="选择日期时间">
+        v-model="listQuery.ltime"
+        type="date"
+        format="yyyy-MM-dd"
+        placeholder="选择日期时间"
+        value-format="yyyy-MM-dd">
       </el-date-picker>
       <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
         <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sname" v-model="listQuery.sname">
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sid" v-model="listQuery.sid">
       </el-input>
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort" :placeholder="tableCol.order">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
@@ -28,9 +30,9 @@
 
     <el-table  :key='tableKey' :data="list" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.sno" width="80">
+      <el-table-column align="center" :label="tableCol.sid" width="80">
         <template slot-scope="scope">
-          <span>{{scope.row.sno}}</span>
+          <span>{{scope.row.sid}}</span>
         </template>
       </el-table-column>
       <el-table-column width="80px" align="center" :label="tableCol.sname">
@@ -43,30 +45,30 @@
           <span>{{scope.row.sclass}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px"  align="center" :label="tableCol.time">
+      <el-table-column width="100px"  align="center" :label="tableCol.ltime">
         <template slot-scope="scope">
-          <span >{{scope.row.time}}</span>
+          <span >{{scope.row.ltime}}</span>
         </template>
       </el-table-column>
-        <el-table-column width="100px" align="center" :label="tableCol.Lend">
+        <el-table-column width="100px" align="center" :label="tableCol.lday">
         <template slot-scope="scope">
-          <span>{{scope.row.Lend}}</span>
+          <span>{{scope.row.lday}}</span>
         </template>
       </el-table-column>
-      <el-table-column  :label="tableCol.Lreason" min-width="95">
+      <el-table-column  :label="tableCol.lreasion" min-width="95">
         <template slot-scope="scope">
-          <el-alert type="info" :closable="false">{{scope.row.Lreason}}</el-alert>
+          <el-alert title="" type="info" :closable="false">{{scope.row.lreasion}}</el-alert>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" :label="tableCol.Laprover" width="80">
+      <el-table-column class-name="status-col" :label="tableCol.lapprover" width="80">
         <template slot-scope="scope">
-          <el-tag>{{scope.row.Laprover}}</el-tag>
+          <el-tag>{{scope.row.lapprover}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.$index)">{{$t('table.delete')}}
+          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row.lid)">{{$t('table.delete')}}
           </el-button>
         </template>
       </el-table-column>
@@ -79,37 +81,35 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <!-- <el-form-item :label="tableCol[0]" prop="sno">
+        <!-- <el-form-item :label="tableCol[0]" prop="sid">
           <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
             <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
             </el-option>
           </el-select>
         </el-form-item> -->
+        <el-form-item :label="tableCol.sid" prop="sid">
+          <el-input v-model="temp.sid"></el-input>
+        </el-form-item>
         <el-form-item :label="tableCol.sname" prop="sname">
           <el-input v-model="temp.sname"></el-input>
         </el-form-item>
        
-        <el-form-item :label="tableCol.ssex" prop="sex">
-          <el-select class="filter-item" v-model="temp.ssex" placeholder="请选择">
-            <el-option v-for="item in  sexOptions" :key="item" :label="item" :value="item">
-            </el-option>
-          </el-select>
-        </el-form-item>
+        
         <el-form-item :label="tableCol.sclass" prop="sclass">
           <el-input v-model="temp.sclass"></el-input>
         </el-form-item>
-        <el-form-item :label="tableCol.Laprover" prop="Laprover">
-          <el-input v-model="temp.Laprover"></el-input>
+        <el-form-item :label="tableCol.lapprover" prop="lapprover">
+          <el-input v-model="temp.lapprover"></el-input>
         </el-form-item>
-         <el-form-item :label="tableCol.time" prop="time">
-          <el-date-picker v-model="temp.time"  format="yyyy-MM-dd" placeholder="请选择生日">
+         <el-form-item :label="tableCol.ltime" prop="ltime">
+          <el-date-picker v-model="temp.ltime"  format="yyyy-MM-dd" placeholder="请选择日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item :label="tableCol.Lend" prop="Lend">
-          <el-input v-model="temp.Lend"></el-input>
+        <el-form-item :label="tableCol.lday" prop="lday">
+          <el-input v-model="temp.lday"></el-input>
         </el-form-item>
-         <el-form-item :label="tableCol.Lreason" prop="Lreason">
-            <el-input v-model="temp.Lreason"  type="textarea" :autosize="{ minRows: 5, maxRows: 4}"></el-input>
+         <el-form-item :label="tableCol.lreasion" prop="lreasion">
+            <el-input v-model="temp.lreasion"  type="textarea" :autosize="{ minRows: 5, maxRows: 4}"></el-input>
         </el-form-item>
         
       </el-form>
@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import { fetchListLeave } from '@/api/leave'
+import { fetchListLeave, createLeave, updateLeave, deleteLeave } from '@/api/leave'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -144,14 +144,14 @@ export default {
     return {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
-        sno: '学号',
+        sid: '学号',
         sname: '姓名',
         ssex: '性别',
         sclass: '班级',
-        time: '请假时间',
-        Lend: '天数',
-        Lreason: '原因',
-        Laprover: '批准人',
+        ltime: '请假时间',
+        lday: '天数',
+        lreasion: '原因',
+        lapprover: '批准人',
         operator: '操作',
         order: '排序规则'
       },
@@ -163,11 +163,11 @@ export default {
         page: 1,
         limit: 20,
         sname: undefined,
-        time: undefined,
+        ltime: undefined,
         order: '+id',
         sclass: undefined
       },
-      classOptions: ['101', '102', '103', '104', '105', '106', '107', '108', '109'],
+      classOptions: ['vue.js', '大数据', 'javaweb'],
       sexOptions: ['男', '女'],
       deptOptions: ['javaweb', '大数据', '前端工程师'],
 
@@ -175,14 +175,14 @@ export default {
 
       showReviewer: false,
       temp: {
-        sno: undefined,
+        sid: undefined,
         sname: undefined,
         ssex: undefined,
         sclass: undefined,
-        time: undefined,
-        Lend: undefined,
-        Lreason: undefined,
-        Laprover: undefined
+        ltime: undefined,
+        lday: undefined,
+        lreasion: undefined,
+        lapprover: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -201,15 +201,15 @@ export default {
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
-      //  sno: undefined,
+      //  sid: undefined,
       //   sname: undefined,
       //   ssex: undefined,
       //   sclass: undefined,
-      //   time: undefined,
-      //   Lend: undefined,
-      //   Lreason: undefined,
-      //   Laprover: undefined
-      tHeader: ['sno', 'sname', 'ssex', 'sclass', 'time', 'Lend', 'Lreason', 'Laprover']
+      //   ltime: undefined,
+      //   lday: undefined,
+      //   lreasion: undefined,
+      //   lapprover: undefined
+      tHeader: ['sid', 'sname', 'sclass', 'ltime', 'lday', 'lreasion', 'lapprover']
     }
   },
   filters: {
@@ -224,12 +224,7 @@ export default {
 
   },
   created() {
-    if (this.$storage.get('leaveInit') === true) {
-      console.log(2)
-      this.list = this.$storage.get('leaveList')
-    } else {
-      this.getList()
-    }
+    this.getList()
   },
   methods: {
     selected(data) {
@@ -243,29 +238,26 @@ export default {
           duration: 2000
         })
       } else {
+        for (let j = 0; data.results[j] != null; j++) {
+          // 去掉导入内容的主键
+          createLeave(data.results[j]).then(res => {
+          })
+        }
+        this.getList()
         this.$message({
-          message: '操作成功',
+          message: '导入成功',
           type: 'success'
         })
-        console.log(this.list)
-        console.log(this.tableData)
-        console.log(this.list.length)
-        let j, len
-        for (j = 0, len = this.tableData.length; j < len; j++) {
-          this.list.push(this.tableData[j])
-        }
-        this.list.concat(this.tableData)
-        console.log(this.list.length)
       }
     },
     getList() {
       this.listLoading = true
+
       fetchListLeave(this.listQuery).then(response => {
         this.list = response.data.items
-        this.$storage.set('leaveInit', true)
-        this.$storage.set('leaveList', response.data.items)
         this.total = response.data.total
         this.listLoading = false
+        console.log(response.data.items)
       })
     },
     handleFilter() {
@@ -282,14 +274,14 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        sno: undefined,
+        sid: undefined,
         sname: undefined,
         ssex: undefined,
         sclass: undefined,
-        time: undefined,
-        Lend: undefined,
-        Lreason: undefined,
-        Laprover: undefined
+        ltime: undefined,
+        lday: undefined,
+        lreasion: undefined,
+        lapprover: undefined
       }
     },
     handleCreate() {
@@ -301,34 +293,29 @@ export default {
       })
     },
     createData() {
-      if (this.temp.sname === undefined || this.temp.ssex === undefined || this.temp.sclass === undefined || this.temp.time === undefined || this.temp.Lend === undefined || this.temp.Lreason === undefined) {
-        this.$notify({
-          title: '失败',
-          message: '请填写完整',
-          duration: 2000
-        })
-      } else {
-        const months = this.temp.time.getMonth() + 1
-        const times = this.temp.time.getFullYear() + '.' + months + '.' + this.temp.time.getDate()
-        this.list.push({
-          sno: '101',
-          sname: this.temp.sname,
-          ssex: this.temp.ssex,
-          sclass: this.temp.sclass,
-          Lend: this.temp.Lend,
-          Lreason: this.temp.Lreason, // 已到、迟到、请假、未到
-          Laprover: this.temp.Laprover,
-          time: times
-        })
-        this.$storage.set('leaveList', this.list)
-        this.$notify({
-          title: '成功',
-          message: '创建成功',
-          type: 'success',
-          duration: 2000
-        })
-      }
-      this.dialogFormVisible = false
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          createLeave(this.temp).then(res => {
+            if (res.data.data === 'success') {
+              this.getList()
+              this.dialogFormVisible = false
+              this.$notify({
+                title: '成功',
+                message: '创建成功',
+                type: 'success',
+                duration: 2000
+              })
+            } else {
+              this.$notify({
+                title: '失败',
+                message: '创建失败',
+                type: 'error',
+                duration: 2000
+              })
+            }
+          })
+        }
+      })
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
@@ -341,47 +328,48 @@ export default {
       })
     },
     updateData() {
-      const tempData = Object.assign({}, this.temp)
-      tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-      const oldtempData = Object.assign({}, this.oldtemp)
-      let times
-      if (tempData.time !== oldtempData.time) {
-        const months = tempData.time.getMonth() + 1
-        times = tempData.time.getFullYear() + '.' + months + '.' + tempData.time.getDate()
-      } else {
-        times = oldtempData.time
-      }
-      for (let i = 0; i < this.list.length; i++) {
-        if (this.list[i].time === oldtempData.time && this.list[i].id === oldtempData.id) {
-          this.list[i].sname = this.temp.sname
-          this.list[i].time = times
-          this.list[i].ssex = this.temp.ssex
-          this.list[i].sclass = this.temp.sclass
-          this.list[i].Lend = this.temp.Lend
-          this.list[i].Lreason = this.temp.Lreason
-          this.list[i].Laprover = this.temp.Laprover
-          this.$storage.set('leaveList', this.list)
-          break
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          updateLeave(tempData).then(() => {
+            for (const v of this.list) {
+              if (v.lid === this.temp.lid) {
+                const index = this.list.indexOf(v)
+                this.list.splice(index, 1, this.temp)
+                break
+              }
+            }
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
         }
-      }
-      this.dialogFormVisible = false
-      this.$notify({
-        title: '成功',
-        message: '更新成功',
-        type: 'success',
-        duration: 2000
       })
     },
-    handleDelete(index) {
-      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+    handleDelete(lid) {
+      this.$confirm('此操作将永久删除该学生, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.list.splice(index, 1)
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        deleteLeave({ 'lid': lid }).then(res => {
+          if (res.data.data === 'success') {
+            this.getList()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          } else {
+            this.$message({
+              type: 'info',
+              message: '删除失败'
+            })
+          }
         })
       }).catch(() => {
         this.$message({
@@ -390,7 +378,7 @@ export default {
         })
       })
     },
-    // sno: undefined,
+    // sid: undefined,
     //     sname: undefined,
     //     ssex: undefined,
     //     sclass: undefined,
@@ -401,7 +389,7 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const filterVal = ['sno', 'sname', 'ssex', 'sclass', 'time', 'Lend', 'Lreason', 'Laprover']
+        const filterVal = ['sid', 'sname', 'sclass', 'ltime', 'lday', 'lreasion', 'lapprover']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel(this.tHeader, data, 'table-list')
         this.downloadLoading = false
