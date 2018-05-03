@@ -5,11 +5,18 @@
       <span style="font-size:25px">重大事项管理</span>
     </div>
     <div class="filter-container">
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.Sclass" :placeholder="tableCol.Sclass">
+      <el-date-picker class="filter-item"
+        v-model="listQuery.time"
+        type="date"
+        format="yyyy-MM-dd"
+        placeholder="选择日期时间"
+        value-format="yyyy-MM-dd">
+      </el-date-picker>
+      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
         <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
-      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.Sname" v-model="listQuery.Sname">
+      <el-input @keyup.enter.native="handleFilter" style="width: 100px;" class="filter-item" :placeholder="tableCol.sid" v-model="listQuery.sid">
       </el-input>
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort"  :placeholder="tableCol.order">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
@@ -28,24 +35,24 @@
           <span>{{scope.row.time}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="80px" align="center" :label="tableCol.Sname">
+      <el-table-column width="80px" align="center" :label="tableCol.sname">
         <template slot-scope="scope">
-          <span>{{scope.row.Sname }}</span>
+          <span>{{scope.row.sname }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="80px" align="center" :label="tableCol.Sclass">
+      <el-table-column width="80px" align="center" :label="tableCol.sclass">
         <template slot-scope="scope">
-          <span>{{scope.row.Sclass}}</span>
+          <span>{{scope.row.sclass}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.Sid" width="80">
+      <el-table-column align="center" :label="tableCol.sid" width="80">
         <template slot-scope="scope">
-          <span>{{scope.row.Sid}}</span>
+          <span>{{scope.row.sid}}</span>
         </template>
       </el-table-column>
       <el-table-column min-width="150px" :label="tableCol.title">
         <template slot-scope="scope">
-          <el-alert type="warning" :closable="false">{{scope.row.title}}</el-alert>
+          <el-alert title="" type="warning" :closable="false">{{scope.row.title}}</el-alert>
         </template>
       </el-table-column>
       
@@ -53,7 +60,7 @@
       <el-table-column align="center" :label="tableCol.operator" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.$index)">{{$t('table.delete')}}
+          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row.oid)">{{$t('table.delete')}}
           </el-button>
         </template>
       </el-table-column>
@@ -66,39 +73,34 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <!-- <el-form-item :label="tableCol[0]" prop="Sid">
+        <!-- <el-form-item :label="tableCol[0]" prop="sid">
           <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
             <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
             </el-option>
           </el-select>
         </el-form-item> -->
-        <el-form-item :label="tableCol.Sname" prop="Sname">
-          <el-input v-model="temp.Sname"></el-input>
+        <el-form-item :label="tableCol.sid" prop="sid">
+          <el-input v-model="temp.sid"></el-input>
+        </el-form-item>
+        <el-form-item :label="tableCol.sname" prop="sname">
+          <el-input v-model="temp.sname"></el-input>
         </el-form-item>
        
-        <el-form-item :label="tableCol.ssex" prop="sex">
-           <el-select class="filter-item" v-model="temp.ssex" placeholder="请选择">
-            <el-option v-for="item in  sexOptions" :key="item" :label="item" :value="item">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="tableCol.Sclass" prop="Sclass">
-          <el-input v-model="temp.Sclass"></el-input>
+        
+        <el-form-item :label="tableCol.sclass" prop="sclass">
+          <el-input v-model="temp.sclass"></el-input>
         </el-form-item>
          <el-form-item :label="tableCol.time" prop="time">
-          <el-date-picker v-model="temp.time"  format="yyyy-MM-dd" placeholder="请选择时间">
+          <el-date-picker
+            v-model="temp.time"
+            type="date"
+            format="yyyy-MM-dd"
+            placeholder="选择日期时间"
+            value-format="yyyy-MM-dd">
           </el-date-picker>
         </el-form-item>
         <el-form-item :label="tableCol.title" prop="title">
           <el-input v-model="temp.title"></el-input>
-        </el-form-item>
-        <el-form-item :label="tableCol.content" prop="title">
-          <el-input
-            type="textarea"
-            :autosize="{ minRows: 5, maxRows: 6}"
-            placeholder="请输入内容"
-            v-model="temp.content">
-          </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -114,7 +116,7 @@
 </template>
 
 <script>
-import { fetchListGreat } from '@/api/otherImportant'
+import { fetchListGreat, createOtherImportant, updateOtherImportant, deleteOtherImportant } from '@/api/otherImportant'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -132,10 +134,10 @@ export default {
     return {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
-        Sid: '学号',
-        Sname: '姓名',
+        sid: '学号',
+        sname: '姓名',
         ssex: '性别',
-        Sclass: '班级',
+        sclass: '班级',
         title: '标题',
         content: '重大事项',
         time: '时间',
@@ -150,11 +152,12 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        Sname: undefined,
-        order: '+id',
-        Sclass: undefined
+        sid: undefined,
+        time: undefined,
+        sort: '-id',
+        sclass: undefined
       },
-      classOptions: ['101', '102', '103', '104', '105', '106', '107', '108', '109'],
+      classOptions: ['vue.js', '大数据', 'javaweb'],
       sexOptions: ['男', '女'],
       deptOptions: ['javaweb', '大数据', '前端工程师'],
 
@@ -162,10 +165,10 @@ export default {
 
       showReviewer: false,
       temp: {
-        Sid: undefined,
-        Sname: undefined,
+        sid: undefined,
+        sname: undefined,
         ssex: undefined,
-        Sclass: undefined,
+        sclass: undefined,
         title: undefined,
         content: undefined,
         time: undefined
@@ -186,14 +189,14 @@ export default {
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
-      // Sid: undefined,
-      //   Sname: undefined,
+      // sid: undefined,
+      //   sname: undefined,
       //   ssex: undefined,
-      //   Sclass: undefined,
+      //   sclass: undefined,
       //   title: undefined,
       //   content: undefined,
       //   time: undefined
-      tHeader: ['Sid', 'Sname', 'ssex', 'Sclass', 'title', 'content', 'time']
+      tHeader: ['sid', 'sname', 'sclass', 'title', 'time']
     }
   },
   filters: {
@@ -208,11 +211,7 @@ export default {
 
   },
   created() {
-    if (this.$storage.get('greatInit') === true) {
-      this.list = this.$storage.get('greatList')
-    } else {
-      this.getList()
-    }
+    this.getList()
   },
   methods: {
     selected(data) {
@@ -226,27 +225,22 @@ export default {
           duration: 2000
         })
       } else {
+        for (let j = 0; data.results[j] != null; j++) {
+          // 去掉导入内容的主键
+          createOtherImportant(data.results[j]).then(res => {
+          })
+        }
+        this.getList()
         this.$message({
-          message: '操作成功',
+          message: '导入成功',
           type: 'success'
         })
-        console.log(this.list)
-        console.log(this.tableData)
-        console.log(this.list.length)
-        let j, len
-        for (j = 0, len = this.tableData.length; j < len; j++) {
-          this.list.push(this.tableData[j])
-        }
-        this.list.concat(this.tableData)
-        console.log(this.list.length)
       }
     },
     getList() {
       this.listLoading = true
       fetchListGreat(this.listQuery).then(response => {
         this.list = response.data.items
-        this.$storage.set('greatInit', true)
-        this.$storage.set('greatList', response.data.items)
         this.total = response.data.total
         this.listLoading = false
       })
@@ -265,10 +259,10 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        Sid: undefined,
-        Sname: undefined,
+        sid: undefined,
+        sname: undefined,
         ssex: undefined,
-        Sclass: undefined,
+        sclass: undefined,
         title: undefined,
         content: undefined,
         time: undefined
@@ -283,34 +277,29 @@ export default {
       })
     },
     createData() {
-      console.log(this.temp.time)
-      if (this.temp.Sname === undefined || this.temp.ssex === undefined || this.temp.Sclass === undefined || this.temp.time === undefined || this.temp.title === undefined) {
-        this.$notify({
-          title: '失败',
-          message: '请填写完整',
-          duration: 2000
-        })
-      } else {
-        const months = this.temp.time.getMonth() + 1
-        const times = this.temp.time.getFullYear() + '.' + months + '.' + this.temp.time.getDate()
-        this.list.push({
-          Sid: '101',
-          Sname: this.temp.Sname,
-          ssex: this.temp.ssex,
-          Sclass: this.temp.Sclass,
-          title: this.temp.title,
-          content: this.temp.content,
-          time: times
-        })
-        this.$storage.set('greatList', this.list)
-        this.$notify({
-          title: '成功',
-          message: '创建成功',
-          type: 'success',
-          duration: 2000
-        })
-      }
-      this.dialogFormVisible = false
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          createOtherImportant(this.temp).then(res => {
+            if (res.data.data === 'success') {
+              this.getList()
+              this.dialogFormVisible = false
+              this.$notify({
+                title: '成功',
+                message: '创建成功',
+                type: 'success',
+                duration: 2000
+              })
+            } else {
+              this.$notify({
+                title: '失败',
+                message: '创建失败',
+                type: 'error',
+                duration: 2000
+              })
+            }
+          })
+        }
+      })
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
@@ -323,46 +312,48 @@ export default {
       })
     },
     updateData() {
-      const tempData = Object.assign({}, this.temp)
-      const oldtempData = Object.assign({}, this.oldtemp)
-      let times
-      if (tempData.time !== oldtempData.time) {
-        times = this.temp.time
-      } else {
-        times = oldtempData.time
-      }
-      for (let i = 0; i < this.list.length; i++) {
-        if (this.list[i].time === oldtempData.time && this.list[i].id === oldtempData.id) {
-          this.list[i].no = '101'
-          this.list[i].Sname = tempData.Sname
-          this.list[i].time = times
-          this.list[i].ssex = tempData.ssex
-          this.list[i].Sclass = tempData.Sclass
-          this.list[i].content = tempData.content // 已到、迟到、请假、未到
-          this.list[i].title = tempData.title
-          this.$storage.set('greatList', this.list)
-          break
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          updateOtherImportant(tempData).then(() => {
+            for (const v of this.list) {
+              if (v.oid === this.temp.oid) {
+                const index = this.list.indexOf(v)
+                this.list.splice(index, 1, this.temp)
+                break
+              }
+            }
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
         }
-      }
-      this.dialogFormVisible = false
-      this.$notify({
-        title: '成功',
-        message: '更新成功',
-        type: 'success',
-        duration: 2000
       })
     },
-    handleDelete(index) {
-      this.$confirm('此操作将永久删除该记录, 是否继续?', '提示', {
+    handleDelete(oid) {
+      this.$confirm('此操作将永久删除该学生, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.list.splice(index, 1)
-        this.$storage.set('greatList', this.list)
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        deleteOtherImportant({ 'oid': oid }).then(res => {
+          if (res.data.data === 'success') {
+            this.getList()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          } else {
+            this.$message({
+              type: 'info',
+              message: '删除失败'
+            })
+          }
         })
       }).catch(() => {
         this.$message({
@@ -375,7 +366,7 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const filterVal = ['Sid', 'Sname', 'ssex', 'Sclass', 'title', 'content', 'time']
+        const filterVal = ['sid', 'sname', 'sclass', 'title', 'time']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel(this.tHeader, data, 'table-list')
         this.downloadLoading = false
