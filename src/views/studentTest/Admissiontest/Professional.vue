@@ -115,7 +115,9 @@
 
 <script>
     import { format } from '@/utils/time'
-    import fetchList from '@/api/Professional'
+    import { fetchListTest } from '@/api/testInformation'
+    import { getCurrentUser } from '@/api/user'
+    import { updateStudentGrade, fetchListStudentGrade } from '@/api/StudentGrade'
     const FILL = '___'
 
     // eslint-disable-next-line
@@ -161,20 +163,6 @@
       created() {
         this.getList()
         this.start()
-        this.init()
-      },
-      mounted() {
-        const id = this.$route.params.id
-        if (id === '1') {
-          return 0
-        } else {
-          this.exam = this.$storage.get('exam-' + id)
-          this.questions = this.exam.questions
-        }
-        this.question = this.questions[this.questionIndex]
-        // 测试
-    
-        // 测试
       },
       destroyed() {
         clearInterval(this.timer)
@@ -212,12 +200,33 @@
             single_success: single_success,
             judgment_success: judgment_success
           }
-          this.$storage.set('professional', professional)// 专业能力测试数据
-          console.log(professional)
+          const data = {
+            Sid: this.Sid
+          }
+          fetchListStudentGrade(data).then(response => {
+            const s = response.data.items[0]
+            s.sstatus = s.sstatus + 33
+            if (s.sstatus === 99) {
+              s.sstatus = 100
+            }
+            s.professional = JSON.stringify(professional)
+            updateStudentGrade(s)
+          })
         },
         getList() {
-          fetchList().then(Response => {
-            this.questions = Response.data.items
+          getCurrentUser().then(response => {
+            this.Sid = response.data.user.sid
+          })
+          const data = {
+            Tid: 'SystemTest-PRO-1'
+          }
+          fetchListTest(data).then(response => {
+            const exam = response.data.item
+            this.questions = JSON.parse(exam.tquestion)
+            this.question = this.questions[this.questionIndex]
+            this.init()
+            console.log(this.questions, this.question)
+            // console.log(this.list)
           })
         },
         init() {

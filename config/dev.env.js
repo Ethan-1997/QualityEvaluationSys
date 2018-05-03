@@ -3,3 +3,4 @@ module.exports = {
 	ENV_CONFIG: '"dev"',
 	BASE_API: '"http://192.168.10.104:8080"'
 }
+ 

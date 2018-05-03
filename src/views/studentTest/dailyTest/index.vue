@@ -8,22 +8,17 @@
                 <el-table style="width: 100%" :data="dailyTest">
                 <el-table-column label="试卷名称" width="180">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.name }}</span>
+                        <span>{{ scope.row.tname }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="上传日期" width="280">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.date }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="类型">
-                    <template slot-scope="scope">
-                        <span>{{scope.row.radio}}</span>
+                        <span>{{ scope.row.tdate }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="状态">
                     <template slot-scope="scope">
-                        <span>{{scope.row.state}}</span>
+                        <span>{{scope.row.sstate}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
@@ -47,25 +42,40 @@
 </div>
 </template>
 <script>
-    export default {
-      data() {
-        return {
-          visible2: false,
-          dailyTest: []
-        }
-      },
-      mounted() {
-        this.init()
-      },
-      methods: {
-        init() {
-          this.dailyTest = this.$storage.get('midtest')
-        },
-        goTest(row) {
-          this.$router.push({ path: '/tests/' + row.id })
-        }
-      }
+import { fetchListStudentTest } from '@/api/StudentTest'
+import { getCurrentUser } from '@/api/user'
+export default {
+  data() {
+    return {
+      visible2: false,
+      dailyTest: []
     }
+  },
+  mounted() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      getCurrentUser().then(response => {
+        const data = {
+          sid: response.data.user.sid
+        }
+        fetchListStudentTest(data).then(response => {
+          const temp = response.data.items
+          console.log(temp, response.data.items)
+          for (const daily of temp) {
+            if (daily.display === 1) {
+              this.dailyTest.push(daily)
+            }
+          }
+        })
+      })
+    },
+    goTest(row) {
+      this.$router.push({ path: '/tests/' + row.tid + '/', params: { tid: row.tid, sid: row.sid }})
+    }
+  }
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
