@@ -5,20 +5,18 @@
       <span style="font-size:25px">作业管理</span>
     </div>
     <div class="filter-container">
-      <el-select clearable style="width: 150px" class="filter-item" v-model="listQuery.Cid" placeholder="请选择班级">
-        <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="请输标题" v-model="listQuery.title">
+      </el-input>
+      <el-select clearable style="width: 130px" class="filter-item" v-model="listQuery.Cid" placeholder="请选择班级">
+        <el-option v-for="item in classOptions" :key="item" :label="item.cname" :value="item.cid">
         </el-option>
       </el-select>
-      <el-select clearable style="width: 150px" class="filter-item" v-model="listQuery.author" placeholder="请选择老师">
+      <el-select clearable style="width: 130px" class="filter-item" v-model="listQuery.author" placeholder="请选择老师">
         <el-option v-for="item in authorOptions" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
-      <el-select clearable style="width: 150px" class="filter-item" v-model="listQuery.status" placeholder="请选择状态">
-        <el-option v-for="item in statusOptions" :key="item.key" :label="item.label" :value="item.key">
-        </el-option>
-      </el-select>
-      <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
+      <el-select @change='handleFilter' style="width: 13d0px" class="filter-item" v-model="listQuery.sort">
+        <el-option v-for="item in sortOptions" :key="item":label="item.label" :value="item.key">
         </el-option>
       </el-select>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
@@ -29,29 +27,29 @@
 
     <el-table  :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.id" width="65">
-        <template slot-scope="scope">
-          <span>{{scope.row.id}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="100px" align="center" :label="tableCol.title">
+      <el-table-column width="150px" align="center" :label="tableCol.title">
         <template slot-scope="scope">
           <span>{{scope.row.title }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" align="center" :label="tableCol.startTime">
+      <el-table-column width="180px" align="center" :label="tableCol.startTime">
         <template slot-scope="scope">
-         <span>{{scope.row.startTime}}</span>
+         <span>{{scope.row.starttime}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="100px" align="center" :label="tableCol.endTime">
+      <el-table-column align="center" label="内容">
         <template slot-scope="scope">
-          <span>{{scope.row.endTime}}</span>
+          <el-alert title="" type="info" :closable="false">{{scope.row.content }}</el-alert>
         </template>
       </el-table-column>
-      <el-table-column width="100px"  align="center" :label="tableCol.Cid">
+      <el-table-column width="180px" align="center" :label="tableCol.endTime">
         <template slot-scope="scope">
-          <span >{{scope.row.Cid}}</span>
+          <span>{{scope.row.endtime}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column width="100px"  align="center" label="班级">
+        <template slot-scope="scope">
+          <span >{{scope.row.cname}}</span>
         </template>
       </el-table-column>
       <el-table-column width="80px"  align="center"  :label="tableCol.author">
@@ -59,11 +57,15 @@
           <span>{{scope.row.author}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="250" class-name="small-padding fixed-width">
+      <el-table-column width="150px"  align="center"  label="上交进度">
         <template slot-scope="scope">
-          <el-button type="info" size="mini" @click="handledatail(scope.row)">详情</el-button>
+          <el-progress :percentage="scope.row.submit/scope.row.sum*100" :show-text="false"></el-progress><span>{{scope.row.submit}}/{{scope.row.sum}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="操作" width="180px" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.$index)">{{$t('table.delete')}}
+          <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row.wid)">{{$t('table.delete')}}
           </el-button>
         </template>
       </el-table-column>
@@ -90,8 +92,8 @@
           </el-col>
           <el-col :span="12">
              <el-form-item :label="tableCol.Cid" prop="Cid">
-              <el-select class="filter-item" v-model="temp.Cid" placeholder="请选择班级">
-                <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
+              <el-select class="filter-item" v-model="temp.cid" placeholder="请选择班级">
+                <el-option v-for="item in classOptions" :key="item" :label="item.cname" :value="item.cid">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -100,13 +102,13 @@
          <el-row :gutter="20">
            <el-col :span="12">
              <el-form-item :label="tableCol.startTime"  prop="startTime">
-              <el-date-picker v-model="temp.startTime"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" placeholder="请选择">
+              <el-date-picker v-model="temp.starttime" type="datetime"  format="yyyy-MM-dd HH:mm:ss"  value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择">
               </el-date-picker>
             </el-form-item>
            </el-col>
            <el-col :span="12">
              <el-form-item :label="tableCol.endTime" prop="endTime">
-              <el-date-picker v-model="temp.endTime"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" placeholder="请选择">
+              <el-date-picker v-model="temp.endtime"  type="datetime"  format="yyyy-MM-dd HH:mm:ss"  value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择">
               </el-date-picker>
             </el-form-item>
            </el-col>
@@ -146,14 +148,15 @@
         <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
         <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
       </div>
-      <input type="hidden"  v-model="temp.id"/>
     </el-dialog>
     </el-card>
   </div>
 </template>
 
 <script>
-import { createWork, updateWork, fetchListWork } from '@/api/work'
+import { createWorkInfo, updateWorkInfo, fetchWorkInfoList, deleteWorkInfo } from '@/api/work'
+import { fetchList } from '@/api/class'
+import { getStatisticsByWid } from '@/api/studentwork'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -177,7 +180,6 @@ export default {
         status: '状态',
         title: '标题', // 文章题目
         content: '内容', // 文章内容
-        id: 'id',
         startTime: '开始时间',
         endTime: '结束时间',
         submitTime: '提交时间',
@@ -194,30 +196,25 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
+        title: undefined,
         author: undefined,
         status: undefined,
-        order: '+id',
-        Cid: undefined,
-        course: undefined
+        cid: undefined
       },
-      classOptions: ['101', '102', '103', '104', '105', '106', '107', '108', '109'],
+      classOptions: null,
       authorOptions: ['王老师', '应老师', '曹老师'],
-      statusOptions: [{ label: '草稿', key: 'draft' }, { label: '发布', key: 'published' }],
       sortOptions: [{ label: '升序排序', key: '+id' }, { label: '降序排序', key: '-id' }],
-      courseOptions: ['javaweb', '大数据', '云计算'],
       showReviewer: false,
       temp: {
-        status: 'draft',
         title: undefined, // 文章题目
         content: undefined, // 文章内容
-        id: undefined,
         startTime: undefined,
         endTime: undefined,
-        submitTime: undefined,
-        history: undefined,
-        annex: undefined,
-        class: undefined,
-        author: undefined
+        cid: undefined,
+        cname: undefined,
+        author: undefined,
+        sum: null,
+        submit: null
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -230,16 +227,21 @@ export default {
       rules: {
         type: [{ required: true, message: 'type is required', trigger: 'change' }],
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
+        title: [{ required: true, message: '请输入标题', trigger: 'blur' }]
       },
       downloadLoading: false,
       tableData: null,
       tableHeader: null,
-      tHeader: ['status', 'title', 'content', 'id', 'startTime', 'endTime', 'submitTime', 'history', 'annex', 'class', 'author']
+      tHeader: ['title', 'starttime', 'content', 'endtime', 'cid', 'cname', 'author'],
+      wid: null
     }
   },
   created() {
     this.getList()
+    fetchList().then(res => {
+      this.classOptions = res.data.items
+    })
+    // classOptions
   },
   methods: {
     handlePreview(file) {
@@ -273,23 +275,30 @@ export default {
           duration: 2000
         })
       } else {
+        for (let j = 0; data.results[j] != null; j++) {
+          // 去掉导入内容的主键
+          createWorkInfo(data.results[j]).then(res => {
+          })
+        }
+        this.getList()
         this.$message({
-          message: '操作成功',
+          message: '导入成功',
           type: 'success'
         })
-        let j, len
-        for (j = 0, len = this.tableData.length; j < len; j++) {
-          this.list.push(this.tableData[j])
-        }
-        this.list.concat(this.tableData)
       }
     },
     getList() {
       this.listLoading = true
-      fetchListWork(this.listQuery).then(response => {
+      fetchWorkInfoList(this.listQuery).then(response => {
         this.list = response.data.items
-        this.total = response.data.total
         this.listLoading = false
+        for (let i = 0; i < this.list.length; i++) {
+          this.wid = this.list[i].wid
+          getStatisticsByWid({ wid: this.wid }).then(response => {
+            this.list[i].submit = response.data.complete
+            this.list[i].sum = response.data.total
+          })
+        }
       })
     },
     handleFilter() {
@@ -306,17 +315,12 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        status: 'draft',
         title: undefined, // 文章题目
         content: undefined, // 文章内容
-        id: undefined,
         startTime: undefined,
         endTime: undefined,
-        submitTime: undefined,
-        submitStatus: '未提交',
-        history: undefined,
-        annex: [],
-        class: undefined,
+        cid: undefined,
+        cname: undefined,
         author: undefined
       }
     },
@@ -331,28 +335,33 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 1) + 1029 // mock a id
-          createWork(this.temp).then(() => {
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
+          for (let i = 0; i < this.classOptions.length; i++) {
+            if (this.classOptions[i].cid === this.temp.cid) {
+              this.temp.cname = this.classOptions[i].cname
+            }
+          }
+          console.log(this.temp)
+          createWorkInfo(this.temp).then(res => {
+            if (res.data.data === 'success') {
+              this.getList()
+              this.dialogFormVisible = false
+              this.$notify({
+                title: '成功',
+                message: '创建成功',
+                type: 'success',
+                duration: 2000
+              })
+            } else {
+              this.$notify({
+                title: '失败',
+                message: '创建失败',
+                type: 'error',
+                duration: 2000
+              })
+            }
           })
         }
       })
-      this.list.push({
-        id: this.temp.id,
-        title: this.temp.title,
-        startTime: this.temp.startTime,
-        endTime: this.temp.endTime,
-        Cid: this.temp.Cid,
-        status: this.temp.status,
-        author: this.temp.author
-      })
-      this.$storage.set('worklist', this.list)
     },
     handledatail(row) {
       this.$storage.set('workCol', row)
@@ -371,15 +380,19 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          for (let i = 0; i < this.classOptions.length; i++) {
+            if (this.classOptions[i].cid === this.temp.cid) {
+              this.temp.cname = this.classOptions[i].cname
+            }
+          }
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateWork(tempData).then(() => {
+          updateWorkInfo(tempData).then(() => {
             for (const v of this.list) {
-              if (v.id === this.temp.id) {
+              if (v.wid === this.temp.wid) {
                 const index = this.list.indexOf(v)
                 console.log(this.temp)
                 this.list.splice(index, 1, this.temp)
-                this.$storage.set('worklist', this.list)
                 break
               }
             }
@@ -395,17 +408,25 @@ export default {
         }
       })
     },
-    handleDelete(index) {
+    handleDelete(wid) {
       this.$confirm('是否删除该作业?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.list.splice(index, 1)
-        this.$storage.set('worklist', this.list)
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+        deleteWorkInfo({ 'wid': wid }).then(res => {
+          if (res.data.data === 'success') {
+            this.getList()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+          } else {
+            this.$message({
+              type: 'info',
+              message: '删除失败'
+            })
+          }
         })
       }).catch(() => {
         this.$message({

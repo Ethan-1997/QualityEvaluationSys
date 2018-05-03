@@ -8,26 +8,25 @@
               <span><svg-icon icon-class="form" />&nbsp;学生作业</span>
             </div>
             <el-table :data="taskData" style="width:94%;margin:0px auto;font-size:16px" :row-class-name="tableRowClassName">
-                  <el-table-column align="center" label="序号" width="65"  :index="indexMethod" >  
-                    <template slot-scope="scope">
-                        <span> {{scope.row.id}}</span>
-                    </template> 
-                  </el-table-column>
-                  <el-table-column label="任务" >
+                  <el-table-column label="作业" >
                     <template slot-scope="scope">
                         <span>{{scope.row.title}}</span>&nbsp;
                         <el-button type="primary" plain size="mini" @click="openTaskDetail(scope.row)">{{'详情'}}</el-button>
                     </template> 
                   </el-table-column>
+                  <el-table-column label="开始时间" width="200" align="center"> 
+                    <template slot-scope="scope">
+                      <el-alert :title="scope.row.starttime" type="info" :closable="false"></el-alert>
+                    </template>      
+                  </el-table-column>
                   <el-table-column label="截止时间" width="200" align="center"> 
                     <template slot-scope="scope">
-                      <i class="el-icon-time"></i>
-                        <span>{{scope.row.endTime}}</span>
+                      <el-alert :title="scope.row.endtime" type="info" :closable="false"></el-alert>
                     </template>      
                   </el-table-column>
                   <el-table-column label="提交状态" prop="submitStatus" width="120" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
                     <template slot-scope="scope">
-                        <el-button :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'" @click="openUploadTask(scope.row)">{{scope.row.submitStatus}}</el-button>
+                        <el-button :type="scope.row.submitstatus === '已提交' ? 'success' : 'warning'" @click="openUploadTask(scope.row)">{{scope.row.submitstatus === '已提交' ? '已提交' : '未提交'}}</el-button>
                     </template>   
                   </el-table-column>
                 </el-table>
@@ -81,7 +80,9 @@
   </div>
 </template>
 <script>
-import { fetchListWork } from '@/api/work'
+import { fetchWorkInfoList } from '@/api/work'
+import { fetchStudentWorkList } from '@/api/studentwork'
+import { getToken } from '@/api/qiniu'
 import storage from '@/utils/storage'
 export default {
 
@@ -100,19 +101,16 @@ export default {
     }
   },
   created() {
-    if (this.$storage.get('worklist') !== null) {
-      this.taskData = this.$storage.get('worklist')
-      console.log(2)
-      console.log(this.$storage.get('worklist'))
-    } else {
-      this.getList()
-    }
+    this.getList()
   },
   methods: {
     getList() {
-      fetchListWork().then(Response => {
-        this.taskData = Response.data.taskData
+      fetchWorkInfoList().then(Response => {
+        this.taskData = Response.data.items
         console.log(this.taskData)
+      })
+      fetchStudentWorkList().then(Response => {
+        console.log(Response.data.items)
       })
     },
     filterTaskTag(value, row) {
@@ -130,7 +128,7 @@ export default {
       this.temp = Object.assign({}, row) // copy obj
       this.taskTitle = this.temp.title
       this.taskAuthor = this.temp.author
-      this.taskFinishedTime = this.temp.endTime
+      this.taskFinishedTime = this.temp.endtime
       this.taskDetailText = this.temp.content
       this.taskDetail = true
     },
@@ -153,6 +151,9 @@ export default {
           if (this.fileList.length !== 0) {
             v.submitStatus = '已提交'
 
+            getToken().then(res => {
+              console.log(res.data)
+            })
             this.$notify({
               title: '成功',
               message: '上传成功',
