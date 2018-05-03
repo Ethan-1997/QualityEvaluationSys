@@ -4,7 +4,7 @@
       <el-col :span="24">
         <el-card>
           <div slot="header">
-            <span style="font-size:25px">学中综合评定</span>
+            <span style="font-size:25px">项目经理面试评定</span>
           </div>
           <el-table :data="reviewTable" border style="width: 100%">
             <el-table-column prop="name" width="200px" label="班级" align="center">
@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     goToDeatil(row) {
-      this.$router.push({ name: 'midTeacherReview' })
+      this.$router.push({ name: 'projectManagerReview' })
     }
   }
 }

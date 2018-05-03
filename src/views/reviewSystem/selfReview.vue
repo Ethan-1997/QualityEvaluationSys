@@ -33,7 +33,7 @@
                 <el-table-column label="自评成绩" fixed="right" align="center">
                   <template slot-scope="scope">
                     <div style="width:100%;padding:0px 10px">
-                      <el-slider v-model="scope.row.projectRate" :step="10" show-stops></el-slider>
+                      <el-slider v-model="scope.row.projectRate"  show-input></el-slider>
                     </div>
                   </template>
                 </el-table-column>

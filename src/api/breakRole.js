@@ -37,3 +37,11 @@ export function deleteBreakRole(data) {
     params: data // 配置接口数据 一定要用params
   })
 }
+
+export function getBreakRole(query) {
+  return request({
+    url: '/breakrule/listBySid',
+    method: 'get',
+    params: query // 配置接口数据 一定要用params
+  })
+}

@@ -7,7 +7,7 @@
             <div slot="header" class="clearfix">
               <span style="font-size:25px">人事经理面试</span>
             </div>
-            <el-button :index="index" v-for="(buttonIndex,index) in studentFormData" :key="index" @click="setCarouselItem(index)" ref="studentSelect" style="width:9.3%;margin: 5px;line-height: 30px;text-align:center">{{buttonIndex.Sname}}</el-button>
+            <el-button :index="index" v-for="(buttonIndex,index) in studentFormData" :key="index" @click="setCarouselItem(index,buttonIndex.sid,buttonIndex.uno)" ref="studentSelect" style="width:9.3%;margin: 5px;line-height: 30px;text-align:center">{{buttonIndex.sname}}</el-button>
           </el-card>
         </template>
     </el-col>
@@ -20,12 +20,12 @@
               <el-row :gutter="20">
                 <el-col :span="24">
                   <el-card class="box-card-1">
-                    <div style="width:200px;height:200px;float:left"><img :src="studentFormData[index].Simage" ></div>
+                    <div style="width:200px;height:200px;float:left"><img :src="image" style="width:200px;height:200px;" ></div>
                       <div style="height:200px;float:left;margin:0 0 0 18px">
-                      <div style="height:50px;font-size:17px;line-height:50px"><svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;{{studentFormData[index].Sname}}</div>
-                      <div style="height:50px;font-size:17px;line-height:50px"><i class="el-icon-info"/>&nbsp;&nbsp;学号:&nbsp;&nbsp;{{studentFormData[index].Sno}}</div>
-                      <div style="height:50px;font-size:17px;line-height:50px"><i class="el-icon-star-on"/>&nbsp;&nbsp;性别:&nbsp;&nbsp;{{studentFormData[index].Ssex}}</div>
-                      <div style="height:50px;font-size:17px;line-height:50px"><svg-icon icon-class="peoples" />&nbsp;&nbsp;班级:&nbsp;&nbsp;{{studentFormData[index].Sclass}}</div>
+                      <div style="height:50px;font-size:17px;line-height:50px"><svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;<el-tag type="info" size="medium">{{studentFormData[index].sname}}</el-tag></div>
+                      <div style="height:50px;font-size:17px;line-height:50px"><i class="el-icon-info"/>&nbsp;&nbsp;学号:&nbsp;&nbsp;<el-tag type="info" size="medium">{{studentFormData[index].sid}}</el-tag></div>
+                      <div style="height:50px;font-size:17px;line-height:50px"><i class="el-icon-star-on"/>&nbsp;&nbsp;性别:&nbsp;&nbsp;<el-tag type="info" size="medium">{{studentFormData[index].ssex}}</el-tag></div>
+                      <div style="height:50px;font-size:17px;line-height:50px"><svg-icon icon-class="peoples" />&nbsp;&nbsp;班级:&nbsp;&nbsp;<el-tag type="info" size="medium">{{studentFormData[index].sclass}}</el-tag></div>
                     </div>
                   </el-card>
                 </el-col>
@@ -49,24 +49,24 @@
                       <el-card>
                         <el-row :gutter="20">
                           <el-col :span="7" :offset="3">
-                            <div style="font-size:16px">职场礼仪：<el-rate show-text v-model="studentFormData[index].developRate1"></el-rate></div>
+                            <div style="font-size:16px">职场礼仪：<el-rate show-text v-model="gradeList.grade1"></el-rate></div>
                           </el-col>
                           <el-col :span="7">
-                            <div style="font-size:16px">职业生涯规划：<el-rate show-text v-model="studentFormData[index].developRate2"></el-rate></div>
+                            <div style="font-size:16px">职业生涯规划：<el-rate show-text v-model="gradeList.grade2"></el-rate></div>
                           </el-col>
                           <el-col :span="7">
-                            <div style="font-size:16px">交际能力：<el-rate show-text v-model="studentFormData[index].developRate3"></el-rate></div>
+                            <div style="font-size:16px">交际能力：<el-rate show-text v-model="gradeList.grade3"></el-rate></div>
                           </el-col>
                         </el-row>
                         <el-row :gutter="20">
                           <el-col :span="7" :offset="3">
-                            <div style="font-size:16px">思维能力：<el-rate show-text v-model="studentFormData[index].daliyRate1"></el-rate></div>
+                            <div style="font-size:16px">思维能力：<el-rate show-text v-model="gradeList.grade4"></el-rate></div>
                           </el-col>
                           <el-col :span="7">
-                            <div style="font-size:16px">责任意识：<el-rate show-text v-model="studentFormData[index].daliyRate2"></el-rate></div>
+                            <div style="font-size:16px">责任意识：<el-rate show-text v-model="gradeList.grade5"></el-rate></div>
                           </el-col>
                           <el-col :span="7">
-                            <div style="font-size:16px">素质素养：<el-rate show-text v-model="studentFormData[index].daliyRate3"></el-rate></div>
+                            <div style="font-size:16px">素质素养：<el-rate show-text v-model="gradeList.grade6"></el-rate></div>
                           </el-col>
                         </el-row>
                       </el-card>
@@ -74,7 +74,7 @@
                   </el-row>
                   <el-row :gutter="20">
                     <el-col :span="24">
-                      <el-input type="textarea" :rows="8" placeholder="请输入您的评价" v-model="studentFormData[index].remark"></el-input>
+                      <el-input type="textarea" :rows="8" placeholder="请输入您的评价" v-model="gradeList.text"></el-input>
                     </el-col>
                   </el-row>
                   <el-row :gutter="20">
@@ -96,7 +96,9 @@
 </template>
 
 <script>
-import { getStudentData } from '@/api/student'
+import { getStudentByCid } from '@/api/student'
+import { fetchUser } from '@/api/user'
+import { fetchReviewGradeList, updateReviewGrade } from '@/api/reviewgrade'
 export default {
   data() {
     return {
@@ -119,8 +121,26 @@ export default {
       activeNames: ['1'],
       studentImage: null,
       studentQuery: {
-        Sclass: 1
-      }
+        Cid: 1
+      },
+      gradeQuery: {
+        type: 'hr',
+        sid: null
+      },
+      imageQuery: {
+        uno: null
+      },
+      gradeList: {
+        grade1: null,
+        grade2: null,
+        grade3: null,
+        grade4: null,
+        grade5: null,
+        grade6: null,
+        text: null,
+        submitstatus: null
+      },
+      image: null
     }
   },
   created() {
@@ -139,11 +159,31 @@ export default {
       })
     },
     getStudentData() {
-      getStudentData(this.studentQuery).then(response => {
+      getStudentByCid(this.studentQuery).then(response => {
         this.studentFormData = response.data.items
+        this.gradeQuery.sid = response.data.items[0].sid
+        this.imageQuery.uno = response.data.items[0].uno
+        fetchReviewGradeList(this.gradeQuery).then(response => {
+          this.gradeList = response.data.items[0]
+        })
+        fetchUser(this.imageQuery).then(response => {
+          this.image = response.data.item.avatar
+        })
       })
     },
-    setCarouselItem(buttonIndex) {
+    getStudentGrade() {
+      fetchReviewGradeList(this.gradeQuery).then(response => {
+        this.gradeList = response.data.items[0]
+        console.log(this.gradeList)
+      })
+      fetchUser(this.imageQuery).then(response => {
+        this.image = response.data.item.avatar
+      })
+    },
+    setCarouselItem(buttonIndex, sid, uno) {
+      this.imageQuery.uno = uno
+      this.gradeQuery.sid = sid
+      this.getStudentGrade()
       this.index = buttonIndex
       this.player = this.$refs.player.dp
       this.player.switchVideo({
@@ -151,23 +191,26 @@ export default {
       })
     },
     saveButton() {
+      console.log(this.gradeList)
       if (
-        this.studentFormData[this.index].studyRate1.value !== 0 &&
-        this.studentFormData[this.index].studyRate2.value !== 0 &&
-        this.studentFormData[this.index].studyRate3.value !== 0 &&
-        this.studentFormData[this.index].developRate1.value !== 0 &&
-        this.studentFormData[this.index].developRate2.value !== 0 &&
-        this.studentFormData[this.index].developRate3.value !== 0 &&
-        this.studentFormData[this.index].daliyRate1.value !== 0 &&
-        this.studentFormData[this.index].daliyRate2.value !== 0 &&
-        this.studentFormData[this.index].daliyRate3.value !== 0 &&
-        this.studentFormData[this.index].remark !== ''
+        this.gradeList.grade1 !== 0 &&
+        this.gradeList.grade2 !== 0 &&
+        this.gradeList.grade3 !== 0 &&
+        this.gradeList.grade4 !== 0 &&
+        this.gradeList.grade5 !== 0 &&
+        this.gradeList.grade6 !== 0 &&
+        this.gradeList.text !== ''
       ) {
-        this.$refs.studentSelect[this.index].type = 'primary'
         this.$notify({
           title: '成功',
           message: '保存成功',
           type: 'success'
+        })
+        this.gradeList.submitstatus = '已评定'
+        updateReviewGrade(this.gradeList).then(res => {
+          if (res.data.data === 'success') {
+            console.log('success')
+          }
         })
       } else {
         this.$alert('您还有内容未填写，请填写完整。', '提示', {

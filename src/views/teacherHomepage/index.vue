@@ -182,6 +182,7 @@
     import { fetchList } from '@/api/announcement'
     import { fetchListWork } from '@/api/work'
     import { mapGetters } from 'vuex'
+    
     import storage from '@/utils/storage'
     export default {
     
@@ -214,6 +215,7 @@
         ])
       },
       created() {
+        this.getList()
         this.getTaskData()
         this.getAnnouncementData()
         // if (this.$storage.get('worklist') !== null) {
@@ -225,6 +227,7 @@
         // }
       },
       methods: {
+    
         goToInformation() {
           this.$router.push({ path: '/teacherInformation/index' })
         },
