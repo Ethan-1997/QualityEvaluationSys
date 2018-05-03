@@ -237,8 +237,9 @@
       },
       methods: {
         getList() {
+          console.log(1)
           fetchListDaily().then(response => {
-            const date = new Date().getFullYear() + '/' + (+new Date().getMonth() + +1) + '/' + (+new Date().getDay() + +4)
+            const date = new Date().getFullYear() + '/' + (+new Date().getMonth() + +1) + '/' + (+new Date().getDay() - +1)
             this.dailyList = response.data.items
             const figure = response.data.total
             console.log(date)
