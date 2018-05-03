@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function fetchListTest(query) { // 根据Tno来查找TestInformation
+export function fetchListTest(query) { // 根据Tid来查找TestInformation
   return request({
-    url: '/test/list',
+    url: '/itest/get',
     method: 'get',
     params: query
   })
@@ -10,22 +10,22 @@ export function fetchListTest(query) { // 根据Tno来查找TestInformation
 
 export function createTest(data) { // 往TestInformation插入数据
   return request({
-    url: '/test/create',
+    url: '/itest/create',
     method: 'post',
-    params: data
+    data
   })
 }
 
 export function updateTest(data) { // 更新TestInformation数据，通过Tid
   return request({
-    url: '/test/update',
+    url: '/itest/update',
     method: 'post',
     params: data
   })
 }
 export function deleteTest(data) { // 根据Tid删除TestInformation里的数据
   return request({
-    url: '/test/delete',
+    url: '/itest/delete',
     method: 'post',
     params: data // 配置接口数据 一定要用params
   })

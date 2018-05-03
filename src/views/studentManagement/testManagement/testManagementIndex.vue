@@ -9,23 +9,35 @@
                 <el-table style="width: 100%" height="330" :data="exams">
                 <el-table-column label="试卷名称" width="130">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.name }}</span>
+                        <span>{{ scope.row.tname }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="类型">
+                <el-table-column label="类型"  width="150">
                     <template slot-scope="scope">
                       日常测试
                     </template>
                 </el-table-column>
-                <el-table-column label="创建日期" width="100">
+                <el-table-column label="选择班级" width="250">
+                  <template slot-scope="scope">
+                <el-select v-model="scope.row.cid" placeholder="Select">
+                  <el-option
+                    v-for="item in classlist"
+                    :key="item.cid"
+                    :label="item.cname"
+                    :value="item.cid">
+                  </el-option>
+                </el-select>
+                  </template>
+                </el-table-column>
+                <el-table-column label="创建日期" width="200">
                     <template slot-scope="scope">
-                        <span>{{ scope.row.date }}</span>
+                        <span>{{ scope.row.tdate }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" align="center" width="300px">
+                <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button type="success" @click="midissue(scope.row)" v-if="scope.row.display">发布</el-button>
-                        <el-button type="primary" @click="midcancel(scope.row)" v-if="scope.row.display===false">取消</el-button>
+                        <el-button type="success" @click="midissue(scope.row)" v-if="scope.row.tdisplay==='false'">发布</el-button>
+                        <el-button type="primary" @click="midcancel(scope.row)" v-if="scope.row.tdisplay==='true'">取消</el-button>
                         <el-button type="warning" @click="editTest(scope.row)">编辑</el-button>
                         <el-button type="danger"  @click.prevent="remove(scope.row)">删除</el-button>
                     </template>
@@ -47,19 +59,27 @@
 </template>
 
 <script>
-    import { deleteTest, updateTest } from '@/api/testInformation'
-    import { fetchListTeacherTest, deleteTeacherTest } from '@/api/TeacherTest'
-    import { createStudentTest, deleteStudentTest } from '@/api/StudentTest'
+    import { deleteTest } from '@/api/testInformation'
+    import { fetchListTeacherTest, deleteTeacherTest, updateTeacherTest } from '@/api/TeacherTest'
+    import { switchDisplay } from '@/api/StudentTest'
+    import { getCurrentUser } from '@/api/user'
+    import { fetchList } from '@/api/class'
     export default {
       data() {
         return {
+          classlist: [],
+          listQuery: {
+            page: 1,
+            limit: 20
+          },
           visible2: false,
           exams: [
           ],
           date: new Date(),
           midtest: [],
           type: '',
-          radio2: ''
+          radio2: '',
+          Tno: ''
         }
       },
       mounted() {
@@ -86,28 +106,37 @@
               duration: 2000
             })
           } else {
-            this.$router.push({ path: '/tests/' + row.Tid + '/edit' })
+            this.$router.push({ path: '/tests/' + row.tid + '/edit', params: { tid: row.tid }})
           }
         },
         getList() {
-          fetchListTeacherTest(this.$route.params.Tno).then(response => {
-            this.exams = response.data.items
+          getCurrentUser().then(response => {
+            this.Tno = response.data.user.tno
+            console.log(this.Tno)
+            const data = {
+              Tno: this.Tno
+            }
+            fetchListTeacherTest(data).then(response => {
+              this.exams = response.data.item
+              console.log(234)
+              console.log(this.exams)
+              fetchList(this.listQuery).then(response => {
+                this.classlist = response.data.items
+                console.log(this.classlist)
+              })
             // console.log(this.list)
+            })
           })
         },
         midissue(data) {
           const infor = {
-            Tid: data.Tid,
-            Sid: data.Sid,
-            name: data.name,
-            date: data.date,
-            state: '未完成',
-            radio: '日常',
-            gread: null
+            cid: data.cid,
+            tid: data.tid,
+            status: 1
           }
-          this.data.display = false
-          updateTest(data)
-          createStudentTest(infor).then(res => {
+          data.tdisplay = 'true'
+          switchDisplay(infor)
+          updateTeacherTest(data).then(res => {
             if (res.data.data === 'success') {
               this.getList()
               this.dialogFormVisible = false
@@ -128,22 +157,27 @@
           })
         },
         midcancel(data) {
-          this.data.display = true
-          updateTest(data)
-          deleteStudentTest(data.Tid).then(res => {
+          const infor = {
+            Cid: data.cid,
+            Tid: data.tid,
+            status: 0
+          }
+          data.tdisplay = 'false'
+          switchDisplay(infor)
+          updateTeacherTest(data).then(res => {
             if (res.data.data === 'success') {
               this.getList()
               this.dialogFormVisible = false
               this.$notify({
                 title: '成功',
-                message: '取消成功',
+                message: '创建成功',
                 type: 'success',
                 duration: 2000
               })
             } else {
               this.$notify({
                 title: '失败',
-                message: '取消失败',
+                message: '创建失败',
                 type: 'error',
                 duration: 2000
               })

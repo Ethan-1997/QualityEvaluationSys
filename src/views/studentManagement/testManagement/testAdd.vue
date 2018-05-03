@@ -91,10 +91,10 @@
         </el-card>
     </div>
 </template>
-
 <script>
     import { fetchListTest, createTest, updateTest } from '@/api/testInformation'
     import { createTeacherTest, updateTeacherTest } from '@/api/TeacherTest'
+    import { getCurrentUser } from '@/api/user'
     // eslint-disable-next-line
     Array.prototype.contains = function (obj) {
       var i = this.length
@@ -113,14 +113,15 @@
     export default {
       data() {
         return {
+          Tno: '',
+          Cid: '',
           isEdit: false,
+          isAdd: true,
           date: new Date(),
           exam: {
+            id: new Date().getTime(),
             name: '未命名',
-            display: true,
-            questions: [],
-            isAdd: true,
-            state: '未完成'
+            questions: []
           },
           question: null, // 当前题目
           options: []
@@ -132,23 +133,46 @@
         }
       },
       mounted() {
-        if (this.$route.params.Tid) {
-          this.getList()
-        }
+        console.log(this.exam.questions)
+        this.getListTno()
+        this.getList()
       },
       methods: {
+        getListTno() {
+          getCurrentUser().then(response => {
+            this.Tno = response.data.user.tno
+            this.Cid = response.data.user.cid
+            console.log(this.Tno)
+          })
+        },
         getList() { // 获取试卷信息
-          fetchListTest().then(response => { // 学生学号
-            this.exam = response.data.items
-            // console.log(this.list)
-          })
+          if (this.$route.params.tid) {
+            this.isAdd = false
+            const data = {
+              Tid: this.$route.params.tid
+            }
+            fetchListTest(data).then(response => {
+              const exam = response.data.item
+              console.log(response.data.item)
+              this.exam.id = exam.tid
+              this.exam.name = exam.tname
+              this.exam.questions = JSON.parse(exam.tquestion)
+              // console.log(this.list)
+            })
+            // const data = {
+            //   Tid: 1525347980238
+            // }
+            // fetchListTest(data).then(response => {
+            //   const exam = response.data.item
+            //   this.exam.id = exam.tid
+            //   this.exam.name = exam.tname
+            //   this.exam.questions = JSON.parse(exam.toption)
+            //   console.log(this.exam)
+            //   // console.log(this.list)
+            // })
+          }
         },
-        getListStudentTest() { // 获取试卷信息
-          fetchListTest().then(response => { // 学生学号
-            this.exams = response.data.items
-            // console.log(this.list)
-          })
-        },
+    
         finish() {
           const question = {
             id: new Date().getTime(), // TODO
@@ -171,7 +195,7 @@
           } else {
             this.exam.questions.push(question)
           }
-          console.log(this.exam.questions)
+          console.log(this.exam)
           this.question = null
           this.save()
         },
@@ -281,25 +305,30 @@
           }
         },
         save() {
-          this.$storage.set('tests-' + this.exam.id, this.exam)
-          console.log(this.exam)
+          updateTest(this.exam)
         },
         test() {
           // this.$storage.set('tests-' + this.exam.id, this.exam)
           // console.log(this.exam)
           const exams = {
-            Tno: this.$route.params.Tno,
-            Tid: this.exam.Tid,
-            name: this.exam.name,
-            date: this.date.getFullYear() + '/' + (+this.date.getMonth() + +1) + '/' + this.date.getDate()
+            Tno: this.Tno,
+            Tid: this.exam.id,
+            Tname: this.exam.name,
+            Tdate: this.date.getFullYear() + '/' + (+this.date.getMonth() + +1) + '/' + this.date.getDate(),
+            Tdisplay: 'false',
+            Cid: this.Cid
           }
-          this.exam.testType = '日常'
-          if (this.exam.isAdd === true) {
-            createTeacherTest(exams)
-            // this.$storage.set('exams', exams)
-            // console.log(this.exam.id)
-            this.exam.isAdd = false
-            createTest(this.exam).then(res => {
+          console.log(223)
+          console.log(this.exam)
+          const exam = {
+            Tid: this.exam.id,
+            Tname: this.exam.name,
+            Tquestion: JSON.stringify(this.exam.questions),
+            Ttype: '日常'
+          }
+          console.log(this.isAdd)
+          if (this.isAdd) {
+            createTeacherTest(exams).then(res => {
               if (res.data.data === 'success') {
                 this.getList()
                 this.dialogFormVisible = false
@@ -318,9 +347,12 @@
                 })
               }
             })
+            // this.$storage.set('exams', exams)
+            // console.log(this.exam.id)
+            createTest(exam)
           } else {
             updateTeacherTest(exams)
-            updateTest(this.exam).then(res => {
+            updateTest(exam).then(res => {
               if (res.data.data === 'success') {
                 this.getList()
                 this.dialogFormVisible = false

@@ -1,4 +1,5 @@
 import Mock from 'mockjs'
+import { createTest } from '@/api/testInformation'
 const List = []
 const count = 30
 const characterQuestionText = [
@@ -49,6 +50,15 @@ for (let i = 0; i < count; i++) {
     userAnswer: null
   }))
 }
+
+const temp = {
+  Tid: 'SystemTest-PDP-1',
+  Tname: '动物性格测试PDP-1',
+  Tquestion: JSON.stringify(List),
+  Ttype: '性格'
+}
+
+createTest(temp)
 
 export default {
   getList: () => {

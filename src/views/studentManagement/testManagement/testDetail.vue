@@ -198,24 +198,29 @@
       },
       created() {
         this.start()
-        this.init()
       },
       mounted() {
-        const id = this.$route.params.Tid
-        this.getList(id)
-        this.questions = this.exam.questions
-        this.question = this.questions[this.questionIndex]
+        // const id = this.$route.params.tid
+        // this.questions = this.exam.questions
         // 测试
-    
+        this.getList()
         // 测试
       },
       destroyed() {
         clearInterval(this.timer)
       },
       methods: {
-        getList(id) {
-          fetchListTest(id).then(response => {
-            this.exam = response.data.items
+        getList() {
+          console.log(this.$route.params.tid)
+          const data = {
+            Tid: this.$route.params.tid
+          }
+          fetchListTest(data).then(response => {
+            const exam = response.data.item
+            console.log(response.data.item)
+            this.questions = JSON.parse(exam.tquestion)
+            this.question = this.questions[this.questionIndex]
+            this.init()
             // console.log(this.list)
           })
         },
@@ -435,6 +440,7 @@
         },
         viewAnswer() {
           this.state = 'end'
+          console.log(this.q)
           this.endTime = new Date()
           this.updateTime()
           clearInterval(this.timer)

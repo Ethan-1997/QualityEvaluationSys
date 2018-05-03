@@ -115,7 +115,9 @@
 
 <script>
     import { format } from '@/utils/time'
-    import fetchList from '@/api/character'
+    import { fetchListTest } from '@/api/testInformation'
+    import { getCurrentUser } from '@/api/user'
+    import { updateStudentGrade, fetchListStudentGrade } from '@/api/StudentGrade'
     const FILL = '___'
 
     // eslint-disable-next-line
@@ -132,13 +134,15 @@
     export default {
       data() {
         return {
+          Sid: null,
           questionIndex: 0,
           questions: [],
           question: {},
           state: '', // 'start', 'end',
           startTime: null,
           endTime: null,
-          minute: 0
+          minute: 0,
+          test: null
         }
       },
       computed: {
@@ -260,7 +264,19 @@
             owl,
             chameleon
           ]
-          this.$storage.set('character', character) // 性格测试数据
+          const data = {
+            Sid: this.Sid
+          }
+          fetchListStudentGrade(data).then(response => {
+            const s = response.data.items[0]
+            s.sstatus = s.sstatus + 33
+            if (s.sstatus === 99) {
+              s.sstatus = 100
+            }
+            s.scharacter = JSON.stringify(character)
+            updateStudentGrade(s)
+          })
+          // 性格测试数据
         },
         startTimeStr() {
           return format(new Date(this.startTime), 'hh:mm')
@@ -269,36 +285,28 @@
       created() {
         this.getList()
         this.start()
-        this.init()
-      },
-      mounted() {
-        const id = this.$route.params.id
-        if (id === '1') {
-          return 0
-        } else {
-          this.exam = this.$storage.get('exam-' + id)
-          this.questions = this.exam.questions
-        }
-        this.question = this.questions[this.questionIndex]
-        // 测试
-    
-        // 测试
       },
       destroyed() {
         clearInterval(this.timer)
       },
       methods: {
         submit() {
-          this.$storage.set('ctest', true) // 是否完成答题
-          this.$storage.set('percentage', this.$storage.get('percentage') + 33)// 进度条
-          this.$storage.set('name', 'professional')//
-          this.$router.push({ name: 'admissionTestIndex' })
-
           this.PDP()
         },
         getList() {
-          fetchList().then(Response => {
-            this.questions = Response.data.items
+          getCurrentUser().then(response => {
+            this.Sid = response.data.user.sid
+          })
+          const data = {
+            Tid: 'SystemTest-PDP-1'
+          }
+          fetchListTest(data).then(response => {
+            const exam = response.data.item
+            this.questions = JSON.parse(exam.tquestion)
+            this.question = this.questions[this.questionIndex]
+            this.init()
+            console.log(this.questions, this.question)
+            // console.log(this.list)
           })
         },
         init() {

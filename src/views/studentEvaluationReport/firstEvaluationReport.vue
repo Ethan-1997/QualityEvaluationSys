@@ -214,7 +214,7 @@
                 </el-row>
                 <el-row :gutter="20" type="flex" ju40ify="center">
                   <div style="padding:0px 32px 16px 32px;">
-                    {{ firstReport[0].title }}
+                    <!-- {{ firstReport[0].title }} -->
                   </div>
                 </el-row>
               </el-card>
@@ -229,11 +229,13 @@
 <script>
 import CharacterTestGrade from './components/CharacterTestGrade'
 import ThinkingTestGrade from './components/ThinkingTestGrade'
-import { fetchListFirstReport } from '@/api/firstReport'
-import storage from '@/utils/storage'
+import { fetchListStudentGrade } from '@/api/StudentGrade'
+import { getCurrentUser } from '@/api/user'
 export default {
   data() {
     return {
+      Sid: null,
+      stduent: null,
       character: 0,
       firstReport: [],
       thinking: 0,
@@ -246,12 +248,12 @@ export default {
         score: 0
       },
 
-      thinkingData: storage.get('thinking_iitem'),
-      characterOneData: storage.get('character')[0],
-      characterTwoData: storage.get('character')[1],
-      characterThreeData: storage.get('character')[2],
-      characterFourData: storage.get('character')[3],
-      characterFiveData: storage.get('character')[4]
+      thinkingData: '',
+      characterOneData: '',
+      characterTwoData: '',
+      characterThreeData: '',
+      characterFourData: '',
+      characterFiveData: ''
     }
   },
   components: {
@@ -259,8 +261,7 @@ export default {
     ThinkingTestGrade
   },
   created() {
-    this.init()
-    console.log(this.professional)
+    this.getList()
     if (this.thinking < 14) {
       this.results = '优秀'
     } else if (this.thinking < 20) {
@@ -272,27 +273,24 @@ export default {
     }
   },
   methods: {
-    init() {
-      if (this.$storage.get('character') !== null) {
-        const chara = this.$storage.get('character')
-        let max = 0
-        for (let i = 1; i < chara.length; i++) {
-          if (max < chara[i]) {
-            max = chara[i]
-            this.character = i
-          }
-        }
-      }
-      console.log(this.character)
-      if (this.$storage.get('thinking') !== null) {
-        this.thinking = this.$storage.get('thinking')
-      }
-      if (this.$storage.get('professional') !== null) {
-        this.professional = this.$storage.get('professional')
-      }
-      fetchListFirstReport().then(Response => {
-        this.firstReport = Response.data.items
-        console.log(this.firstReport)
+    getList() {
+      getCurrentUser().then(response => {
+        const data = { Sid: response.data.user.sid }
+        fetchListStudentGrade(data).then(response => {
+          this.stduent = response.data.items[0]
+          const cstr = JSON.parse(this.stduent.scharacter)
+          this.professional = JSON.parse(this.stduent.professional)
+          const tstr = JSON.parse(this.stduent.thinking)
+          this.characterOneData = cstr[0]
+          this.characterTwoData = cstr[0]
+          this.characterThreeData = cstr[0]
+          this.characterFourData = cstr[0]
+          this.characterFiveData = cstr[0]
+          this.thinking = tstr[0]
+          const data = [tstr[1], tstr[2], tstr[3]]
+          this.thinkingData = data
+          console.log(this.thinkingData)
+        })
       })
     }
   }

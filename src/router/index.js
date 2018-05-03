@@ -98,7 +98,7 @@ export const asyncRouterMap = [
     hidden: true,
     // meta: { roles: ['student'] },
     children: [{
-      path: ':Tid',
+      path: ':tid',
       component: _import('studentManagement/testManagement/testDetail'),
       name: 'testDetail',
       meta: { title: '试卷详情', icon: 'icon', noCache: true }
@@ -110,7 +110,7 @@ export const asyncRouterMap = [
     hidden: true,
     // meta: { roles: ['student'] },
     children: [{
-      path: ':Tid/edit',
+      path: ':tid/edit',
       component: _import('studentManagement/testManagement/testAdd'),
       name: 'testDetail',
       meta: { title: '试卷详情', icon: 'icon', noCache: true }
