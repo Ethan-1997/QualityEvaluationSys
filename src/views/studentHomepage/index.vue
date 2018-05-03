@@ -173,7 +173,7 @@
 </template>
 
 <script>
-    import { fetchListWork } from '@/api/work'
+    import { fetchWorkInfoList } from '@/api/work'
     import { getCurrentUser } from '@/api/user'
     import { fetchList } from '@/api/announcement'
     import { mapGetters } from 'vuex'
@@ -366,7 +366,7 @@
         },
 
         getTaskData() {
-          fetchListWork().then(response => {
+          fetchWorkInfoList().then(response => {
             this.taskData = storage.get('worklist')
           })
         },
