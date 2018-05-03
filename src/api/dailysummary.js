@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 
-export function fetchList() {
+export function fetchDailysummary() {
   return request({
-    url: '/dailysummary/list',
+    url: '/dailysummary/listBySid',
     method: 'get'
   })
 }
+

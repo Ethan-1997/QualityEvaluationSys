@@ -228,6 +228,7 @@
         // }
       },
       methods: {
+    
         goToInformation() {
           this.$router.push({ path: '/teacherInformation/index' })
         },

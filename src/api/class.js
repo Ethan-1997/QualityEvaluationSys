@@ -12,7 +12,7 @@ export function createClass(data) {
   return request({
     url: '/class/create',
     method: 'post',
-    data
+    params: data
   })
 }
 
@@ -20,6 +20,13 @@ export function updateClass(data) {
   return request({
     url: '/class/update',
     method: 'post',
-    data
+    params: data
+  })
+}
+export function deleteClass(data) {
+  return request({
+    url: '/class/delete',
+    method: 'post',
+    params: data
   })
 }
