@@ -38,3 +38,10 @@ export function deleteOtherImportant(data) {
     params: data // 配置接口数据 一定要用params
   })
 }
+export function getOtherImportant(query) {
+  return request({
+    url: '/otherimportant/listBySid',
+    method: 'get',
+    params: query // 配置接口数据 一定要用params
+  })
+}

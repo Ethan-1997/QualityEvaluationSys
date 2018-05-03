@@ -597,7 +597,7 @@ export const asyncRouterMap = [
       roles: ['admin']
     },
     children: [{
-      path: 'index',
+      path: 'userManager',
       component: _import('system/userManager/index'),
       name: 'userManager',
       meta: { title: '用户管理', icon: 'dashboard', noCache: true }
