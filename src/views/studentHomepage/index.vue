@@ -28,17 +28,10 @@
                             <el-button style="float: right; padding: 3px 0" type="text" @click="showStudentWork">更多</el-button>
                         </div>
                         <el-table :data="taskData" style="width: 100%" :row-class-name="tableRowClassName">
-                            <el-table-column align="center" label="序号" width="65" type="index" :index="indexMethod">
-                              <template slot-scope="scope">
-                                <span>
-                                  {{scope.row.id}}
-                                </span>
-                              </template>
-                            </el-table-column>
-                            <el-table-column prop="title" label="学生作业">
+                            <el-table-column prop="title" label="作业标题">
                               
                             </el-table-column>
-                            <el-table-column label="截止时间"  width="130" align="center">
+                            <el-table-column label="截止时间"  width="200" align="center">
                                 <template slot-scope="scope">
                                     <i class="el-icon-time"></i>
                                     <span>{{scope.row.endTime}}</span>
@@ -63,41 +56,21 @@
                             <el-button style="float: right; padding: 3px 0" type="text" @click="goToDaliyReport">更多</el-button>
                         </div>
                         <el-tabs tab-position="left" style="height: 264px;"><!-- tip:静态数据 -->
-                            <el-tab-pane label="日常出勤">
-                                <div style="padding: 4px 0">
-                                    <el-alert :title="firstDaily.status" 
-                                    :type="firstDaily.status | statusFilter"
-                                    show-icon :closable="false"> {{firstDaily.date}}
-                                    </el-alert>
-                                </div>
-                                <div style="padding: 4px 0">
-                                    <el-alert :title="secondDaily.status"
-                                      :type="secondDaily.status | statusFilter" 
-                                      show-icon :closable="false"> {{secondDaily.date}}
-                                    </el-alert>
-                                </div>
-                                <div style="padding: 4px 0">
-                                    <el-alert :title="thirdDaily.status"
-                                      :type="thirdDaily.status | statusFilter" 
-                                      show-icon :closable="false"> {{thirdDaily.date}}
-                                    </el-alert>
-                                </div>
-                                <div style="padding: 4px 0">
-                                    <el-alert :title="fourthDaily.status"
-                                      :type="fourthDaily.status | statusFilter" 
-                                      show-icon :closable="false"> {{fourthDaily.date}}
-                                    </el-alert>
-                                </div>
-                                <div style="padding: 4px 0">
-                                    <el-alert :title="fifthDaily.status"
-                                      :type="fifthDaily.status | statusFilter" 
-                                      show-icon :closable="false"> {{fifthDaily.date}}
+                            <el-tab-pane label="日常出勤" :data="dailyList">
+                                <div>
+                                    <el-alert  v-for="item in dailyList" 
+                                    :key="item.pid"
+                                    :title="item.status"
+                                    :type="item.status | statusFilter"
+                                    show-icon :closable="false"
+                                     style="margin: 5px 0"> 
+                                     {{item.date}}&nbsp;{{item.time}}
                                     </el-alert>
                                 </div>
                             </el-tab-pane>
                             <el-tab-pane label="违纪情况">
                                 <template>
-                                        <el-table :data="breakRuleData" style="width:100%" :row-class-name="breakRuleTable">
+                                        <el-table :data="breakRuleList" style="width:100%" :row-class-name="breakRuleTable">
                                             <el-table-column prop="status" label="违纪情况" > </el-table-column>
                                             <el-table-column prop="time" label="日期" width="100" align="center"> </el-table-column>
                                         </el-table>
@@ -105,7 +78,7 @@
                             </el-tab-pane>
                             <el-tab-pane label="突出表现">
                                 <template>
-                                        <el-table :data="highlightData" style="width:100%" :row-class-name="highlightTable">
+                                        <el-table :data="highLightList" style="width:100%" :row-class-name="highlightTable">
                                             <el-table-column prop="title" label="突出表现" > </el-table-column>
                                             <el-table-column prop="time" label="日期" width="100" align="center"> </el-table-column>
                                         </el-table>
@@ -113,7 +86,7 @@
                             </el-tab-pane>
                             <el-tab-pane label="重大事项">
                                 <template>
-                                        <el-table :data="bigThingData" style="width:100%" :row-class-name="bigThingTable">
+                                        <el-table :data="greatList" style="width:100%" :row-class-name="bigThingTable">
                                             <el-table-column prop="title" label="重大事件" > </el-table-column>
                                             <el-table-column prop="time" label="日期" width="100" align="center"> </el-table-column>
                                         </el-table>
@@ -168,7 +141,9 @@
                             </div>
                             <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;{{sname}}</div>
                             <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<i class="el-icon-info"/>&nbsp;&nbsp;学号:&nbsp;&nbsp;{{sid}}</div>
-                            <div style="line-height:28px;width:150px;margin:0px auto"><el-button type="primary" :plain="signInButton" @click="open2" :disabled="signIn" style="width:150px">{{signInText}}</el-button></div>
+                            <div style="line-height:28px;width:150px;margin:0px auto">
+                                <el-button type="primary" :plain="signInButton" @click="creatdata" :disabled="signIn" style="width:150px">{{signInText}}</el-button>
+                            </div>
                             </div>
                         </el-col>
                         </el-row>
@@ -194,26 +169,37 @@
 </template>
 
 <script>
-    import { fetchListWork } from '@/api/work'
+    import { getAllInfoBySid } from '@/api/studentwork'
     import { getCurrentUser } from '@/api/user'
     import { fetchList } from '@/api/announcement'
     import { mapGetters } from 'vuex'
     import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
-    import { fetchListDaily } from '@/api/participation'
-    import { fetchListBreakRule } from '@/api/breakRole'
-    import { fetchListGreat } from '@/api/otherImportant'
-    import storage from '@/utils/storage'
-    import { fetchListHighLight } from '@/api/highlighting'
+    import { getDailysummary, createParticipation } from '@/api/participation'
+    import { getBreakRole } from '@/api/breakRole'
+    import { getOtherImportant } from '@/api/otherImportant'
+    import { getHighlighting } from '@/api/highlighting'
     import CharacterTestGrade from './components/CharacterTestGrade'
     export default {
     
       data() {
         return {
+          temp: {
+            sid: undefined,
+            sname: undefined,
+            sclass: undefined,
+            time: undefined,
+            status: undefined, // 已到、迟到、请假、未到
+            reason: undefined,
+            date: undefined
+          },
+          content: '无',
           taskData: null,
           active: null,
           announcementData: null,
           sname: null,
           sid: null,
+          sclass: null,
+          statu: null,
           midComprehensiveQualityData: [60, 75, 60, 80, 50],
           finalComprehensiveQualityData: [60, 80, 50, 60, 75],
 
@@ -279,7 +265,6 @@
       },
       created() {
         this.getUserInfo()
-        this.getTaskData()
         this.getAnnouncementData()
         this.$nextTick(() => {
           this.$refs.gradeTabsOne.chart.resize()
@@ -287,141 +272,32 @@
           this.$refs.gradeTabsThree.chart.resize()
         })
         this.init()
-        if (storage.get('character') !== null) {
-          this.characterOneData = storage.get('character')[0]
-          this.characterTwoData = storage.get('character')[1]
-          this.characterThreeData = storage.get('character')[2]
-          this.characterFourData = storage.get('character')[3]
-          this.characterFiveData = storage.get('character')[4]
-        }
       },
       methods: {
-        init() {
-          if (this.$storage.get('dailyList') !== null) {
-            this.dailyList = this.$storage.get('dailyList')
-            const length = this.dailyList.length
-            this.firstDaily = this.dailyList[length - 1]
-            this.secondDaily = this.dailyList[length - 2]
-            this.thirdDaily = this.dailyList[length - 3]
-            this.fourthDaily = this.dailyList[length - 4]
-            this.fifthDaily = this.dailyList[length - 5]
-          } else {
-            this.getListDaily()
-          }
-          if (this.$storage.get('breakRuleList') !== null) {
-            this.breakRuleList = this.$storage.get('breakRuleList')
-            const length = this.breakRuleList.length
-            this.breakRuleData = []
-            if (length > 5) {
-              for (let i = 1; i <= 5; i++) {
-                this.breakRuleData[i - 1] = this.breakRuleList[length - i]
-              }
-            } else {
-              for (let i = 1; i <= length; i++) {
-                this.breakRuleData[i - 1] = this.breakRuleList[length - i]
-              }
-            }
-          } else {
-            this.getListBreakRule()
-          }
-          if (this.$storage.get('greatList') !== null) {
-            this.greatList = this.$storage.get('greatList')
-            const length = this.greatList.length
-            this.bigThingData = []
-            if (length > 5) {
-              for (let i = 1; i <= 5; i++) {
-                this.bigThingData[i - 1] = this.greatList[length - i]
-              }
-            } else {
-              for (let i = 1; i <= length; i++) {
-                this.bigThingData[i - 1] = this.greatList[length - i]
-              }
-            }
-          } else {
-            this.getListGreat()
-          }
-          if (this.$storage.get('highLightList') !== null) {
-            this.highLightList = this.$storage.get('highLightList')
-            const length = this.highLightList.length
-            this.highlightData = []
-            if (length > 5) {
-              for (let i = 1; i <= 5; i++) {
-                this.highlightData[i - 1] = this.highLightList[length - i]
-              }
-            } else {
-              for (let i = 1; i <= length; i++) {
-                this.highlightData[i - 1] = this.highLightList[length - i]
-              }
-            }
-          } else {
-            this.getListHighLight()
-          }
-        },
-        getListDaily() {
-          fetchListDaily().then(response => {
-            this.dailyList = response.data.items
-            const length = this.dailyList.length
-            this.firstDaily = this.dailyList[length - 1]
-            this.secondDaily = this.dailyList[length - 2]
-            this.thirdDaily = this.dailyList[length - 3]
-            this.fourthDaily = this.dailyList[length - 4]
-            this.fifthDaily = this.dailyList[length - 5]
-            console.log(1)
-            console.log(this.firstDaily)
-          })
-        },
-        getListBreakRule() {
-          fetchListBreakRule(this.listQuery).then(response => {
-            this.breakRuleList = response.data.items
-            const length = this.breakRuleList.length
-            this.breakRuleData = []
-            if (length > 5) {
-              for (let i = 1; i <= 5; i++) {
-                this.breakRuleData[i - 1] = this.breakRuleList[length - i]
-              }
-            } else {
-              for (let i = 1; i <= length; i++) {
-                this.breakRuleData[i - 1] = this.breakRuleList[length - i]
-              }
-            }
-          })
-        },
-        getListGreat() {
-          fetchListGreat(this.listQuery).then(response => {
-            this.greatList = response.data.items
-            const length = this.greatList.length
-            this.bigThingData = []
-            if (length > 5) {
-              for (let i = 1; i <= 5; i++) {
-                this.bigThingData[i - 1] = this.greatList[length - i]
-              }
-            } else {
-              for (let i = 1; i <= length; i++) {
-                this.bigThingData[i - 1] = this.greatList[length - i]
-              }
-            }
-          })
-        },
-        getListHighLight() {
-          fetchListHighLight(this.listQuery).then(response => {
-            this.highLightList = response.data.items
-            const length = this.highLightList.length
-            this.highlightData = []
-            if (length > 5) {
-              for (let i = 1; i <= 5; i++) {
-                this.highlightData[i - 1] = this.highLightList[length - i]
-              }
-            } else {
-              for (let i = 1; i <= length; i++) {
-                this.highlightData[i - 1] = this.highLightList[length - i]
-              }
-            }
-          })
-        },
+    
         getUserInfo() {
           getCurrentUser().then(response => {
             this.sname = response.data.user.sname
             this.sid = response.data.user.sid
+            this.sclass = response.data.user.sclass
+            console.log(response.data.user)
+            getDailysummary({ sid: this.sid, sort: '-id' }).then(response => {
+              this.dailyList = [response.data.items[0], response.data.items[1], response.data.items[2], response.data.items[3], response.data.items[4]]
+              console.log(this.dailyList)
+            })
+            getBreakRole({ sid: this.sid }).then(response => {
+              this.breakRuleList = response.data.items
+            })
+            getHighlighting({ sid: this.sid }).then(response => {
+              this.highLightList = response.data.items
+            })
+            getOtherImportant({ sid: this.sid }).then(response => {
+              this.breakRuleList = response.data.items
+            })
+          })
+          getAllInfoBySid({ sid: this.sid }).then(response => {
+            this.taskData = [response.data.items[0], response.data.items[1], response.data.items[2], response.data.items[3], response.data.items[4]]
+            console.log(response.data)
           })
         },
         clickTab() {
@@ -472,10 +348,38 @@
           this.$message({
             message: '签到成功!',
             type: 'success'
+    
           })
           this.signIn = true
           this.signInText = '已签到'
           this.signInButton = true
+        },
+        creatdata() {
+          const date = new Date()
+          if (+date.getHours() < 9) {
+            this.statu = '已到'
+          } else if (+date.getMinutes() === 0 && +date.getSeconds() === 0) {
+            this.statu = '已到'
+          } else {
+            this.statu = '迟到'
+          }
+          const temp = {
+            sid: this.sid,
+            sname: this.sname,
+            sclass: this.sclass,
+            time: date.getHours() + ':' + (+date.getMinutes() + +1) + ':' + (+date.getSeconds() - +1),
+            date: date.getFullYear() + '/' + (+date.getMonth() + +1) + '/' + (+date.getDay() - +1),
+            status: this.statu,
+            reason: this.content
+          }
+          console.log(124124112424123124)
+          console.log(temp)
+          createParticipation(temp)
+          this.$message({
+            message: '签到成功!',
+            type: 'success'
+    
+          })
         },
 
         breakRuleTable({ row, rowIndex }) {
@@ -493,12 +397,6 @@
             return 'success-row'
           }
           return ''
-        },
-
-        getTaskData() {
-          fetchListWork().then(response => {
-            this.taskData = storage.get('worklist')
-          })
         },
         filterTaskTag(value, row) {
           return row.submitStatus === value

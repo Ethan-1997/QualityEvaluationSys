@@ -19,21 +19,15 @@
               <el-col :span="6" style="text-align:center"><div class="grid-content bg-purple3">{{later}}</div></el-col>
             </el-row>
             <el-table :data="dailyList" style="width:100%" >
-              <el-table-column
-                prop="date"
-                label="日期"
-                width="180"
-                height="50"
-                >
+              <el-table-column prop="date" label="日期" width="180" height="50" >
               </el-table-column>
                 <el-table-column
                   prop="status"
-                  label="状态"
-                  
+                  label="状态" 
                   :filters="[ { text: '已到', value: '已到' }, 
-              { text: '未到', value: '未到' }, 
-              { text: '请假', value: '请假' }, 
-              { text: '迟到', value: '迟到' }]"
+                    { text: '未到', value: '未到' }, 
+                    { text: '请假', value: '请假' }, 
+                    { text: '迟到', value: '迟到' }]"
                   :filter-method="filtertag"
                   filter-placement="bottom-end">
                   <template slot-scope="scope">
@@ -46,14 +40,14 @@
           <el-tab-pane label="违纪情况" name="second">
             <el-row :gutter="20">
               <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple1">违纪次数：</div></el-col>
-              <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple">{{ breakRuleList.length }}次</div></el-col>
+              <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple">{{breakR}}次</div></el-col>
             </el-row>
              <el-table :data="breakRuleList"  fit highlight-current-row style="width: 100%">
             <el-table-column width="180px" align="center" label="时间" prop="time">
             </el-table-column>
             <el-table-column width="120px" align="center" label="违纪情况" prop="status">
             </el-table-column>
-            <el-table-column prop="note" label="备注"> 
+            <el-table-column prop="content" label="备注"> 
             </el-table-column>
             </el-table>
             
@@ -61,29 +55,26 @@
           <el-tab-pane label="突出表现" name="third">
             <el-row :gutter="20">
               <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple1">突出表现：</div></el-col>
-              <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple2">{{ highLightList.length }}次</div></el-col>
+              <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple2">{{highL}}次</div></el-col>
             </el-row>
              <el-table :data="highLightList"  fit highlight-current-row style="width: 100%">
             <el-table-column width="180px" align="center" label="时间" prop="time">
             </el-table-column>
-            <el-table-column width="120px" align="center" label="突出表现" prop="title">
+            <el-table-column width="600px"  label="突出表现" prop="title">
             </el-table-column>
-            <el-table-column prop="content" label="备注"> 
-            </el-table-column>
+            
             </el-table>
           </el-tab-pane>
 
           <el-tab-pane label="重大事项" name="fourth">
             <el-row :gutter="20">
               <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple1">重大事件：</div></el-col>
-              <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple3">{{ greatList.length }}次</div></el-col>
+              <el-col :span="12" style="text-align:center"><div class="grid-content bg-purple3">{{otherI}}次</div></el-col>
             </el-row>
              <el-table :data="greatList"  fit highlight-current-row style="width: 100%">
             <el-table-column width="180px" align="center" label="时间" prop="time">
             </el-table-column>
-            <el-table-column width="120px" align="center" label="重大事件" prop="title">
-            </el-table-column>
-            <el-table-column prop="content" label="备注"> 
+            <el-table-column width="600px"  label="重大事件" prop="title">
             </el-table-column>
             </el-table>
           </el-tab-pane>
@@ -95,10 +86,11 @@
 
 <script>
 
-import { fetchListDaily } from '@/api/participation'
-import { fetchListBreakRule } from '@/api/breakRole'
-import { fetchListGreat } from '@/api/otherImportant'
-import { fetchListHighLight } from '@/api/highlighting'
+import { getDailysummary } from '@/api/participation'
+import { getCurrentUser } from '@/api/user'
+import { getBreakRole } from '@/api/breakRole'
+import { getOtherImportant } from '@/api/otherImportant'
+import { getHighlighting } from '@/api/highlighting'
 export default {
   data() {
     return {
@@ -131,99 +123,67 @@ export default {
       askForLeave: 0,
       arrived: 0,
       unarrived: 0,
-      later: 0
+      later: 0,
+      breakR: 0,
+      highL: 0,
+      otherI: 0,
+      sid: null,
+      sort: '-id',
+      status: []
     }
   },
 
   methods: {
-    init() {
-      if (this.$storage.get('dailyList') !== null) {
-        this.dailyList = this.$storage.get('dailyList')
-        for (let i = 0; i < this.dailyList.length; i++) {
-          switch (this.dailyList[i].status) {
-            case '请假':
-              this.askForLeave = this.askForLeave + 1
-              break
-            case '未到':
-              this.unarrived = this.unarrived + 1
-              break
-            case '已到':
-              this.arrived = this.arrived + 1
-              break
-            case '迟到':
-              this.later = this.later + 1
-              break
+    getParticipation() {
+      getCurrentUser().then(response => {
+        this.sid = response.data.user.sid
+        console.log(response.data.user.sid)
+        getBreakRole({ sid: this.sid }).then(response => {
+          this.breakRuleList = response.data.items
+          console.log(response.data)
+          console.log(this.breakRuleList.length)
+          for (let i = 0; i < this.breakRuleList.length; i++) {
+            this.breakR++
+            console.log(this.breakR)
           }
-        }
-        const length = this.dailyList.length
-        this.firstDaily = this.dailyList[length - 1]
-        this.secondDaily = this.dailyList[length - 2]
-        this.thirdDaily = this.dailyList[length - 3]
-        this.fourthDaily = this.dailyList[length - 4]
-        this.fifthDaily = this.dailyList[length - 5]
-      } else {
-        this.getListDaily()
-      }
-      if (this.$storage.get('breakRuleList') !== null) {
-        this.breakRuleList = this.$storage.get('breakRuleList')
-      } else {
-        this.getListBreakRule()
-      }
-      if (this.$storage.get('greatList') !== null) {
-        this.greatList = this.$storage.get('greatList')
-      } else {
-        this.getListGreat()
-      }
-      if (this.$storage.get('highLightList') !== null) {
-        this.highLightList = this.$storage.get('highLightList')
-      } else {
-        this.getListHighLight()
-      }
-    },
-    getListDaily() {
-      fetchListDaily().then(response => {
-        this.dailyList = response.data.items
-        for (let i = 0; i < this.dailyList.length; i++) {
-          switch (this.dailyList[i].status) {
-            case '请假':
-              this.askForLeave = this.askForLeave + 1
-              break
-            case '未到':
-              this.unarrived = this.unarrived + 1
-              break
-            case '已到':
-              this.arrived = this.arrived + 1
-              break
-            case '迟到':
-              this.later = this.later + 1
-              break
+        })
+        getHighlighting({ sid: this.sid }).then(response => {
+          this.highLightList = response.data.items
+          console.log(response.data)
+          for (let i = 0; i < this.highLightList.length; i++) {
+            this.highL++
           }
-        }
-        const length = this.dailyList.length
-        this.firstDaily = this.dailyList[length - 1]
-        this.secondDaily = this.dailyList[length - 2]
-        this.thirdDaily = this.dailyList[length - 3]
-        this.fourthDaily = this.dailyList[length - 4]
-        this.fifthDaily = this.dailyList[length - 5]
-        console.log(1)
-        console.log(this.firstDaily)
+        })
+        getOtherImportant({ sid: this.sid }).then(response => {
+          this.greatList = response.data.items
+          console.log(response.data)
+          for (let i = 0; i < this.greatList.length; i++) {
+            this.otherI++
+          }
+        })
+        getDailysummary({ sid: this.sid, sort: this.sort }).then(response => {
+          this.dailyList = response.data.items
+          console.log(response.data)
+          this.askForLeave = 0
+          this.arrived = 0
+          this.unarrived = 0
+          this.later = 0
+          console.log(this.dailyList.length)
+          for (let i = 0; i < this.dailyList.length; i++) {
+            if (this.dailyList[i].status === '已到') {
+              this.arrived++
+            } else if (this.dailyList[i].status === '请假') {
+              this.askForLeave++
+            } else if (this.dailyList[i].status === '未到') {
+              this.askForLeave++
+            } else if (this.dailyList[i].status === '迟到') {
+              this.askForLeave++
+            }
+          }
+        })
       })
     },
-    getListBreakRule() {
-      fetchListBreakRule(this.listQuery).then(response => {
-        this.breakRuleList = response.data.items
-      })
-    },
-    getListGreat() {
-      fetchListGreat(this.listQuery).then(response => {
-        this.greatList = response.data.items
-      })
-    },
-    getListHighLight() {
-      fetchListHighLight(this.listQuery).then(response => {
-        this.highLightList = response.data.items
-      })
-    },
+
     filtertag(value, row) {
       console.log(row, value)
       return row.status === value
@@ -241,7 +201,7 @@ export default {
     })
   },
   created() {
-    this.init()
+    this.getParticipation()
   },
   filters: {
     statusFilter(status) {

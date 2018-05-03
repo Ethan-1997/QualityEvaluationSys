@@ -1,32 +1,39 @@
 import request from '@/utils/request'
 
-export function fetchListWork(query) {
+export function fetchWorkInfoList(query) {
   return request({
-    url: '/work/list',
+    url: '/workinfo/list',
     method: 'get',
     params: query
   })
 }
 
-export function fetchWork() {
+export function fetchWorkInfo() {
   return request({
-    url: '/work/detail',
+    url: '/workinfo/detail',
     method: 'get'
   })
 }
 
-export function createWork(data) {
+export function createWorkInfo(data) {
   return request({
-    url: '/work/create',
+    url: '/workinfo/create',
     method: 'post',
-    data
+    params: data
   })
 }
 
-export function updateWork(data) {
+export function updateWorkInfo(data) {
   return request({
-    url: '/work/update',
+    url: '/workinfo/update',
     method: 'post',
-    data
+    params: data
+  })
+}
+export function deleteWorkInfo(data) {
+  return request({
+    url: '/workinfo/delete',
+    method: 'post',
+    params: data // 配置接口数据 一定要用params
   })
 }

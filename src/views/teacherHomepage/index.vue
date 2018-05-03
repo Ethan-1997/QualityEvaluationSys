@@ -53,7 +53,7 @@
                     <span><svg-icon icon-class="table" />&nbsp;系统公告</span>
                     <el-button style="float: right; padding: 3px 0" type="text" @click="goToAnnocument" >更多</el-button>
                 </div>
-                <el-table :data="announcementDataData" style="width: 100%"  >
+                <el-table :data="announcementData" style="width: 100%"  >
                     <el-table-column prop="atitle" label="公告"> 
                     </el-table-column>
                     <el-table-column fixed="right" prop="atime" label="发布日期" width="100" align="center"> 
@@ -72,28 +72,28 @@
                             </div>
                             <el-row type="flex" justify="center" :gutter="20">
                                 <el-col :xs="24" :sm="24" :lg="11">
-                                    <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="90" status="success"></el-progress></div>
+                                    <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="arrived*10" status="success"></el-progress></div>
                                     <div style="width:126px;margin:30px auto 0px auto"><el-button @click="goToParticipation" type="primary">&nbsp;&nbsp;&nbsp;查看详情&nbsp;&nbsp;&nbsp;</el-button></div>
                                 </el-col>
                                 <el-col :xs="24" :sm="24" :lg="13">
                                     <el-row :gutter="1">
                                         <el-alert title="" type="success" :closable="false">
-                                            <div style="line-height:30px;font-size:18px;">已到:18/20</div>
+                                            <div style="line-height:30px;font-size:18px;">已到:{{arrived}}人</div>
                                         </el-alert>
                                     </el-row>
                                     <el-row :gutter="1">
                                         <el-alert title="" type="info" :closable="false">
-                                            <div style="line-height:30px;font-size:16px;">请假:1人</div>
+                                            <div style="line-height:30px;font-size:16px;">请假:{{askForLeave}}人</div>
                                         </el-alert>
                                     </el-row>
                                     <el-row :gutter="1">
                                         <el-alert title="" type="warning" :closable="false">
-                                            <div style="line-height:30px;font-size:16px;">迟到:1人</div>
+                                            <div style="line-height:30px;font-size:16px;">迟到:{{later}}人</div>
                                         </el-alert>
                                     </el-row>
                                     <el-row :gutter="1">
                                         <el-alert title="" type="error" :closable="false">
-                                            <div style="line-height:30px;font-size:16px;">未到:0人</div>
+                                            <div style="line-height:30px;font-size:16px;">未到:{{unarrived}}人</div>
                                         </el-alert>
                                     </el-row>
                                 </el-col>
@@ -107,29 +107,22 @@
                                 <el-button style="float: right; padding: 3px 0" type="text" @click="goToWorkManagement">更多</el-button>
                             </div>
                             <el-table :data="taskData" style="width: 100%">
-                                <el-table-column align="center" label="序号" width="65" type="index" :index="indexMethod">
-                                    <template slot-scope="scope">
-                                        <span>
-                                        {{scope.row.id}}
-                                        </span>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column prop="task" label="学生作业">
+                                <el-table-column prop="title" width="150px" align="center" label="学生作业">
                                     <template slot-scope="scope">
                                         <span>
                                         {{scope.row.title}}
                                         </span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="截止时间" width="130" align="center">
+                                <el-table-column  prop="endtime" label="截止时间" align="center">
                                     <template slot-scope="scope">
                                         <i class="el-icon-time"></i>
-                                        <span>{{scope.row.endTime}}</span>
+                                        <span>{{scope.row.endtime}}</span>
                                     </template>            
                                 </el-table-column>
-                                <el-table-column label="上交进度" width="130" align="center" fixed="right">
+                                <el-table-column label="上交进度" width="150px" align="center" fixed="right">
                                     <template slot-scope="scope">
-                                    <el-progress :percentage="scope.row.rate/20*100" :show-text="false">123</el-progress><span>{{scope.row.rate}}/20</span>
+                                    <el-progress :percentage="scope.row.submit/scope.row.sum*100" :show-text="false"></el-progress><span>{{scope.row.submit}}/{{scope.row.sum}}</span>
                                 </template>         
                                 </el-table-column>
                             </el-table>
@@ -150,8 +143,8 @@
                                             <div style="line-height:28px;width:150px;margin:0px auto">
                                                 <img style="width:150px;height:150px;border-radius:75px" :src="avatar"/>
                                             </div>
-                                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;摇滚兔子</div>
-                                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<i class="el-icon-info"/>&nbsp;&nbsp;工号:&nbsp;&nbsp;16147131</div>
+                                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;{{tname}}</div>
+                                            <div style="line-height:28px;width:150px;margin:0px auto">&nbsp;<i class="el-icon-info"/>&nbsp;&nbsp;工号:&nbsp;&nbsp;{{tno}}</div>
                                         </div>
                                     </el-col>
                                 </el-row>
@@ -180,17 +173,26 @@
 
 <script>
     import { fetchList } from '@/api/announcement'
-    import { fetchListWork } from '@/api/work'
+    import { fetchWorkInfoList } from '@/api/work'
+    import { getStatisticsByWid } from '@/api/studentwork'
     import { mapGetters } from 'vuex'
-    import storage from '@/utils/storage'
+    import { fetchListDaily } from '@/api/participation'
+    
+    import { getCurrentUser } from '@/api/user'
     export default {
     
       data() {
         return {
+          dailyList: null,
           active: null,
-          announcementDataData: null,
+          announcementData: null,
           taskData: null,
-
+          participation: [],
+          askForLeave: 0,
+          arrived: 0,
+          unarrived: 0,
+          later: 0,
+          figure: 0,
           dynamicTags: ['今晚检查学生学生作业', '周五下午四点行政楼开会', '今天有5人迟到', '提醒课代表收作业', '前台使用的技术是Vue.js', '主要的组件是Element UI', '后台使用的是SQLserver'], // 动态编辑标签
           inputVisible: false,
           inputValue: '',
@@ -202,10 +204,15 @@
           listQuery: {
             page: 1,
             limit: 15,
-            sort: '-id',
-            title: undefined,
-            time: undefined
-          }
+            sort: '-id'
+          },
+          taskQuery: {
+            page: 1,
+            limit: 5
+          },
+          wid: null,
+          tno: null,
+          tname: null
         }
       },
       computed: {
@@ -214,17 +221,64 @@
         ])
       },
       created() {
-        this.getTaskData()
         this.getAnnouncementData()
+        this.getTaskData()
+        getCurrentUser().then(response => {
+          this.tno = response.data.user.tno
+          this.tname = response.data.user.tname
+        })
         // if (this.$storage.get('worklist') !== null) {
     
         //   console.log(12)
         //   console.log(this.$storage.get('worklist'))
         // } else {
-        //   this.getList()
+        this.getList()
         // }
       },
       methods: {
+        getList() {
+          console.log(1)
+          fetchListDaily().then(response => {
+            const date = new Date().getFullYear() + '/' + (+new Date().getMonth() + +1) + '/' + (+new Date().getDay() - +1)
+            this.dailyList = response.data.items
+            const figure = response.data.total
+            console.log(date)
+            for (let i = 0; i < figure; i++) {
+              if (this.dailyList[i].date === date) {
+                console.log(1)
+                this.participation.push({
+                  sid: this.dailyList[i].sid,
+                  sclass: this.dailyList[i].sclass,
+                  sname: this.dailyList[i].sname,
+                  status: this.dailyList[i].status,
+                  date: this.dailyList[i].date,
+                  time: this.dailyList[i].time,
+                  reason: this.dailyList[i].reason
+                })
+              }
+            }
+            this.askForLeave = 0
+            this.arrived = 0
+            this.unarrived = 0
+            this.later = 0
+            console.log(this.dailyList.length)
+            for (let i = 0; i < this.participation.length; i++) {
+              if (this.participation[i].status === '已到') {
+                this.arrived++
+              } else if (this.participation[i].status === '请假') {
+                this.askForLeave++
+              } else if (this.participation[i].status === '未到') {
+                this.askForLeave++
+              } else if (this.participation[i].status === '迟到') {
+                this.askForLeave++
+              }
+            }
+            console.log(2)
+            console.log(this.arrived)
+            console.log(this.participation)
+          })
+        },
+    
         goToInformation() {
           this.$router.push({ path: '/teacherInformation/index' })
         },
@@ -280,12 +334,19 @@
         },
         getAnnouncementData() {
           fetchList(this.listQuery).then(response => {
-            this.announcementDataData = response.data.items
+            this.announcementData = response.data.items
           })
         },
         getTaskData() {
-          fetchListWork().then(response => {
-            this.taskData = storage.get('worklist')
+          fetchWorkInfoList(this.taskQuery).then(response => {
+            this.taskData = response.data.items
+            for (let i = 0; i < this.taskData.length; i++) {
+              this.wid = this.taskData[i].wid
+              getStatisticsByWid({ wid: this.wid }).then(response => {
+                this.taskData[i].submit = response.data.complete
+                this.taskData[i].sum = response.data.total
+              })
+            }
           })
         },
         indexMethod(index) {

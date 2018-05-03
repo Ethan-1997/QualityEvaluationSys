@@ -83,11 +83,15 @@
         </el-form-item>
        
         <el-form-item :label="tableCol.ttime" prop="ttime">
-          <el-date-picker v-model="temp.ttime"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" placeholder="请选择参与工作的时间">
+          <el-date-picker v-model="temp.ttime"  format="yyyy 年 MM 月 dd 日"  value-format="yyyy-MM-dd" placeholder="参与工作">
           </el-date-picker>
         </el-form-item>
         <el-form-item :label="tableCol.twage" prop="twage">
           <el-input v-model="temp.twage"></el-input>
+        </el-form-item>
+
+        <el-form-item :label="tableCol.ttel" prop="ttel">
+          <el-input v-model="temp.ttel"></el-input>
         </el-form-item>
      
          <el-form-item :label="tableCol.tintroduce" prop="tintroduce">
@@ -131,10 +135,11 @@ export default {
       tableCol: {
         tno: '编号',
         tname: '名字',
-        ttime: '参与工作时间',
+        ttime: '参与工作',
         tintroduce: '简介',
         tsex: '性别',
-        twage: '工资'
+        twage: '工资',
+        ttel: '电话'
       },
       tableKey: 0,
       list: null,
@@ -147,9 +152,9 @@ export default {
         tsex: undefined,
         order: '+id'
       },
-      classOptions: ['101', '102', '103', '104', '105', '106', '107', '108', '109'],
+      classOptions: null,
       sexOptions: ['男', '女'],
-      deptOptions: ['javaweb', '大数据', '前端工程师'],
+      deptOptions: ['前端', '后端'],
 
       sortOptions: [{ label: '升序排序', key: '+id' }, { label: '降序排序', key: '-id' }],
 
@@ -160,7 +165,8 @@ export default {
         ttime: undefined,
         tintroduce: undefined,
         tsex: undefined,
-        twage: undefined
+        twage: undefined,
+        ttel: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -172,7 +178,6 @@ export default {
       pvData: [],
       rules: {
         type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false,
@@ -184,7 +189,7 @@ export default {
       //   tintroduce: undefined,
       //   tsex: undefined,
       //   twage: undefined
-      tHeader: ['tno', 'tname', 'ttime', 'tintroduce', 'tsex', 'twage']
+      tHeader: ['tno', 'tname', 'ttime', 'tintroduce', 'tsex', 'twage', 'ttel']
     }
   },
   filters: {
@@ -264,7 +269,8 @@ export default {
         ttime: undefined,
         tintroduce: undefined,
         tsex: undefined,
-        twage: undefined
+        twage: undefined,
+        ttel: undefined
       }
     },
     handleCreate() {
@@ -303,7 +309,6 @@ export default {
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       console.log(this.temp)
-      this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -314,22 +319,24 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateTeacher(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
+          updateTeacher(tempData).then((res) => {
+            if (res.data.data === 'success') {
+              this.dialogFormVisible = false
+              this.getList()
+              this.$notify({
+                title: '成功',
+                message: '更新成功',
+                type: 'success',
+                duration: 2000
+              })
+            } else {
+              this.$notify({
+                title: '失败',
+                message: '更新失败',
+                type: 'error',
+                duration: 2000
+              })
             }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
           })
         }
       })
@@ -373,7 +380,7 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const filterVal = ['tno', 'tname', 'ttime', 'tintroduce', 'tsex', 'twage']
+        const filterVal = ['tno', 'tname', 'ttime', 'tintroduce', 'tsex', 'twage', 'ttel']
         const data = this.formatJson(filterVal, this.list)
         excel.export_json_to_excel(this.tHeader, data, 'table-list')
         this.downloadLoading = false

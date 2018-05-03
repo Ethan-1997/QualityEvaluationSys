@@ -30,9 +30,9 @@
 
     <el-table  :key='tableKey' :data="list" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" :label="tableCol.sid" width="80">
+      <el-table-column align="center" :label="tableCol.time" width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.sid}}</span>
+          <span>{{scope.row.time}}</span>
         </template>
       </el-table-column>
       <el-table-column width="80px" align="center" :label="tableCol.sname">
@@ -45,9 +45,9 @@
           <span>{{scope.row.sclass}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.time" width="100">
+      <el-table-column align="center" :label="tableCol.sid" width="80">
         <template slot-scope="scope">
-          <span>{{scope.row.time}}</span>
+          <span>{{scope.row.sid}}</span>
         </template>
       </el-table-column>
       <el-table-column min-width="150px" :label="tableCol.title">

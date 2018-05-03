@@ -441,17 +441,14 @@ export const asyncRouterMap = [
     path: '/workManagement',
     component: Layout,
     meta: {
+      title: '作业管理',
+      icon: 'homework',
       roles: ['teacher']
     },
-    children: [{
-      path: 'index',
-      component: _import('studentManagement/workManagement/index'),
-      name: 'workManagement',
-      meta: {
-        title: '作业管理',
-        icon: 'homework'
-      }
-    }]
+    children: [
+      { path: 'index', component: _import('studentManagement/workManagement/index'), name: 'workManagement', meta: { title: '作业发布管理', icon: 'homework' }},
+      { path: 'detail', component: _import('studentManagement/workManagement/workdetail'), name: 'workDetail', meta: { title: '作业提交管理', icon: 'homework' }}
+    ]
   },
   {
     path: '/projectDefense',
@@ -600,7 +597,7 @@ export const asyncRouterMap = [
       roles: ['admin']
     },
     children: [{
-      path: 'index',
+      path: 'userManager',
       component: _import('system/userManager/index'),
       name: 'userManager',
       meta: { title: '用户管理', icon: 'dashboard', noCache: true }
@@ -645,15 +642,6 @@ export const asyncRouterMap = [
       name: 'logManager',
       meta: { title: '日志管理', icon: 'dashboard', noCache: true }
     }]
-  },
-  {
-    path: '/workdetail',
-    component: Layout,
-    hidden: true,
-    meta: {
-      roles: ['teacher']
-    },
-    children: [{ path: 'index', component: _import('studentManagement/workManagement/workdetail'), name: 'workdetail', meta: { title: '作业详情', icon: '2' }}]
   },
   { path: '*', redirect: '/404', hidden: true }
 ]
