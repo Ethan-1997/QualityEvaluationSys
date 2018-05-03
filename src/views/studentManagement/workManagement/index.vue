@@ -8,7 +8,7 @@
       <el-input @keyup.enter.native="handleFilter" style="width: 180px;" class="filter-item" placeholder="请输标题" v-model="listQuery.title">
       </el-input>
       <el-select clearable style="width: 130px" class="filter-item" v-model="listQuery.Cid" placeholder="请选择班级">
-        <el-option v-for="item in classOptions" :key="item" :label="item.cname" :value="item.cid">
+        <el-option v-for="item in classOptions" :key="item.cname" :label="item.cname" :value="item.cid">
         </el-option>
       </el-select>
       <el-select clearable style="width: 130px" class="filter-item" v-model="listQuery.author" placeholder="请选择老师">
@@ -16,7 +16,7 @@
         </el-option>
       </el-select>
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort">
-        <el-option v-for="item in sortOptions" :key="item":label="item.label" :value="item.key">
+        <el-option v-for="item in sortOptions" :key="item.key":label="item.label" :value="item.key">
         </el-option>
       </el-select>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
@@ -93,7 +93,7 @@
           <el-col :span="12">
              <el-form-item :label="tableCol.Cid" prop="Cid">
               <el-select class="filter-item" v-model="temp.cid" placeholder="请选择班级">
-                <el-option v-for="item in classOptions" :key="item" :label="item.cname" :value="item.cid">
+                <el-option v-for="item in classOptions" :key="item.cname" :label="item.cname" :value="item.cid">
                 </el-option>
               </el-select>
             </el-form-item>

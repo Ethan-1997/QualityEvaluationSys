@@ -4,20 +4,19 @@
     <div slot="header" class="clearfix">
       <span style="font-size:25px">作业提交管理</span>
     </div>
-    <div class="filter-container">
-      <el-date-picker class="filter-item"
-        v-model="listQuery.date"
-        type="date"
-        format="yyyy/M/d"
-        placeholder="选择日期时间"
-        value-format="yyyy/M/d">
-      </el-date-picker>
-      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.sclass" :placeholder="tableCol.sclass">
-        <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
+    <div class="filter-container" style="float:left">
+      <el-input @keyup.enter.native="handleFilter" style="width: 150px;" class="filter-item" placeholder="请输入标题" v-model="listQuery.title">
+      </el-input>
+      <el-select clearable style="width: 90px" class="filter-item" v-model="listQuery.cname" :placeholder="tableCol.sclass">
+        <el-option v-for="item in classOptions" :key="item.cname" :label="item.cname" :value="item.cname">
         </el-option>
       </el-select>
       <el-input @keyup.enter.native="handleFilter" style="width: 120px;" class="filter-item" placeholder="请输入学号" v-model="listQuery.sid">
       </el-input>
+      <el-select clearable style="width: 120px" class="filter-item" v-model="listQuery.submit" placeholder="提交状态">
+        <el-option v-for="item in submitOptions" :key="item" :label="item" :value="item">
+        </el-option>
+      </el-select>
       <el-select @change='handleFilter' style="width: 140px" class="filter-item" v-model="listQuery.sort" :placeholder="tableCol.sort">
         <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key">
         </el-option>
@@ -25,51 +24,61 @@
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
     </div>
 
-    <el-table  :key='tableKey' :data="list" border fit highlight-current-row
+    <el-table  :key='tableKey' :data="allStudentWork" border fit highlight-current-row
       style="width: 100%">
-      <el-table-column align="center" prop="date" sortable :label="tableCol.date" width="100">
+      <el-table-column align="center" prop="title" :label="tableCol.title" width="140px">
         <template slot-scope="scope">
-          <span>{{scope.row.date}}</span>
+          <span>{{scope.row.title}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="80px" align="center" :label="tableCol.sname">
+      <el-table-column align="center" prop="content" :label="tableCol.content">
         <template slot-scope="scope">
-          <span>{{scope.row.sname }}</span>
+          <el-alert :title="scope.row.content" type="info" :closable="false"></el-alert>
         </template>
       </el-table-column>
-      <el-table-column width="80px" align="center" :label="tableCol.sclass">
+      <el-table-column width="180px" align="center" prop="uptime" :label="tableCol.uptime">
         <template slot-scope="scope">
-          <span>{{scope.row.sclass}}</span>
+          <span>{{scope.row.uptime}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="tableCol.sid" width="80">
+      <el-table-column width="80px" align="center" prop="submitstatus" :label="tableCol.submitstatus">
         <template slot-scope="scope">
+          <el-tag :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'">{{scope.row.submitStatus}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="cname" :label="tableCol.cname" width="100px">
+        <template slot-scope="scope">
+          <span>{{scope.row.cname}}</span>
+        </template>
+      </el-table-column>
+     <el-table-column align="center" prop="sname" :label="tableCol.sname" width="100px">
+        <template slot-scope="scope">
+          <span>{{snamefilters(scope.row.sid)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="sid" :label="tableCol.sid" width="100px">
+        <template slot-scope="scope" >
           <span>{{scope.row.sid}}</span>
         </template>
       </el-table-column>
-     <el-table-column align="center" prop="time" sortable :label="tableCol.time" width="80">
+      <el-table-column align="center" prop="fileList" :label="tableCol.fileList" width="100">
         <template slot-scope="scope">
-          <span>{{scope.row.time}}</span>
+          <el-button type="info" size="mini" @click="fileDownload(scope.row.fileList)">作业下载</el-button>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="status" :label="tableCol.status" width="90" :filters="[{ text: '请假', value: '请假' }, { text: '已到', value: '已到' }, { text: '未到', value: '未到' }, { text: '迟到', value: '迟到' }]" :filter-method="filterTaskTag">
-        <template slot-scope="scope" >
-          <el-tag :type="scope.row.status === '已到' ? 'success' : scope.row.status === '未到' ? 'danger' : scope.row.status === '迟到' ? 'warning' : 'info'">{{scope.row.status}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column :label="tableCol.reason" min-width="95">
+      <el-table-column align="center" prop="grade" :label="tableCol.grade" width="100">
         <template slot-scope="scope">
-          <el-alert title="" type="info" :closable="false">{{scope.row.reason}}</el-alert>
+          <el-button v-if="scope.row.grade===null"  type="primary" size="mini" @click="handleUpdate(scope.row)">点评</el-button>
+          <span v-else style="font-size:30px">{{scope.row.grade}}</span>
         </template>
       </el-table-column>
-
-      <el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
+      <!-- <el-table-column align="center" label="点评/分数" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
           <el-button v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row.pid)">{{$t('table.delete')}}
           </el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
 
     <div class="pagination-container">
@@ -77,66 +86,20 @@
       </el-pagination>
     </div>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 400px; margin-left:50px;'>
-        <!-- <el-form-item :label="tableCol[0]" prop="sid">
-          <el-select class="filter-item" v-model="temp.type" placeholder="Please select">
-            <el-option v-for="item in  calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key">
-            </el-option>
-          </el-select>
-        </el-form-item> -->
-        <el-form-item :label="tableCol.sname" prop="sname">
-          <el-input v-model="temp.sname" width="200px"  placeholder="请输入姓名"></el-input>
-        </el-form-item>
-        <el-form-item :label="tableCol.sid" prop="sid">
-          <el-input v-model="temp.sid" width="150px"  placeholder="请输入学号"></el-input>
-        </el-form-item>
-        <el-form-item :label="tableCol.sclass" prop="sclass">
-          <el-select clearable style="width: 90px" class="filter-item" v-model="temp.sclass" :placeholder="tableCol.sclass">
-            <el-option v-for="item in classOptions" :key="item" :label="item" :value="item">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="tableCol.date" prop="date">
-          <el-date-picker
-            v-model="temp.date"
-            type="date"
-            format="yyyy/M/d"
-            placeholder="选择日期时间"
-            value-format="yyyy/M/d">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item :label="tableCol.time" prop="time">
-           <el-time-picker
-            v-model="temp.time"
-            type="datetime"
-            format="HH:mm:ss"
-            value-format="HH:mm:ss"
-            placeholder="选择时间">
-          </el-time-picker>
-        </el-form-item>
-        <el-form-item :label="tableCol.status" prop="status">
-            <el-select class="filter-item" v-model="temp.status" placeholder="请选择">
-              <el-option v-for="item in  statusOptions" :key="item" :label="item" :value="item">
-              </el-option>
-            </el-select>
-        </el-form-item>
-
-        
-        <el-form-item :label="tableCol.reason" prop="reason">
-         <el-input
-            type="textarea"
-            :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="请输入内容"
-            v-model="temp.reason">
-          </el-input>
-        </el-form-item>
-        
+    <el-dialog title="点评" :visible.sync="dialogFormVisible">
+      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="70px" style='width: 80%; margin:100px 0 0 100px;'>
+        <template>
+          <div>
+            <span style="font-size:100px;margin:0 0 100px 0">{{temp.grade}}分</span>
+            <el-slider
+              v-model="temp.grade">
+            </el-slider>
+          </div>
+        </template>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
+        <el-button type="primary" @click="updateData">{{$t('table.confirm')}}</el-button>
       </div>
       
     </el-dialog>
@@ -146,7 +109,10 @@
 </template>
 
 <script>
-import { fetchListDaily, createParticipation, updateParticipation, deleteParticipation } from '@/api/participation'
+import { createParticipation, deleteParticipation } from '@/api/participation'
+import { fetchList } from '@/api/class'
+import { getStudentData } from '@/api/student'
+import { getAllInfoBySid, updateStudentWork } from '@/api/studentwork'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
@@ -164,9 +130,17 @@ export default {
     return {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
       tableCol: {
-        date: '日期',
-        sid: '学号',
+        title: '作业标题',
+        content: '内容',
+        submitstatus: '提交状态',
+        uptime: '提交时间',
+        cname: '班级',
         sname: '姓名',
+        sid: '学号',
+        fileList: '作业下载',
+        grade: '点评/分数',
+
+        date: '日期',
         ssex: '性别',
         sclass: '班级',
         sprofession: '专业',
@@ -175,6 +149,9 @@ export default {
         reason: '备注',
         sort: '排序方式'
       },
+      studentlength: null,
+      studentdata: null,
+      allStudentWork: null,
       tableKey: 0,
       list: null,
       total: null,
@@ -182,27 +159,27 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
+        title: undefined,
+        cname: undefined,
         sid: undefined,
-        date: undefined,
-        sort: '-id',
-        sclass: undefined
+        submit: undefined,
+        sort: '-id'
       },
-      classOptions: ['vue.js', '大数据', 'javaweb'],
+      classOptions: null,
       sexOptions: ['男', '女'],
       sortOptions: [{ label: '升序排序', key: '+id' }, { label: '降序排序', key: '-id' }],
       courseOptions: ['前端', '后端'],
+      submitOptions: ['已提交', '未提交'],
       statusOptions: ['已到', '迟到', '请假', '未到'],
       showReviewer: false,
       temp: {
+        id: undefined,
+        wid: undefined,
         sid: undefined,
-        sname: undefined,
-        ssex: undefined,
-        sclass: undefined,
-        sprofession: undefined,
-        time: undefined,
-        status: undefined, // 已到、迟到、请假、未到
-        reason: undefined,
-        date: undefined
+        uptime: undefined,
+        submitStatus: undefined,
+        fileList: undefined,
+        grade: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -232,20 +209,11 @@ export default {
       tHeader: ['date', 'sname', 'sclass', 'sid', 'time', 'status', 'reason']
     }
   },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-
-  },
   created() {
     this.getList()
-    console.log(this.list)
+    fetchList().then(res => {
+      this.classOptions = res.data.items
+    })
   },
   methods: {
     selected(data) {
@@ -273,15 +241,30 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchListDaily(this.listQuery).then(response => {
-        this.list = response.data.items
-        console.log(response.data.items)
-        this.total = response.data.total
-        this.listLoading = false
+      getStudentData().then(response => {
+        this.studentdata = response.data.items
+        this.studentlength = response.data.total
+        console.log(this.studentlength)
+        getAllInfoBySid(this.listQuery).then(response => {
+          this.allStudentWork = response.data.items
+          console.log(this.allStudentWork)
+          this.listLoading = false
+        })
       })
     },
-
+    fileDownload(fileList) {
+      console.log(fileList)
+    },
+    snamefilters(sid) {
+      for (let i = 0; i < this.studentlength; i++) {
+        console.log(this.studentdata[i].sid)
+        if (this.studentdata[i].sid === sid) {
+          return this.studentdata[i].sname
+        }
+      }
+    },
     handleFilter() {
+      console.log(this.listQuery)
       this.listQuery.page = 1
       this.getList()
     },
@@ -295,15 +278,13 @@ export default {
     },
     resetTemp() {
       this.temp = {
+        id: undefined,
+        wid: undefined,
         sid: undefined,
-        sname: undefined,
-        ssex: undefined,
-        sclass: undefined,
-        sprofession: undefined,
-        status: undefined, // 已到、迟到、请假、未到
-        reason: undefined,
-        time: undefined,
-        date: undefined
+        uptime: undefined,
+        submitStatus: undefined,
+        fileList: undefined,
+        grade: 0
       }
     },
     handleCreate() {
@@ -340,7 +321,13 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
+      this.temp.id = row.id
+      this.temp.wid = row.wid
+      this.temp.sid = row.sid
+      this.temp.uptime = row.uptime
+      this.temp.submitStatus = row.submitStatus
+      this.temp.fileList = row.fileList
+      this.temp.grade = 0
       console.log(this.temp)
       this.oldtemp = row
       this.temp.timestamp = new Date(this.temp.timestamp)
@@ -355,18 +342,12 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateParticipation(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.pid === this.temp.pid) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
+          updateStudentWork(tempData).then(() => {
+            this.getList()
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
-              message: '更新成功',
+              message: '点评成功',
               type: 'success',
               duration: 2000
             })

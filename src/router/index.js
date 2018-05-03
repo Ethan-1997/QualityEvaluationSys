@@ -447,7 +447,7 @@ export const asyncRouterMap = [
     },
     children: [
       { path: 'index', component: _import('studentManagement/workManagement/index'), name: 'workManagement', meta: { title: '作业发布管理', icon: 'homework' }},
-      { path: 'detail', component: _import('studentManagement/workManagement/workdetail'), name: 'workDetail', meta: { title: '作业提交详情', icon: 'homework' }}
+      { path: 'detail', component: _import('studentManagement/workManagement/workdetail'), name: 'workDetail', meta: { title: '作业提交管理', icon: 'homework' }}
     ]
   },
   {
