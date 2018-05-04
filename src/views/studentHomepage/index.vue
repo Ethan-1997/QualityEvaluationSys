@@ -308,7 +308,9 @@
               this.highLightList = response.data.items
             })
             getOtherImportant({ sid: this.sid }).then(response => {
-              this.breakRuleList = response.data.items
+              this.greatList = response.data.items
+              console.log(123456)
+              console.log(response.data)
             })
           })
           getAllInfoBySid({ sid: this.sid }).then(response => {
