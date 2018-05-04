@@ -82,7 +82,7 @@ export const asyncRouterMap = [
     path: '/tests',
     component: Layout,
     hidden: true,
-    // meta: { roles: ['student'] },
+    meta: { roles: ['student'] },
     children: [{
       path: ':tid',
       component: _import('studentManagement/testManagement/testDetail'),
@@ -94,7 +94,7 @@ export const asyncRouterMap = [
     path: '/tests',
     component: Layout,
     hidden: true,
-    // meta: { roles: ['student'] },
+    meta: { roles: ['teacher'] },
     children: [{
       path: ':tid/edit',
       component: _import('studentManagement/testManagement/testAdd'),
@@ -431,7 +431,7 @@ export const asyncRouterMap = [
       roles: ['teacher']
     },
     children: [
-      { path: 'index', component: _import('studentManagement/testManagement/testManagementIndex'), name: 'testManagementIndex', meta: { title: '测试管理', icon: 'test' }},
+      { path: 'index', component: _import('studentManagement/testManagement/testManagementIndex'), meta: { title: '测试管理', icon: 'test' }},
       { path: 'testAdd', component: _import('studentManagement/testManagement/testAdd'), name: 'testAdd', hidden: true, meta: { title: '制作试卷', icon: 'icon', noCache: true }}
     ]
   },
