@@ -91,7 +91,7 @@
                   </el-col>
                   <el-col :xs="24" :sm="24" :lg="8">
                     <div style="width:100%">
-                      <div style="width:126px;height:126px;text-align:center;margin:0px auto;line-height:126px;font-size:50px">100</div>
+                      <div style="width:126px;height:126px;text-align:center;margin:0px auto;line-height:126px;font-size:50px">{{agrade}}</div>
                       <div style="width:126px;text-align:center;margin:5px auto 0 auto">作业平均分</div>
                     </div>
                   </el-col>
@@ -293,7 +293,7 @@ import { getOtherImportant } from '@/api/otherImportant'
 import { getHighlighting } from '@/api/highlighting'
 import { fetchListStudentGrade } from '@/api/StudentGrade'
 import { getCurrentUser } from '@/api/user'
-import { getAllInfoBySid } from '@/api/studentwork'
+import { getAllInfoBySid, averageGrade } from '@/api/studentwork'
 export default {
   data() {
     return {
@@ -336,8 +336,9 @@ export default {
       projectManagerReviewResults: [55, 60, 50, 40, 55],
       HRReviewResults: [55, 66, 76, 88, 50, 90],
 
-      comprehensiveQualityData: [60, 75, 50, 80, 75]
+      comprehensiveQualityData: [60, 75, 50, 80, 75],
 
+      agrade: 0
     }
   },
   components: {
@@ -393,7 +394,9 @@ export default {
           this.greatList = response.data
           console.log(response.data)
         })
-
+        averageGrade({ sid: data }).then(response => {
+          this.agrade = response.data.average
+        })
         fetchListStudentGrade({ sid: data }).then(response => {
           const data = response.data.items[0]
           this.lastTestScore1 = JSON.parse(data.lasttest1)
