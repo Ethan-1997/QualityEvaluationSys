@@ -115,6 +115,7 @@
 
 <script>
     import { format } from '@/utils/time'
+    import { fetchListTest } from '@/api/testInformation'
     const FILL = '___'
 
     // eslint-disable-next-line
@@ -197,26 +198,32 @@
       },
       created() {
         this.start()
-        this.init()
       },
       mounted() {
-        const id = this.$route.params.id
-        if (id === '1') {
-          return 0
-        } else {
-          this.exam = this.$storage.get('tests-' + id)
-          console.log(this.exam)
-          this.questions = this.exam.questions
-        }
-        this.question = this.questions[this.questionIndex]
+        // const id = this.$route.params.tid
+        // this.questions = this.exam.questions
         // 测试
-    
+        this.getList()
         // 测试
       },
       destroyed() {
         clearInterval(this.timer)
       },
       methods: {
+        getList() {
+          console.log(this.$route.params.tid)
+          const data = {
+            Tid: this.$route.params.tid
+          }
+          fetchListTest(data).then(response => {
+            const exam = response.data.item
+            console.log(response.data.item)
+            this.questions = JSON.parse(exam.tquestion)
+            this.question = this.questions[this.questionIndex]
+            this.init()
+            // console.log(this.list)
+          })
+        },
         toindex() {
           const midtest = this.$storage.get('midtest')
           for (let i = 0; i < midtest.length; i++) {
@@ -433,6 +440,7 @@
         },
         viewAnswer() {
           this.state = 'end'
+          console.log(this.q)
           this.endTime = new Date()
           this.updateTime()
           clearInterval(this.timer)

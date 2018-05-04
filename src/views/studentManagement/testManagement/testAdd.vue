@@ -91,8 +91,10 @@
         </el-card>
     </div>
 </template>
-
 <script>
+    import { fetchListTest, createTest, updateTest } from '@/api/testInformation'
+    import { createTeacherTest, updateTeacherTest } from '@/api/TeacherTest'
+    import { getCurrentUser } from '@/api/user'
     // eslint-disable-next-line
     Array.prototype.contains = function (obj) {
       var i = this.length
@@ -111,15 +113,15 @@
     export default {
       data() {
         return {
-          isAdd: true,
+          Tno: '',
+          Cid: '',
           isEdit: false,
+          isAdd: true,
           date: new Date(),
           exam: {
             id: new Date().getTime(),
             name: '未命名',
-            display: true,
-            questions: [],
-            state: '未完成'
+            questions: []
           },
           question: null, // 当前题目
           options: []
@@ -131,24 +133,46 @@
         }
       },
       mounted() {
-        this.init()
+        console.log(this.exam.questions)
+        this.getListTno()
+        this.getList()
       },
       methods: {
-        init() {
-          if (this.$route.params.id) {
-            this.isAdd = false
-            const exam = this.$storage.get('tests-' + this.$route.params.id)
-            if (exam) {
-              this.exam = exam
-            }
-          }
-
-          //            this.addJudgment()
-          //            this.addSingle()
-          //            this.addMutiple()
-          //            this.addAq()
-          //            this.addFill()
+        getListTno() {
+          getCurrentUser().then(response => {
+            this.Tno = response.data.user.tno
+            this.Cid = response.data.user.cid
+            console.log(this.Tno)
+          })
         },
+        getList() { // 获取试卷信息
+          if (this.$route.params.tid) {
+            this.isAdd = false
+            const data = {
+              Tid: this.$route.params.tid
+            }
+            fetchListTest(data).then(response => {
+              const exam = response.data.item
+              console.log(response.data.item)
+              this.exam.id = exam.tid
+              this.exam.name = exam.tname
+              this.exam.questions = JSON.parse(exam.tquestion)
+              // console.log(this.list)
+            })
+            // const data = {
+            //   Tid: 1525347980238
+            // }
+            // fetchListTest(data).then(response => {
+            //   const exam = response.data.item
+            //   this.exam.id = exam.tid
+            //   this.exam.name = exam.tname
+            //   this.exam.questions = JSON.parse(exam.toption)
+            //   console.log(this.exam)
+            //   // console.log(this.list)
+            // })
+          }
+        },
+    
         finish() {
           const question = {
             id: new Date().getTime(), // TODO
@@ -171,7 +195,7 @@
           } else {
             this.exam.questions.push(question)
           }
-          console.log(this.exam.questions)
+          console.log(this.exam)
           this.question = null
           this.save()
         },
@@ -281,28 +305,72 @@
           }
         },
         save() {
-          this.$storage.set('tests-' + this.exam.id, this.exam)
-          console.log(this.exam)
+          updateTest(this.exam)
         },
         test() {
-          this.$storage.set('tests-' + this.exam.id, this.exam)
+          // this.$storage.set('tests-' + this.exam.id, this.exam)
+          // console.log(this.exam)
+          const exams = {
+            Tno: this.Tno,
+            Tid: this.exam.id,
+            Tname: this.exam.name,
+            Tdate: this.date.getFullYear() + '/' + (+this.date.getMonth() + +1) + '/' + this.date.getDate(),
+            Tdisplay: 'false',
+            Cid: this.Cid
+          }
+          console.log(223)
           console.log(this.exam)
-          const exams = this.$storage.get('exams', [])
+          const exam = {
+            Tid: this.exam.id,
+            Tname: this.exam.name,
+            Tquestion: JSON.stringify(this.exam.questions),
+            Ttype: '日常'
+          }
+          console.log(this.isAdd)
           if (this.isAdd) {
-            exams.push({
-              id: this.exam.id,
-              name: this.exam.name,
-              day: this.exam.day,
-              month: this.exam.month,
-              year: this.exam.year,
-              date: this.date.getFullYear() + '/' + (+this.date.getMonth() + +1) + '/' + this.date.getDate(),
-              display: this.exam.display,
-              state: this.exam.state
+            createTeacherTest(exams).then(res => {
+              if (res.data.data === 'success') {
+                this.getList()
+                this.dialogFormVisible = false
+                this.$notify({
+                  title: '成功',
+                  message: '创建成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              } else {
+                this.$notify({
+                  title: '失败',
+                  message: '创建失败',
+                  type: 'error',
+                  duration: 2000
+                })
+              }
             })
-            this.$storage.set('exams', exams)
-            console.log(this.exam.id)
+            // this.$storage.set('exams', exams)
+            // console.log(this.exam.id)
+            createTest(exam)
           } else {
-            // TODO 修改试卷名
+            updateTeacherTest(exams)
+            updateTest(exam).then(res => {
+              if (res.data.data === 'success') {
+                this.getList()
+                this.dialogFormVisible = false
+                this.$notify({
+                  title: '成功',
+                  message: '更新成功',
+                  type: 'success',
+                  duration: 2000
+                })
+              } else {
+                this.$notify({
+                  title: '失败',
+                  message: '更新失败',
+                  type: 'error',
+                  duration: 2000
+                })
+              }
+            })
           }
           this.$router.push('/tests/index')
         },

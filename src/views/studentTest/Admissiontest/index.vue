@@ -78,7 +78,7 @@
                 <el-row style="padding:32px;">
                   <el-col :span="24">
                     <div class="complete">
-                      <el-progress type="circle" :percentage="percentage"></el-progress>
+                      <el-progress type="circle" :percentage="student.sstatus"></el-progress>
                     </div>
                   </el-col>
                   <el-col :span="24">
@@ -101,9 +101,12 @@
     </div>
 </template>
 <script>
+import { fetchListStudentGrade } from '@/api/StudentGrade'
+import { getCurrentUser } from '@/api/user'
 export default {
   data() {
     return {
+      student: null,
       activeName: '',
       percentage: 0,
       disabled_report: true,
@@ -114,25 +117,21 @@ export default {
     }
   },
   created() {
-    console.log(this.disabled_report)
-    this.disabled_character = this.$storage.get('ctest')
-    this.disabled_professional = this.$storage.get('ptest')
-    this.disabled_thinking = this.$storage.get('ttest')
-    this.percentage = this.$storage.get('percentage')
-    this.activeName = this.$storage.get('name')
-    if (this.activeName === null) this.activeName = 'character'
-    console.log(this.activeName)
-    if (this.percentage === 99) {
-      this.percentage = 100
-      this.$storage.set('percentage', this.percentage)
-    }
-    if (this.percentage < 100) {
-      this.disabled_report = true
-    } else {
-      this.disabled_report = false
-    }
+    this.getList()
   },
   methods: {
+    getList() {
+      getCurrentUser().then(response => {
+        this.Sid = response.data.user.sid
+        console.log(response.data.user.sid)
+        const data = {
+          Sid: this.Sid
+        }
+        fetchListStudentGrade(data).then(response => {
+          this.student = response.data.items[0]
+        })
+      })
+    },
     clear() {
       this.$storage.set('ctest', false)
       this.$storage.set('ptest', false)

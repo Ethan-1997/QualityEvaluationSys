@@ -108,11 +108,7 @@ export default {
     }
   },
   created() {
-    if (this.$storage.get('studentTeamVote') !== null) {
-      this.tableData = this.$storage.get('studentTeamVote')
-    } else {
-      this.getList()
-    }
+    this.getList()
   },
   methods: {
     selectChange(val, row) {
@@ -192,7 +188,10 @@ export default {
       }
     },
     getList() {
-      fetchList().then(Response => {
+      const data = {
+        Cid: 1
+      }
+      fetchList(data).then(Response => {
         this.tableData = Response.data.ticket
         this.$storage.set('studentTeamVote', Response.data.ticket)
         console.log(this.tableData)

@@ -52,18 +52,16 @@
         return {
           visible2: false,
           midtest: [],
-          professionalTest: []
+          professionalTest: [
+            { name: '期末测试（1）', date: '2017/9/20', radio: '期末', state: '未完成' },
+            { name: '期末测试（2）', date: '2017/9/20', radio: '期末', state: '未完成' },
+            { name: '期末测试（3）', date: '2017/9/20', radio: '期末', state: '未完成' },
+            { name: '期末测试（4）', date: '2017/9/20', radio: '期末', state: '未完成' },
+            { name: '期末测试（5）', date: '2017/9/20', radio: '期末', state: '未完成' }
+          ]
         }
       },
-      created() {
-        this.init()
-      },
       methods: {
-        init() {
-          this.professionalTest = this.$storage.get('professionalTest')
-          console.log(3123)
-          console.log(this.professionalTest)
-        },
         goTest(row) {
           const path = '/systemTest/lastTest' + row.name.split('')[5] + '/'
           this.$router.push({ path: path })
