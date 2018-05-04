@@ -325,8 +325,8 @@
             Ttype: '日常'
           }
           if (this.isAdd) {
-            createTeacherTest(exams).then(() => {
-              createTest(exam).then(res => {
+            createTest(exam).then(() => {
+              createTeacherTest(exams).then(res => {
                 if (res.data.data === 'success') {
                   this.dialogFormVisible = false
                   this.$notify({
@@ -349,8 +349,8 @@
             // this.$storage.set('exams', exams)
             // console.log(this.exam.id)
           } else {
-            updateTeacherTest(exams).then(() => {
-              updateTest(exam).then(res => {
+            updateTest(exam).then(() => {
+              updateTeacherTest(exams).then(res => {
                 if (res.data.data === 'success') {
                   this.dialogFormVisible = false
                   this.$notify({
