@@ -122,9 +122,10 @@
   </el-row>
 </div>
 </template>
-
 <script>
 import { getStudentByCid } from '@/api/student'
+import { getAllInfoBySid } from '@/api/studentwork'
+import { getDailysummary } from '@/api/participation'
 import { fetchUser } from '@/api/user'
 import { fetchReviewGradeList, updateReviewGrade } from '@/api/reviewgrade'
 import ClassAttendance from './components/ClassAttendance'
@@ -133,15 +134,15 @@ import KnowledgeTestGrade from './components/KnowledgeTestGrade'
 export default {
   data() {
     return {
-      studentFormData: [{ Simage: null }],
+      studentFormData: null,
 
-      signInData: 10,
-      lateSignInData: 8,
-      leaveSignInData: 6,
-      notSignInData: 4,
+      signInData: null,
+      lateSignInData: null,
+      leaveSignInData: null,
+      notSignInData: null,
 
-      headInData: 20,
-      notHeadInData: 10,
+      headInData: 0,
+      notHeadInData: 0,
 
       gradeData: ['10', '20', '14', '16', '8'],
 
@@ -172,7 +173,8 @@ export default {
         text: null,
         submitstatus: null
       },
-      image: null
+      image: null,
+      workdata: null
     }
   },
   components: {
@@ -191,10 +193,98 @@ export default {
   },
   methods: {
     clickTab() {
+      this.getimagedata()
       this.$nextTick(() => {
         this.$refs.gradeTabsOne.chart.resize()
         this.$refs.gradeTabsTwo.chart.resize()
         this.$refs.gradeTabsThree.chart.resize()
+      })
+    },
+    getimagedata() {
+      getDailysummary({ sid: this.studentFormData[this.index].sid }).then(response => {
+        this.dailyList = response.data.items
+        for (let i = 0; i < this.dailyList.length; i++) {
+          if (this.dailyList[i].status === '已到') {
+            this.signInData++
+          } else if (this.dailyList[i].status === '请假') {
+            this.leaveSignInData++
+          } else if (this.dailyList[i].status === '未到') {
+            this.notSignInData++
+          } else if (this.dailyList[i].status === '迟到') {
+            this.lateSignInData++
+          }
+        }
+      })
+      getAllInfoBySid({ sid: this.studentFormData[this.index].sid }).then(response => {
+        this.workdata = response.data.items
+        for (let i = 0; i < this.workdata.length; i++) {
+          if (this.dailyList[i].submitStatus === '已提交') {
+            this.headInData++
+          } else {
+            this.notHeadInData++
+          }
+        }
+      })
+      this.$nextTick(() => {
+        this.$refs.gradeTabsOne.chart.resize()
+        this.$refs.gradeTabsTwo.chart.resize()
+        this.$refs.gradeTabsThree.chart.resize()
+      })
+      this.$refs.gradeTabsTwo.chart.setOption({
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          left: 'center',
+          bottom: '10',
+          data: ['已上交', '未上交']
+        },
+        calculable: true,
+        series: [
+          {
+            name: 'WEEKLY WRITE ARTICLES',
+            type: 'pie',
+            roseType: 'radius',
+            radius: [15, 95],
+            center: ['50%', '38%'],
+            data: [
+              { value: this.headInData, name: '已上交' },
+              { value: this.notHeadInData, name: '未上交' }
+            ],
+            animationEasing: 'cubicInOut',
+            animationDuration: 2600
+          }
+        ]
+      })
+      this.$refs.gradeTabsOne.chart.setOption({
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          left: 'center',
+          bottom: '10',
+          data: ['已到', '迟到', '请假', '未到']
+        },
+        calculable: true,
+        series: [
+          {
+            name: 'WEEKLY WRITE ARTICLES',
+            type: 'pie',
+            roseType: 'radius',
+            radius: [15, 95],
+            center: ['50%', '38%'],
+            data: [
+              { value: this.signInData, name: '已到' },
+              { value: this.lateSignInData, name: '迟到' },
+              { value: this.lateSignInData, name: '请假' },
+              { value: this.notSignInData, name: '未到' }
+            ],
+            animationEasing: 'cubicInOut',
+            animationDuration: 2600
+          }
+        ]
       })
     },
     getStudentData() {
@@ -208,6 +298,7 @@ export default {
         fetchUser(this.imageQuery).then(response => {
           this.image = response.data.item.avatar
         })
+        this.getimagedata()
       })
     },
     getStudentGrade() {
@@ -222,6 +313,7 @@ export default {
     setCarouselItem(buttonIndex, sid, uno) {
       this.imageQuery.uno = uno
       this.gradeQuery.sid = sid
+      this.getimagedata()
       this.getStudentGrade()
       this.index = buttonIndex
     },

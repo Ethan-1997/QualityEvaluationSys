@@ -78,20 +78,6 @@ export const asyncRouterMap = [
       meta: { title: '首页', icon: 'dashboard', noCache: true }
     }]
   },
-
-  {
-    path: '/tests',
-    component: Layout,
-    meta: {
-      icon: 'test',
-      title: '学生测试管理',
-      roles: ['teacher']
-    },
-    children: [
-      { path: 'index', component: _import('studentManagement/testManagement/testManagementIndex'), name: 'testManagementIndex', meta: { title: '测试管理', icon: 'test' }},
-      { path: 'testAdd', component: _import('studentManagement/testManagement/testAdd'), name: 'testAdd', hidden: true, meta: { title: '制作试卷', icon: 'icon', noCache: true }}
-    ]
-  },
   {
     path: '/tests',
     component: Layout,
@@ -436,7 +422,19 @@ export const asyncRouterMap = [
     ]
   },
   // 老师端
-
+  {
+    path: '/tests',
+    component: Layout,
+    meta: {
+      icon: 'test',
+      title: '学生测试管理',
+      roles: ['teacher']
+    },
+    children: [
+      { path: 'index', component: _import('studentManagement/testManagement/testManagementIndex'), name: 'testManagementIndex', meta: { title: '测试管理', icon: 'test' }},
+      { path: 'testAdd', component: _import('studentManagement/testManagement/testAdd'), name: 'testAdd', hidden: true, meta: { title: '制作试卷', icon: 'icon', noCache: true }}
+    ]
+  },
   {
     path: '/workManagement',
     component: Layout,

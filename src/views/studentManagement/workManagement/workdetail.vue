@@ -68,7 +68,7 @@
       </el-table-column>
       <el-table-column align="center" prop="grade" :label="tableCol.grade" width="100">
         <template slot-scope="scope">
-          <el-button v-if="scope.row.grade===null"  type="primary" size="mini" @click="handleUpdate(scope.row)">点评</el-button>
+          <el-button v-if="scope.row.grade===null"  :disabled="scope.row.submitStatus !== '已提交'"  type="primary" size="mini" @click="handleUpdate(scope.row)">点评</el-button>
           <span v-else style="font-size:30px">{{scope.row.grade}}</span>
         </template>
       </el-table-column>
