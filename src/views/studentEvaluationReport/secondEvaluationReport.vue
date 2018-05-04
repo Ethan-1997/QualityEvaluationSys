@@ -127,7 +127,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.single_success}}/{{midTest.single_total}}</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.singleSuccess}}/{{midTest.singleTotal}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -139,7 +139,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.judgment_success}}/{{midTest.judgment_total}}</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.judgmentSuccess}}/{{midTest.judgmentTotal}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
