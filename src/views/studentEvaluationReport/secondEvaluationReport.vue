@@ -290,7 +290,7 @@ import { getOtherImportant } from '@/api/otherImportant'
 import { getHighlighting } from '@/api/highlighting'
 import { fetchListStudentGrade } from '@/api/StudentGrade'
 import { getCurrentUser } from '@/api/user'
-import storage from '@/utils/storage'
+import { fetchReviewGradeList } from '@/api/reviewgrade'
 export default {
   data() {
     return {
@@ -321,10 +321,10 @@ export default {
       },
       comprehensiveQualityData: [60, 75, 60, 80, 50],
 
-      examinationGrade1: storage.get('examinationGrade1'),
-      examinationGrade2: storage.get('examinationGrade2'),
-      examinationGrade3: storage.get('examinationGrade3'),
-      examinationGrade4: storage.get('examinationGrade4')
+      examinationGrade1: 0,
+      examinationGrade2: 0,
+      examinationGrade3: 0,
+      examinationGrade4: 0
     }
   },
   created() {
@@ -363,22 +363,25 @@ export default {
             }
           }
         })
-        console.log(1)
         getBreakRole({ sid: data }).then(response => {
-          console.log(response.data)
           this.breakRuleList = response.data
         })
         getHighlighting({ sid: data }).then(response => {
-          console.log(response.data)
           this.highLightList = response.data
         })
         getOtherImportant({ sid: data }).then(response => {
           this.greatList = response.data
-          console.log(response.data)
         })
         fetchListStudentGrade({ sid: data }).then(response => {
           const data = response.data.items[0]
           this.midTest = JSON.parse(data.midtest)
+        })
+        fetchReviewGradeList({ type: 'project', sid: data }).then(response => {
+          this.gradeList = response.data.items[0]
+          this.examinationGrade1 = this.gradeList.grade1
+          this.examinationGrade2 = this.gradeList.grade2
+          this.examinationGrade3 = this.gradeList.grade3
+          this.examinationGrade4 = this.gradeList.grade4
         })
         getAllInfoBySid({ sid: data }).then(response => {
           this.allinfo = response.data.items

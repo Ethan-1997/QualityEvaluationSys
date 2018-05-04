@@ -174,9 +174,9 @@ export default {
         fetchReviewGradeList(this.gradeQuery).then(response => {
           this.gradeList = response.data.items[0]
           this.reviewTableData[0].grade = this.gradeList.grade1
-          this.reviewTableData[1].grade = this.gradeList.grade1
-          this.reviewTableData[2].grade = this.gradeList.grade1
-          this.reviewTableData[3].grade = this.gradeList.grade1
+          this.reviewTableData[1].grade = this.gradeList.grade2
+          this.reviewTableData[2].grade = this.gradeList.grade3
+          this.reviewTableData[3].grade = this.gradeList.grade4
           console.log(this.gradeList)
         })
         fetchUser(this.imageQuery).then(response => {
@@ -187,6 +187,11 @@ export default {
     getStudentGrade() {
       fetchReviewGradeList(this.gradeQuery).then(response => {
         this.gradeList = response.data.items[0]
+        this.reviewTableData[0].grade = this.gradeList.grade1
+        this.reviewTableData[1].grade = this.gradeList.grade2
+        this.reviewTableData[2].grade = this.gradeList.grade3
+        this.reviewTableData[3].grade = this.gradeList.grade4
+        this.text = this.gradeList.text
         console.log(this.gradeList)
       })
       fetchUser(this.imageQuery).then(response => {
@@ -212,9 +217,9 @@ export default {
     },
     saveButton() {
       this.gradeList.grade1 = this.reviewTableData[0].grade
-      this.gradeList.grade2 = this.reviewTableData[0].grade
-      this.gradeList.grade3 = this.reviewTableData[0].grade
-      this.gradeList.grade4 = this.reviewTableData[0].grade
+      this.gradeList.grade2 = this.reviewTableData[1].grade
+      this.gradeList.grade3 = this.reviewTableData[2].grade
+      this.gradeList.grade4 = this.reviewTableData[3].grade
       if (
         this.studentFormData[this.index].remark !== ''
       ) {
