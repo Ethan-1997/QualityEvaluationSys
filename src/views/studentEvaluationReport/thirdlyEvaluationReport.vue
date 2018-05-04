@@ -352,6 +352,7 @@ export default {
     getList() {
       console.log(1)
       getCurrentUser().then(response => {
+
         const data = response.data.user.sid
         console.log(data)
         fetchListDaily({ sid: data }).then(response => {
@@ -393,13 +394,16 @@ export default {
           this.greatList = response.data
           console.log(response.data)
         })
-        fetchListStudentGrade(data).then(response => {
+
+        fetchListStudentGrade({ sid: data }).then(response => {
           const data = response.data.items[0]
-          this.lastTestScore1 = data.lasttest1
-          this.lastTestScore2 = data.lasttest2
-          this.lastTestScore3 = data.lasttest3
-          this.lastTestScore4 = data.lasttest4
-          this.lastTestScore5 = data.lasttest5
+          this.lastTestScore1 = JSON.parse(data.lasttest1)
+          this.lastTestScore2 = JSON.parse(data.lasttest2)
+          this.lastTestScore3 = JSON.parse(data.lasttest3)
+          this.lastTestScore4 = JSON.parse(data.lasttest4)
+          this.lastTestScore5 = JSON.parse(data.lasttest5)
+          this.lastTestAvg = (this.lastTestScore1.score + this.lastTestScore2.score + this.lastTestScore3.score + this.lastTestScore4.score + this.lastTestScore5.score) / 5
+          console.log(data)
           this.init()
         })
         getAllInfoBySid({ sid: data }).then(response => {
@@ -467,22 +471,6 @@ export default {
   },
   created() {
     this.getList()
-    if (this.$storage.get('lastTest1Score') !== null) {
-      this.lastTestScore1 = this.$storage.get('lastTest1Score')
-    }
-    if (this.$storage.get('lastTest2Score') !== null) {
-      this.lastTestScore2 = this.$storage.get('lastTest2Score')
-    }
-    if (this.$storage.get('lastTest3Score') !== null) {
-      this.lastTestScore3 = this.$storage.get('lastTest3Score')
-    }
-    if (this.$storage.get('lastTest4Score') !== null) {
-      this.lastTestScore4 = this.$storage.get('lastTest4Score')
-    }
-    if (this.$storage.get('lastTest5Score') !== null) {
-      this.lastTestScore5 = this.$storage.get('lastTest5Score')
-    }
-    this.lastTestAvg = (this.lastTestScore1.score + this.lastTestScore2.score + this.lastTestScore3.score + this.lastTestScore4.score + this.lastTestScore5.score) / 5
   }
 }
 
