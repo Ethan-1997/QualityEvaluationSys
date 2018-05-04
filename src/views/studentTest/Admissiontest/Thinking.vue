@@ -140,7 +140,8 @@
           state: '', // 'start', 'end',
           startTime: null,
           endTime: null,
-          minute: 0
+          minute: 0,
+          Sid: null
         }
       },
       computed: {
@@ -201,6 +202,9 @@
             s.thinking = JSON.stringify(iitem)
             updateStudentGrade(s)
           })
+          this.$storage.set('activeName' + this.Sid, 'character')
+          this.$storage.set('disabled_thinking' + this.Sid, true)
+          this.$router.push({ name: 'admissionTestIndex' })
         },
         getList() {
           getCurrentUser().then(response => {

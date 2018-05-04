@@ -158,6 +158,21 @@
           }
           return types[this.question.type]
         },
+        startTimeStr() {
+          return format(new Date(this.startTime), 'hh:mm')
+        }
+      },
+      created() {
+        this.getList()
+        this.start()
+      },
+      destroyed() {
+        clearInterval(this.timer)
+      },
+      methods: {
+        submit() {
+          this.PDP()
+        },
         PDP() {
           let tiger = 0
           let peacock = 0
@@ -276,22 +291,10 @@
             s.scharacter = JSON.stringify(character)
             updateStudentGrade(s)
           })
+          this.$storage.set('activeName' + this.Sid, 'professional')
+          this.$storage.set('disabled_character' + this.Sid, true)
+          this.$router.push({ name: 'admissionTestIndex' })
           // 性格测试数据
-        },
-        startTimeStr() {
-          return format(new Date(this.startTime), 'hh:mm')
-        }
-      },
-      created() {
-        this.getList()
-        this.start()
-      },
-      destroyed() {
-        clearInterval(this.timer)
-      },
-      methods: {
-        submit() {
-          this.PDP()
         },
         getList() {
           getCurrentUser().then(response => {
