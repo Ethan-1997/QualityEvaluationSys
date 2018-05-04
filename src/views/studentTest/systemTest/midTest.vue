@@ -115,7 +115,9 @@
 
 <script>
     import { format } from '@/utils/time'
-    import fetchList from '@/api/Professional'
+    import { fetchListTest } from '@/api/testInformation'
+    import { getCurrentUser } from '@/api/user'
+    import { updateStudentGrade, fetchListStudentGrade } from '@/api/StudentGrade'
     const FILL = '___'
 
     // eslint-disable-next-line
@@ -139,7 +141,8 @@
           startTime: null,
           endTime: null,
           minute: 0,
-          key: 1
+          key: 1,
+          Sid: null
         }
       },
       computed: {
@@ -209,12 +212,30 @@
             singleSuccess: single_success,
             judgmentSuccess: judgment_success
           }
-          this.$storage.set('midTestSocre', professional)
-          this.$router.push({ name: 'projectDefense' })
+          const data = {
+            Sid: this.Sid
+          }
+          fetchListStudentGrade(data).then(response => {
+            const s = response.data.items[0]
+            s.midtest = JSON.stringify(professional)
+            updateStudentGrade(s)
+          })
+          this.$router.push({ name: 'projectDefenseIndex' })
         },
         getList() {
-          fetchList().then(Response => {
-            this.questions = Response.data.items
+          getCurrentUser().then(response => {
+            this.Sid = response.data.user.sid
+          })
+          const data = {
+            Tid: 'SystemTest-PRO-6'
+          }
+          fetchListTest(data).then(response => {
+            const exam = response.data.item
+            this.questions = JSON.parse(exam.tquestion)
+            this.question = this.questions[this.questionIndex]
+            this.init()
+            console.log(this.questions, this.question)
+            // console.log(this.list)
           })
         },
         init() {
