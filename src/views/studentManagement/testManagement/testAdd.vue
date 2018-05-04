@@ -318,61 +318,59 @@
             Tdisplay: 'false',
             Cid: this.Cid
           }
-          console.log(223)
-          console.log(this.exam)
           const exam = {
-            Tid: this.exam.id,
+            Tid: '' + this.exam.id,
             Tname: this.exam.name,
             Tquestion: JSON.stringify(this.exam.questions),
             Ttype: '日常'
           }
-          console.log(this.isAdd)
           if (this.isAdd) {
-            createTeacherTest(exams).then(res => {
-              if (res.data.data === 'success') {
-                this.getList()
-                this.dialogFormVisible = false
-                this.$notify({
-                  title: '成功',
-                  message: '创建成功',
-                  type: 'success',
-                  duration: 2000
-                })
-              } else {
-                this.$notify({
-                  title: '失败',
-                  message: '创建失败',
-                  type: 'error',
-                  duration: 2000
-                })
-              }
+            createTeacherTest(exams).then(() => {
+              createTest(exam).then(res => {
+                if (res.data.data === 'success') {
+                  this.dialogFormVisible = false
+                  this.$notify({
+                    title: '成功',
+                    message: '创建成功',
+                    type: 'success',
+                    duration: 2000
+                  })
+                  this.$router.push('/tests/index')
+                } else {
+                  this.$notify({
+                    title: '失败',
+                    message: '创建失败',
+                    type: 'error',
+                    duration: 2000
+                  })
+                }
+              })
             })
             // this.$storage.set('exams', exams)
             // console.log(this.exam.id)
-            createTest(exam)
           } else {
-            updateTeacherTest(exams)
-            updateTest(exam).then(res => {
-              if (res.data.data === 'success') {
-                this.getList()
-                this.dialogFormVisible = false
-                this.$notify({
-                  title: '成功',
-                  message: '更新成功',
-                  type: 'success',
-                  duration: 2000
-                })
-              } else {
-                this.$notify({
-                  title: '失败',
-                  message: '更新失败',
-                  type: 'error',
-                  duration: 2000
-                })
-              }
+            updateTeacherTest(exams).then(() => {
+              updateTest(exam).then(res => {
+                if (res.data.data === 'success') {
+                  this.dialogFormVisible = false
+                  this.$notify({
+                    title: '成功',
+                    message: '更新成功',
+                    type: 'success',
+                    duration: 2000
+                  })
+                  this.$router.push('/tests/index')
+                } else {
+                  this.$notify({
+                    title: '失败',
+                    message: '更新失败',
+                    type: 'error',
+                    duration: 2000
+                  })
+                }
+              })
             })
           }
-          this.$router.push('/tests/index')
         },
         numberToLetter(number) {
           const arr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
