@@ -22,6 +22,13 @@ export function switchDisplay(data) { // 更新学生试卷信息StudentTest
     params: data
   })
 }
+export function getbysid(data) { // 更新学生试卷信息StudentTest
+  return request({
+    url: '/studenttest/get',
+    method: 'get',
+    params: data
+  })
+}
 export function updateStudentTest(data) { // 更新学生试卷信息StudentTest
   return request({
     url: '/studenttest/update',

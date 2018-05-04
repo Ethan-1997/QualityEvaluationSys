@@ -39,10 +39,10 @@
                     </el-row>
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>正常出勤：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="arrived/parseInt(dailyList.length/2)*100" color="#67c23a"></el-progress></div><div>&nbsp;{{ arrived }}/{{parseInt(dailyList.length/2)}}</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>迟到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="later/parseInt(dailyList.length/2)*100" color="#e6a23c"></el-progress></div><div>&nbsp;{{ later }}/{{parseInt(dailyList.length/2)}}</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>未到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="unarrived/parseInt(dailyList.length/2)*100" color="#F56C6C"></el-progress></div><div>&nbsp;{{ unarrived }}/{{parseInt(dailyList.length/2)}}</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>请假：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="18" :percentage="askForLeave/parseInt(dailyList.length/2)*100" color="#909399"></el-progress></div><div>&nbsp;{{ askForLeave }}/{{parseInt(dailyList.length/2)}}</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>正常出勤：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="10" :percentage="arrived*10" color="#67c23a"></el-progress></div><div>&nbsp;{{ arrived }}/10</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>迟到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="10" :percentage="later*10" color="#e6a23c"></el-progress></div><div>&nbsp;{{ later }}/10</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>未到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="10" :percentage="unarrived*10" color="#F56C6C"></el-progress></div><div>&nbsp;{{ unarrived }}/10</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>请假：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="10" :percentage="askForLeave*10" color="#909399"></el-progress></div><div>&nbsp;{{ askForLeave }}/10</div></div>
                       </el-col>
                     </el-row>
                   </el-col>
@@ -57,7 +57,7 @@
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
                         <div>
-                          <daily-performance-summary :first-data="parseInt(breakRuleList.length/2)" :second-data="parseInt(highLightList.length/2)" :thirdly-data="parseInt(greatList.length/2)" ref="barchart1"></daily-performance-summary>
+                          <daily-performance-summary :first-data="breakRuleList.count" :second-data="highLightList.count" :thirdly-data="greatList.count" ref="barchart1"></daily-performance-summary>
                         </div>
                       </el-col>
                     </el-row>
@@ -79,19 +79,19 @@
                 <el-row :gutter="20"  type="flex" justify="center">
                   <el-col :xs="24" :sm="24" :lg="8">
                     <div style="width:100%">
-                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="100"  color="#67c23a"></el-progress></div>
+                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="up/(up+notup)*100"  color="#67c23a"></el-progress></div>
                       <div style="width:126px;text-align:center;margin:5px auto 0 auto">上交情况</div>
                     </div>
                   </el-col>
                   <el-col :xs="24" :sm="24" :lg="8">
                     <div style="width:100%">
-                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="0"  color="#F56C6C"></el-progress></div>
+                      <div style="width:126px;margin:0px auto"><el-progress type="circle" :percentage="notup/(up+notup)*100"  color="#F56C6C"></el-progress></div>
                       <div style="width:126px;text-align:center;margin:5px auto 0 auto">未上交情况</div>
                     </div>
                   </el-col>
                   <el-col :xs="24" :sm="24" :lg="8">
                     <div style="width:100%">
-                      <div style="width:126px;height:126px;text-align:center;margin:0px auto;line-height:126px;font-size:50px">100</div>
+                      <div style="width:126px;height:126px;text-align:center;margin:0px auto;line-height:126px;font-size:50px">{{agrade}}</div>
                       <div style="width:126px;text-align:center;margin:5px auto 0 auto">作业平均分</div>
                     </div>
                   </el-col>
@@ -127,7 +127,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.single_success}}/{{midTest.single_total}}</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.singleSuccess}}/{{midTest.singleTotal}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -139,7 +139,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.judgment_success}}/{{midTest.judgment_total}}</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.judgmentSuccess}}/{{midTest.judgmentTotal}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -280,16 +280,17 @@
 </template>
 
 <script>
+import { getAllInfoBySid, averageGrade } from '@/api/studentwork'
 import TeacherReviewResults from './components/TeacherReviewResults'
 import DailyPerformanceSummary from './components/DailyPerformanceSummary'
 import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
 import { fetchListDaily } from '@/api/participation'
-import { fetchListBreakRule } from '@/api/breakRole'
-import { fetchListGreat } from '@/api/otherImportant'
-import { fetchListHighLight } from '@/api/highlighting'
+import { getBreakRole } from '@/api/breakRole'
+import { getOtherImportant } from '@/api/otherImportant'
+import { getHighlighting } from '@/api/highlighting'
 import { fetchListStudentGrade } from '@/api/StudentGrade'
 import { getCurrentUser } from '@/api/user'
-import storage from '@/utils/storage'
+import { fetchReviewGradeList } from '@/api/reviewgrade'
 export default {
   data() {
     return {
@@ -304,6 +305,9 @@ export default {
       arrived: 0,
       unarrived: 0,
       later: 0,
+      up: 0,
+      allinfo: null,
+      notup: 0,
       classTeacherAssessment: [55, 66, 76, 88, 50],
       lecturerAssessment: [30, 40, 50, 70, 55],
       assistantAssessment: [55, 60, 70, 40, 55],
@@ -317,10 +321,12 @@ export default {
       },
       comprehensiveQualityData: [60, 75, 60, 80, 50],
 
-      examinationGrade1: storage.get('examinationGrade1'),
-      examinationGrade2: storage.get('examinationGrade2'),
-      examinationGrade3: storage.get('examinationGrade3'),
-      examinationGrade4: storage.get('examinationGrade4')
+      examinationGrade1: 0,
+      examinationGrade2: 0,
+      examinationGrade3: 0,
+      examinationGrade4: 0,
+
+      agrade: 0
     }
   },
   created() {
@@ -334,113 +340,66 @@ export default {
   methods: {
     getList() {
       getCurrentUser().then(response => {
-        const data = { Sid: response.data.user.sid }
-        console.log(data)
-        fetchListStudentGrade(data).then(response => {
+        const data = response.data.user.sid
+        fetchListDaily({ sid: data }).then(response => {
+          this.dailyList = response.data.items
+          this.askForLeave = 0
+          this.arrived = 0
+          this.unarrived = 0
+          this.later = 0
+
+          for (let i = 0; i < this.dailyList.length / 2; i++) {
+            switch (this.dailyList[i].status) {
+              case '请假':
+                this.askForLeave = this.askForLeave + 1
+                break
+              case '未到':
+                this.unarrived = this.unarrived + 1
+                break
+              case '已到':
+                this.arrived = this.arrived + 1
+                break
+              case '迟到':
+                this.later = this.later + 1
+                break
+            }
+          }
+        })
+        getBreakRole({ sid: data }).then(response => {
+          this.breakRuleList = response.data
+        })
+        getHighlighting({ sid: data }).then(response => {
+          this.highLightList = response.data
+        })
+        averageGrade({ sid: data }).then(response => {
+          this.agrade = response.data.average
+        })
+        getOtherImportant({ sid: data }).then(response => {
+          this.greatList = response.data
+        })
+        fetchListStudentGrade({ sid: data }).then(response => {
           const data = response.data.items[0]
           this.midTest = JSON.parse(data.midtest)
-          console.log(this.midTest)
-          this.init()
+        })
+        fetchReviewGradeList({ type: 'project', sid: data }).then(response => {
+          this.gradeList = response.data.items[0]
+          this.examinationGrade1 = this.gradeList.grade1
+          this.examinationGrade2 = this.gradeList.grade2
+          this.examinationGrade3 = this.gradeList.grade3
+          this.examinationGrade4 = this.gradeList.grade4
+        })
+        getAllInfoBySid({ sid: data }).then(response => {
+          this.allinfo = response.data.items
+          for (let i = 0; i < this.allinfo.length; i++) {
+            if (this.allinfo[i].submitStatus === '已提交') {
+              this.up++
+            } else {
+              this.notup++
+            }
+          }
         })
       })
-    },
-    init() {
-      if (this.$storage.get('dailyList') !== null) {
-        this.dailyList = this.$storage.get('dailyList')
-        for (let i = 0; i < this.dailyList.length; i++) {
-          switch (this.dailyList[i].status) {
-            case '请假':
-              this.askForLeave = this.askForLeave + 1
-              break
-            case '未到':
-              this.unarrived = this.unarrived + 1
-              break
-            case '已到':
-              this.arrived = this.arrived + 1
-              break
-            case '迟到':
-              this.later = this.later + 1
-              break
-          }
-        }
-        this.askForLeave = parseInt(this.askForLeave / 2)
-        this.unarrived = parseInt(this.unarrived / 2)
-        this.arrived = parseInt(this.arrived / 2)
-        this.later = parseInt(this.later / 2)
-        const length = this.dailyList.length
-        this.firstDaily = this.dailyList[length - 1]
-        this.secondDaily = this.dailyList[length - 2]
-        this.thirdDaily = this.dailyList[length - 3]
-        this.fourthDaily = this.dailyList[length - 4]
-        this.fifthDaily = this.dailyList[length - 5]
-      } else {
-        this.getListDaily()
-      }
-      if (this.$storage.get('breakRuleList') !== null) {
-        this.breakRuleList = this.$storage.get('breakRuleList')
-      } else {
-        this.getListBreakRule()
-      }
-      if (this.$storage.get('greatList') !== null) {
-        this.greatList = this.$storage.get('greatList')
-      } else {
-        this.getListGreat()
-      }
-      if (this.$storage.get('highLightList') !== null) {
-        this.highLightList = this.$storage.get('highLightList')
-      } else {
-        this.getListHighLight()
-      }
-    },
-    getListDaily() {
-      fetchListDaily().then(response => {
-        this.dailyList = response.data.items
-        for (let i = 0; i < this.dailyList.length; i++) {
-          switch (this.dailyList[i].status) {
-            case '请假':
-              this.askForLeave = this.askForLeave + 1
-              break
-            case '未到':
-              this.unarrived = this.unarrived + 1
-              break
-            case '已到':
-              this.arrived = this.arrived + 1
-              break
-            case '迟到':
-              this.later = this.later + 1
-              break
-          }
-        }
-        this.askForLeave = parseInt(this.askForLeave / 2)
-        this.unarrived = parseInt(this.unarrived / 2)
-        this.arrived = parseInt(this.arrived / 2)
-        this.later = parseInt(this.later / 2)
-        const length = this.dailyList.length
-        this.firstDaily = this.dailyList[length - 1]
-        this.secondDaily = this.dailyList[length - 2]
-        this.thirdDaily = this.dailyList[length - 3]
-        this.fourthDaily = this.dailyList[length - 4]
-        this.fifthDaily = this.dailyList[length - 5]
-        console.log(1)
-        console.log(this.firstDaily)
-      })
-    },
-    getListBreakRule() {
-      fetchListBreakRule(this.listQuery).then(response => {
-        this.breakRuleList = response.data.items
-      })
-    },
-    getListGreat() {
-      fetchListGreat(this.listQuery).then(response => {
-        this.greatList = response.data.items
-      })
-    },
-    getListHighLight() {
-      fetchListHighLight(this.listQuery).then(response => {
-        this.highLightList = response.data.items
-      })
     }
-
   }
 }
 
