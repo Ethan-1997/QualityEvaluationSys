@@ -214,7 +214,7 @@
                 </el-row>
                 <el-row :gutter="20" type="flex" ju40ify="center">
                   <div style="padding:0px 32px 16px 32px;">
-                    <!-- {{ firstReport[0].title }} -->
+                    {{ firstReport[0].title }}
                   </div>
                 </el-row>
               </el-card>
