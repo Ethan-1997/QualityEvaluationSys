@@ -78,7 +78,6 @@ export default {
           this.characterFourData = cstr[3]
           this.characterFiveData = cstr[4]
           this.initChart()
-          debugger
         })
       })
     },

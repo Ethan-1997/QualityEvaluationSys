@@ -352,7 +352,6 @@ export default {
     getList() {
       console.log(1)
       getCurrentUser().then(response => {
-
         const data = response.data.user.sid
         console.log(data)
         fetchListDaily({ sid: data }).then(response => {
