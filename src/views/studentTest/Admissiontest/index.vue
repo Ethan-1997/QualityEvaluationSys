@@ -107,13 +107,14 @@ export default {
   data() {
     return {
       student: null,
-      activeName: '',
+      activeName: 'character',
       percentage: 0,
       disabled_report: true,
       disabled_character: false,
       disabled_professional: false,
       disabled_thinking: false,
-      ctest: ''
+      ctest: '',
+      Sid: null
     }
   },
   created() {
@@ -123,12 +124,34 @@ export default {
     getList() {
       getCurrentUser().then(response => {
         this.Sid = response.data.user.sid
+        if (this.$storage.get('activeName' + this.Sid) !== null) {
+          this.activeName = this.$storage.get('activeName' + this.Sid)
+        } else {
+          this.$storage.set('activeName' + this.Sid, this.activeName)
+        }
+        if (this.$storage.get('disabled_character' + this.Sid) !== null) {
+          this.disabled_character = this.$storage.get('disabled_character' + this.Sid)
+          console.log('disabled_character' + this.Sid)
+        } else {
+          this.$storage.set('disabled_character' + this.Sid, this.disabled_character)
+        }
+        if (this.$storage.get('disabled_professional' + this.Sid) !== null) {
+          this.disabled_professional = this.$storage.get('disabled_professional' + this.Sid)
+        } else {
+          this.$storage.set('disabled_professional' + this.Sid, this.disabled_professional)
+        }
+        if (this.$storage.get('disabled_thinking' + this.Sid) !== null) {
+          this.disabled_thinking = this.$storage.get('disabled_thinking' + this.Sid)
+        } else {
+          this.$storage.set('disabled_thinking' + this.Sid, this.disabled_thinking)
+        }
         console.log(response.data.user.sid)
         const data = {
           Sid: this.Sid
         }
         fetchListStudentGrade(data).then(response => {
           this.student = response.data.items[0]
+          if (this.student.sstatus === 100) { this.disabled_report = false }
         })
       })
     },

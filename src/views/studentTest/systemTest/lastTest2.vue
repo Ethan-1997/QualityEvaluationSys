@@ -115,7 +115,9 @@
 
 <script>
     import { format } from '@/utils/time'
-    import fetchList from '@/api/Professional'
+    import { fetchListTest } from '@/api/testInformation'
+    import { getCurrentUser } from '@/api/user'
+    import { updateStudentGrade, fetchListStudentGrade } from '@/api/StudentGrade'
     const FILL = '___'
 
     // eslint-disable-next-line
@@ -139,7 +141,8 @@
           startTime: null,
           endTime: null,
           minute: 0,
-          key: 1
+          key: 1,
+          Sid: null
         }
       },
       computed: {
@@ -182,14 +185,14 @@
       },
       methods: {
         submit() {
-          const lastTest2 = this.$storage.get('professionalTest')
-          for (let i = 0; i < lastTest2.length; i++) {
-            if (lastTest2[i].name === '期末测试(2)') {
-              lastTest2[i].state = '已完成'
+          const lastTest = this.$storage.get('professionalTest' + this.Sid)
+          for (let i = 0; i < lastTest.length; i++) {
+            if (lastTest[i].name === '期末测试（2）') {
+              lastTest[i].state = '已完成'
               break
             }
           }
-          this.$storage.set('professionalTest', lastTest2)
+          this.$storage.set('professionalTest' + this.Sid, lastTest)
           let score = 0
           let single_success = 0
           let judgment_success = 0
@@ -217,12 +220,30 @@
             single_success: single_success,
             judgment_success: judgment_success
           }
-          this.$storage.set('lastTest2Score', professional)
+          const data = {
+            Sid: this.Sid
+          }
+          fetchListStudentGrade(data).then(response => {
+            const s = response.data.items[0]
+            s.lasttest2 = JSON.stringify(professional)
+            updateStudentGrade(s)
+          })
           this.$router.push({ name: 'finalProfessionalKnowledgeTest' })
         },
         getList() {
-          fetchList().then(Response => {
-            this.questions = Response.data.item2
+          getCurrentUser().then(response => {
+            this.Sid = response.data.user.sid
+          })
+          const data = {
+            Tid: 'SystemTest-PRO-4'
+          }
+          fetchListTest(data).then(response => {
+            const exam = response.data.item
+            this.questions = JSON.parse(exam.tquestion)
+            this.question = this.questions[this.questionIndex]
+            this.init()
+            console.log(this.questions, this.question)
+            // console.log(this.list)
           })
         },
         init() {

@@ -47,27 +47,42 @@
 </div>
 </template>
 <script>
-    export default {
-      data() {
-        return {
-          visible2: false,
-          midtest: [],
-          professionalTest: [
-            { name: '期末测试（1）', date: '2017/9/20', radio: '期末', state: '未完成' },
-            { name: '期末测试（2）', date: '2017/9/20', radio: '期末', state: '未完成' },
-            { name: '期末测试（3）', date: '2017/9/20', radio: '期末', state: '未完成' },
-            { name: '期末测试（4）', date: '2017/9/20', radio: '期末', state: '未完成' },
-            { name: '期末测试（5）', date: '2017/9/20', radio: '期末', state: '未完成' }
-          ]
-        }
-      },
-      methods: {
-        goTest(row) {
-          const path = '/systemTest/lastTest' + row.name.split('')[5] + '/'
-          this.$router.push({ path: path })
-        }
-      }
+import { getCurrentUser } from '@/api/user'
+export default {
+  data() {
+    return {
+      visible2: false,
+      Sid: null,
+      midtest: [],
+      professionalTest: [
+        { name: '期末测试（1）', date: '2017/9/20', radio: '期末', state: '未完成' },
+        { name: '期末测试（2）', date: '2017/9/20', radio: '期末', state: '未完成' },
+        { name: '期末测试（3）', date: '2017/9/20', radio: '期末', state: '未完成' },
+        { name: '期末测试（4）', date: '2017/9/20', radio: '期末', state: '未完成' },
+        { name: '期末测试（5）', date: '2017/9/20', radio: '期末', state: '未完成' }
+      ]
     }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    getList() {
+      getCurrentUser().then(response => {
+        this.Sid = response.data.user.sid
+        if (this.$storage.get('professionalTest' + this.Sid) !== null) {
+          this.professionalTest = this.$storage.get('professionalTest' + this.Sid)
+        } else {
+          this.$storage.set('professionalTest' + this.Sid, this.professionalTest)
+        }
+      })
+    },
+    goTest(row) {
+      const path = '/systemTest/lastTest' + row.name.split('')[5] + '/'
+      this.$router.push({ path: path })
+    }
+  }
+}
 </script>
 
 <style rel="stylesheet/scss" lang="scss">

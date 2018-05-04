@@ -291,6 +291,8 @@ import { fetchListDaily } from '@/api/participation'
 import { fetchListBreakRule } from '@/api/breakRole'
 import { fetchListGreat } from '@/api/otherImportant'
 import { fetchListHighLight } from '@/api/highlighting'
+import { fetchListStudentGrade } from '@/api/StudentGrade'
+import { getCurrentUser } from '@/api/user'
 export default {
   data() {
     return {
@@ -344,6 +346,21 @@ export default {
   },
 
   methods: {
+    getList() {
+      getCurrentUser().then(response => {
+        const data = { Sid: response.data.user.sid }
+        console.log(data)
+        fetchListStudentGrade(data).then(response => {
+          const data = response.data.items[0]
+          this.lastTestScore1 = data.lasttest1
+          this.lastTestScore2 = data.lasttest2
+          this.lastTestScore3 = data.lasttest3
+          this.lastTestScore4 = data.lasttest4
+          this.lastTestScore5 = data.lasttest5
+          this.init()
+        })
+      })
+    },
     init() {
       if (this.$storage.get('dailyList') !== null) {
         this.dailyList = this.$storage.get('dailyList')

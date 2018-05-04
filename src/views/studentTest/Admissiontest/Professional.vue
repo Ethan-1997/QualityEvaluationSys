@@ -140,7 +140,8 @@
           state: '', // 'start', 'end',
           startTime: null,
           endTime: null,
-          minute: 0
+          minute: 0,
+          Sid: null
         }
       },
       computed: {
@@ -169,10 +170,6 @@
       },
       methods: {
         submit() {
-          this.$storage.set('name', 'thinking')
-          this.$storage.set('percentage', this.$storage.get('percentage') + 33)
-          this.$storage.set('ptest', true)
-          this.$router.push({ name: 'admissionTestIndex' })
           let score = 0
           let single_success = 0
           let judgment_success = 0
@@ -212,6 +209,9 @@
             s.professional = JSON.stringify(professional)
             updateStudentGrade(s)
           })
+          this.$storage.set('activeName' + this.Sid, 'thinking')
+          this.$storage.set('disabled_professional' + this.Sid, true)
+          this.$router.push({ name: 'admissionTestIndex' })
         },
         getList() {
           getCurrentUser().then(response => {
