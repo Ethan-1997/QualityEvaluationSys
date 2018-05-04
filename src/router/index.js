@@ -96,11 +96,11 @@ export const asyncRouterMap = [
     path: '/tests',
     component: Layout,
     hidden: true,
-    // meta: { roles: ['student'] },
+    meta: { roles: ['student'] },
     children: [{
-      path: ':tid',
+      path: ':tid/:sid',
       component: _import('studentManagement/testManagement/testDetail'),
-      name: 'testDetail',
+      name: 'studenttest',
       meta: { title: '试卷详情', icon: 'icon', noCache: true }
     }]
   },
@@ -108,7 +108,7 @@ export const asyncRouterMap = [
     path: '/tests',
     component: Layout,
     hidden: true,
-    // meta: { roles: ['student'] },
+    meta: { roles: ['teacher'] },
     children: [{
       path: ':tid/edit',
       component: _import('studentManagement/testManagement/testAdd'),

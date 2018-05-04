@@ -23,7 +23,7 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-button type="success" @click="goTest(scope.row)" :disabled="scope.row.state === '已完成'">开始测试</el-button>
+                        <el-button type="success" @click="goTest(scope.row)" :disabled="scope.row.sstate === '已完成'">开始测试</el-button>
                     </template>
                 </el-table-column>
                 </el-table>
@@ -72,7 +72,8 @@ export default {
       })
     },
     goTest(row) {
-      this.$router.push({ path: '/tests/' + row.tid + '/', params: { tid: row.tid, sid: row.sid }})
+      console.log(row.sid)
+      this.$router.push({ path: '/tests/' + row.tid + '/' + row.sid, params: { tid: row.tid, sid: row.sid }})
     }
   }
 }
