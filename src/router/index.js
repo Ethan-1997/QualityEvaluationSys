@@ -84,9 +84,9 @@ export const asyncRouterMap = [
     hidden: true,
     meta: { roles: ['student'] },
     children: [{
-      path: ':tid',
+      path: ':tid/:sid',
       component: _import('studentManagement/testManagement/testDetail'),
-      name: 'testDetail',
+      name: 'studenttest',
       meta: { title: '试卷详情', icon: 'icon', noCache: true }
     }]
   },
