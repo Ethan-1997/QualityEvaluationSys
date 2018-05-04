@@ -84,7 +84,6 @@
       },
       mounted() {
         this.getList()
-        console.log('in')
       },
       methods: {
         typechange(row) {
@@ -122,9 +121,7 @@
               console.log(234)
               fetchList(this.listQuery).then(response => {
                 this.classlist = response.data.items
-                console.log(this.classlist)
               })
-            // console.log(this.list)
             })
           })
         },

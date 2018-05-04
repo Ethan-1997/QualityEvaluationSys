@@ -239,7 +239,7 @@
         getList() {
           console.log(1)
           fetchListDaily().then(response => {
-            const date = new Date().getFullYear() + '/' + (+new Date().getMonth() + +1) + '/' + (+new Date().getDay() - +1)
+            const date = new Date().getFullYear() + '/' + (+new Date().getMonth() + +1) + '/' + (+new Date().getDate())
             this.dailyList = response.data.items
             const figure = response.data.total
             console.log(date)
@@ -268,9 +268,9 @@
               } else if (this.participation[i].status === '请假') {
                 this.askForLeave++
               } else if (this.participation[i].status === '未到') {
-                this.askForLeave++
+                this.unarrived++
               } else if (this.participation[i].status === '迟到') {
-                this.askForLeave++
+                this.later++
               }
             }
             console.log(2)

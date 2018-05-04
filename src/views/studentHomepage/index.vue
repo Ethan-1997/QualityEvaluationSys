@@ -174,7 +174,7 @@
     import { fetchList } from '@/api/announcement'
     import { mapGetters } from 'vuex'
     import ComprehensiveQualityModel from './components/ComprehensiveQualityModel'
-    import { getDailysummary, createParticipation } from '@/api/participation'
+    import { getDailysummary, createParticipation, fetchListDaily } from '@/api/participation'
     import { getBreakRole } from '@/api/breakRole'
     import { getOtherImportant } from '@/api/otherImportant'
     import { getHighlighting } from '@/api/highlighting'
@@ -264,6 +264,7 @@
         this.$refs.gradeTabsThree.chart.resize()
       },
       created() {
+        this.getlist()
         this.getUserInfo()
         this.getAnnouncementData()
         this.$nextTick(() => {
@@ -274,7 +275,22 @@
         this.init()
       },
       methods: {
-    
+        getlist() {
+          fetchListDaily().then(response => {
+            const date = new Date().getFullYear() + '/' + (+new Date().getMonth() + +1) + '/' + (+new Date().getDate())
+            this.dailyList = response.data.items
+            const figure = response.data.total
+            console.log(date)
+            for (let i = 0; i < figure; i++) {
+              if (this.dailyList[i].date === date) {
+                console.log(1)
+                this.signIn = true
+                this.signInText = '已签到'
+                this.signInButton = true
+              }
+            }
+          })
+        },
         getUserInfo() {
           getCurrentUser().then(response => {
             this.sname = response.data.user.sname
@@ -292,7 +308,9 @@
               this.highLightList = response.data.items
             })
             getOtherImportant({ sid: this.sid }).then(response => {
-              this.breakRuleList = response.data.items
+              this.greatList = response.data.items
+              console.log(123456)
+              console.log(response.data)
             })
           })
           getAllInfoBySid({ sid: this.sid }).then(response => {
@@ -344,16 +362,16 @@
           this.inputValue = ''
         },
 
-        open2() { // 签到弹窗
-          this.$message({
-            message: '签到成功!',
-            type: 'success'
+        // open2() { // 签到弹窗
+        //   this.$message({
+        //     message: '签到成功!',
+        //     type: 'success'
     
-          })
-          this.signIn = true
-          this.signInText = '已签到'
-          this.signInButton = true
-        },
+        //   })
+        //   this.signIn = true
+        //   this.signInText = '已签到'
+        //   this.signInButton = true
+        // },
         creatdata() {
           const date = new Date()
           if (+date.getHours() < 9) {
@@ -368,7 +386,7 @@
             sname: this.sname,
             sclass: this.sclass,
             time: date.getHours() + ':' + (+date.getMinutes() + +1) + ':' + (+date.getSeconds() - +1),
-            date: date.getFullYear() + '/' + (+date.getMonth() + +1) + '/' + (+date.getDay() - +1),
+            date: date.getFullYear() + '/' + (+date.getMonth() + +1) + '/' + (+date.getDate()),
             status: this.statu,
             reason: this.content
           }
@@ -380,6 +398,9 @@
             type: 'success'
     
           })
+          this.signIn = true
+          this.signInText = '已签到'
+          this.signInButton = true
         },
 
         breakRuleTable({ row, rowIndex }) {
