@@ -16,17 +16,17 @@
                   </el-table-column>
                   <el-table-column label="开始时间" width="200" align="center"> 
                     <template slot-scope="scope">
-                      <el-alert :title="scope.row.starttime" type="info" :closable="false"></el-alert>
+                      <el-alert :title="scope.row.startTime" type="info" :closable="false"></el-alert>
                     </template>      
                   </el-table-column>
                   <el-table-column label="截止时间" width="200" align="center"> 
                     <template slot-scope="scope">
-                      <el-alert :title="scope.row.endtime" type="info" :closable="false"></el-alert>
+                      <el-alert :title="scope.row.endTime" type="info" :closable="false"></el-alert>
                     </template>      
                   </el-table-column>
                   <el-table-column label="提交状态" prop="submitStatus" width="120" align="center" :filters="[{ text: '已提交', value: '已提交' }, { text: '未提交', value: '未提交' }]" :filter-method="filterTaskTag">
                     <template slot-scope="scope">
-                        <el-button :type="scope.row.submitstatus === '已提交' ? 'success' : 'warning'" @click="openUploadTask(scope.row)">{{scope.row.submitstatus === '已提交' ? '已提交' : '未提交'}}</el-button>
+                        <el-button :type="scope.row.submitStatus === '已提交' ? 'success' : 'warning'" @click="openUploadTask(scope.row)">{{scope.row.submitStatus}}</el-button>
                     </template>   
                   </el-table-column>
                 </el-table>
@@ -35,15 +35,19 @@
     </el-row>
     <el-dialog title="提交任务" :visible.sync="uploadTask" width="420px" center>
       <el-upload
-        class="upload-demo"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :on-change="handleChange"
-        :file-list="fileList"
-        drag
-        :on-remove="removeFile"
-        ref="uploadForm">
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          ref="upload"
+          action="https://upload.qiniup.com"
+          multiple
+          :auto-upload="false"
+          :data="uptoken"
+          :file-list="fileList"
+          :on-success="handleUploadSuccess" 
+          :before-upload="beforeUpload"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          >
+          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
       </el-upload>
       <span slot="footer" class="dialog-footer">
         <el-button @click="uploadTask = false">取 消</el-button>
@@ -72,18 +76,31 @@
         <el-col :span="17"><div class="taskDetail-right">{{taskDetailText}}</div></el-col>
         <el-col :span="2"></el-col>
       </el-row>
+       <el-row :gutter="20" v-if="fileList1!==undefined">
+        <el-col :span="5"><div class="taskDetail-left">附件:</div></el-col>
+        <el-col :span="17">
+            <el-upload
+              class="upload-demo"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :on-preview="handlePreview"
+              :file-list="fileList1">
+            </el-upload>
+          </el-col>
+        <el-col :span="2"></el-col>
+      </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="taskDetail = false">取 消</el-button>
+        
         <el-button type="primary" @click="closeTaskDetail">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
-import { fetchWorkInfoList } from '@/api/work'
-import { fetchStudentWorkList } from '@/api/studentwork'
+import { getAllInfoBySid, updateStudentWork } from '@/api/studentwork'
+import { getCurrentUser } from '@/api/user'
 import { getToken } from '@/api/qiniu'
-import storage from '@/utils/storage'
+
 export default {
 
   data() {
@@ -91,32 +108,61 @@ export default {
       taskData: [],
       activeNames: ['1'],
       temp: null,
-      fileList: [],
+      fileList: null,
       taskTitle: null,
       taskAuthor: null,
       taskFinishedTime: null,
       taskDetailText: null,
       uploadTask: false,
-      taskDetail: false
+      taskDetail: false,
+      sid: null,
+      fileList1: null,
+      uptoken: null
     }
   },
   created() {
     this.getList()
   },
   methods: {
-    getList() {
-      fetchWorkInfoList().then(Response => {
-        this.taskData = Response.data.items
-        console.log(this.taskData)
+    submitUpload() {
+      this.$refs.upload.submit()
+    },
+    show() {
+      console.log(this.fileList)
+      console.log(this.temp)
+    },
+    beforeUpload() {
+      return getToken().then(response => {
+        this.uptoken = {
+          token: response.data.upToken
+        }
       })
-      fetchStudentWorkList().then(Response => {
-        console.log(Response.data.items)
+    },
+    handleRemove(file, fileList) {
+      this.fileList1 = JSON.stringify(fileList)
+    },
+    handleUploadSuccess(response, file, fileList) {
+      // p6k20rdt2.bkt.clouddn.com/FoiCdTJ3kxLZGCICyUZn7VlV9DiF?attname=123.exe
+      // 获取文件名 file.name  获取hash值 response.key
+      file.url = global.downloadhost + response.key + '?attname' + file.name
+      this.fileList = fileList
+    },
+    handlePreview(file) {
+      window.open(file.url)
+    },
+    getList() {
+      getCurrentUser().then(response => {
+        this.sid = response.data.user.sid
+
+        getAllInfoBySid({ sid: this.sid }).then(response => {
+          this.taskData = response.data.items
+          console.log(response.data)
+        })
       })
     },
     filterTaskTag(value, row) {
       return row.submitStatus === value
     },
-
     tableRowClassName({ row, rowIndex }) {
       if (row.submitStatus === '已提交') {
         return 'success-row'
@@ -128,8 +174,12 @@ export default {
       this.temp = Object.assign({}, row) // copy obj
       this.taskTitle = this.temp.title
       this.taskAuthor = this.temp.author
-      this.taskFinishedTime = this.temp.endtime
+      this.taskFinishedTime = this.temp.endTime
       this.taskDetailText = this.temp.content
+      this.fileList1 = JSON.parse(this.temp.teaFileList)
+      if (this.fileList1 === null) {
+        this.fileList1 = undefined
+      }
       this.taskDetail = true
     },
     closeTaskDetail() {
@@ -137,38 +187,67 @@ export default {
     },
 
     openUploadTask(row) {
+      debugger
       this.temp = Object.assign({}, row) // copy obj
-      this.fileList = this.temp.rowFileList
+      if (this.temp.stuFileList !== undefined && this.temp.stuFileList !== '' && this.temp.stuFileList !== 'null') {
+        this.fileList = JSON.parse(this.temp.stuFileList)
+      } else {
+        this.fileList = undefined
+      }
+
+      // this.fileList = JSON.parse(this.temp.stuFileList)
       this.uploadTask = true
     },
     removeFile(files, fileList) {
-      this.fileList = fileList
+      this.fileList = JSON.stringify(fileList)
     },
     closeUploadTask() {
-      console.log(this.fileList)
-      for (const v of this.taskData) {
-        if (v.id === this.temp.id) {
-          if (this.fileList.length !== 0) {
-            v.submitStatus = '已提交'
-
-            getToken().then(res => {
-              console.log(res.data)
-            })
-            this.$notify({
-              title: '成功',
-              message: '上传成功',
-              type: 'success',
-              duration: 2000
-            })
-          } else if (this.fileList.length === 0) {
-            v.submitStatus = '未提交'
-          }
-          v.rowFileList = this.fileList
-
-          storage.set('worklist', this.taskData)
-          console.log(storage.get('worklist'))
-        }
+      this.temp.stuFileList = JSON.stringify(this.fileList)
+      if (this.temp.stuFileList != null) {
+        this.temp.submitstatus = '已提交'
+      } else {
+        this.temp.submitstatus = '未提交'
       }
+      this.temp.filelist = this.temp.stuFileList
+      updateStudentWork(this.temp).then(res => {
+        const data = res.data
+        if (data.data === 'success') {
+          this.getList()
+          this.$notify({
+            title: '成功',
+            message: '上传成功',
+            type: 'success',
+            duration: 2000
+          })
+        } else {
+          this.$notify({
+            title: '失败',
+            message: '上传失败',
+            type: 'error',
+            duration: 2000
+          })
+        }
+      })
+      // for (const v of this.taskData) {
+      //   if (v.id === this.temp.id) {
+      //     if (this.fileList !== '') {
+      //       v.submitStatus = '已提交'
+      //       this.$notify({
+      //         title: '成功',
+      //         message: '上传成功',
+      //         type: 'success',
+      //         duration: 2000
+      //       })
+      //     } else if (this.fileList === '') {
+      //       v.submitStatus = '未提交'
+      //     }
+      //     v.rowFileList = this.fileList
+      //     console.log(v)
+      //     // updateStudentWork(v).then(res => {
+
+      //     // })
+      //   }
+      // }
       this.uploadTask = false
     },
 

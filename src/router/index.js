@@ -78,27 +78,13 @@ export const asyncRouterMap = [
       meta: { title: '首页', icon: 'dashboard', noCache: true }
     }]
   },
-
-  {
-    path: '/tests',
-    component: Layout,
-    meta: {
-      icon: 'test',
-      title: '学生测试管理',
-      roles: ['teacher']
-    },
-    children: [
-      { path: 'index', component: _import('studentManagement/testManagement/testManagementIndex'), name: 'testManagementIndex', meta: { title: '测试管理', icon: 'test' }},
-      { path: 'testAdd', component: _import('studentManagement/testManagement/testAdd'), name: 'testAdd', hidden: true, meta: { title: '制作试卷', icon: 'icon', noCache: true }}
-    ]
-  },
   {
     path: '/tests',
     component: Layout,
     hidden: true,
     // meta: { roles: ['student'] },
     children: [{
-      path: ':id',
+      path: ':tid',
       component: _import('studentManagement/testManagement/testDetail'),
       name: 'testDetail',
       meta: { title: '试卷详情', icon: 'icon', noCache: true }
@@ -110,7 +96,7 @@ export const asyncRouterMap = [
     hidden: true,
     // meta: { roles: ['student'] },
     children: [{
-      path: ':id/edit',
+      path: ':tid/edit',
       component: _import('studentManagement/testManagement/testAdd'),
       name: 'testDetail',
       meta: { title: '试卷详情', icon: 'icon', noCache: true }
@@ -436,22 +422,31 @@ export const asyncRouterMap = [
     ]
   },
   // 老师端
-
+  {
+    path: '/tests',
+    component: Layout,
+    meta: {
+      icon: 'test',
+      title: '学生测试管理',
+      roles: ['teacher']
+    },
+    children: [
+      { path: 'index', component: _import('studentManagement/testManagement/testManagementIndex'), name: 'testManagementIndex', meta: { title: '测试管理', icon: 'test' }},
+      { path: 'testAdd', component: _import('studentManagement/testManagement/testAdd'), name: 'testAdd', hidden: true, meta: { title: '制作试卷', icon: 'icon', noCache: true }}
+    ]
+  },
   {
     path: '/workManagement',
     component: Layout,
     meta: {
+      title: '作业管理',
+      icon: 'homework',
       roles: ['teacher']
     },
-    children: [{
-      path: 'index',
-      component: _import('studentManagement/workManagement/index'),
-      name: 'workManagement',
-      meta: {
-        title: '作业管理',
-        icon: 'homework'
-      }
-    }]
+    children: [
+      { path: 'index', component: _import('studentManagement/workManagement/index'), name: 'workManagement', meta: { title: '作业发布管理', icon: 'homework' }},
+      { path: 'detail', component: _import('studentManagement/workManagement/workdetail'), name: 'workDetail', meta: { title: '作业提交管理', icon: 'homework' }}
+    ]
   },
   {
     path: '/projectDefense',
@@ -645,15 +640,6 @@ export const asyncRouterMap = [
       name: 'logManager',
       meta: { title: '日志管理', icon: 'dashboard', noCache: true }
     }]
-  },
-  {
-    path: '/workdetail',
-    component: Layout,
-    hidden: true,
-    meta: {
-      roles: ['teacher']
-    },
-    children: [{ path: 'index', component: _import('studentManagement/workManagement/workdetail'), name: 'workdetail', meta: { title: '作业详情', icon: '2' }}]
   },
   { path: '*', redirect: '/404', hidden: true }
 ]

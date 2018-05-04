@@ -175,9 +175,9 @@ export default {
             } else if (this.dailyList[i].status === '请假') {
               this.askForLeave++
             } else if (this.dailyList[i].status === '未到') {
-              this.askForLeave++
+              this.unarrive++
             } else if (this.dailyList[i].status === '迟到') {
-              this.askForLeave++
+              this.later++
             }
           }
         })

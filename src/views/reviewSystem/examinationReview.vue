@@ -22,10 +22,10 @@
                   <el-card class="box-card-1">
                     <div style="width:200px;height:200px;float:left"><img :src="image" style="width:200px;height:200px;"></div>
                       <div style="height:200px;float:left;margin:0 0 0 18px">
-                      <div style="height:50px;font-size:17px;line-height:50px"><svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;{{studentFormData[index].sname}}</div>
-                      <div style="height:50px;font-size:17px;line-height:50px"><i class="el-icon-info"/>&nbsp;&nbsp;学号:&nbsp;&nbsp;{{studentFormData[index].sid}}</div>
-                      <div style="height:50px;font-size:17px;line-height:50px"><i class="el-icon-star-on"/>&nbsp;&nbsp;性别:&nbsp;&nbsp;{{studentFormData[index].ssex}}</div>
-                      <div style="height:50px;font-size:17px;line-height:50px"><svg-icon icon-class="peoples" />&nbsp;&nbsp;班级:&nbsp;&nbsp;{{studentFormData[index].sclass}}</div>
+                      <div style="height:50px;font-size:17px;line-height:50px"><svg-icon icon-class="people" />&nbsp;&nbsp;姓名:&nbsp;&nbsp;<el-tag type="info" size="medium">{{studentFormData[index].sname}}</el-tag></div>
+                      <div style="height:50px;font-size:17px;line-height:50px"><i class="el-icon-info"/>&nbsp;&nbsp;学号:&nbsp;&nbsp;<el-tag type="info" size="medium">{{studentFormData[index].sid}}</el-tag></div>
+                      <div style="height:50px;font-size:17px;line-height:50px"><i class="el-icon-star-on"/>&nbsp;&nbsp;性别:&nbsp;&nbsp;<el-tag type="info" size="medium">{{studentFormData[index].ssex}}</el-tag></div>
+                      <div style="height:50px;font-size:17px;line-height:50px"><svg-icon icon-class="peoples" />&nbsp;&nbsp;班级:&nbsp;&nbsp;<el-tag type="info" size="medium">{{studentFormData[index].sclass}}</el-tag></div>
                     </div>
                   </el-card>
                 </el-col>

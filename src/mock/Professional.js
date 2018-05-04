@@ -241,6 +241,14 @@ for (let i = 0; i < 10; i++) {
     userAnswer: null
   }))
 }
+temp = {
+  items: List,
+  item1: List2,
+  item2: List3,
+  item3: List4,
+  item4: List5,
+  item5: List6
+}
 export default {
   getList: () => {
     return {

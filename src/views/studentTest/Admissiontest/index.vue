@@ -78,7 +78,7 @@
                 <el-row style="padding:32px;">
                   <el-col :span="24">
                     <div class="complete">
-                      <el-progress type="circle" :percentage="percentage"></el-progress>
+                      <el-progress type="circle" :percentage="student.sstatus"></el-progress>
                     </div>
                   </el-col>
                   <el-col :span="24">
@@ -101,38 +101,60 @@
     </div>
 </template>
 <script>
+import { fetchListStudentGrade } from '@/api/StudentGrade'
+import { getCurrentUser } from '@/api/user'
 export default {
   data() {
     return {
-      activeName: '',
+      student: null,
+      activeName: 'character',
       percentage: 0,
       disabled_report: true,
       disabled_character: false,
       disabled_professional: false,
       disabled_thinking: false,
-      ctest: ''
+      ctest: '',
+      Sid: null
     }
   },
   created() {
-    console.log(this.disabled_report)
-    this.disabled_character = this.$storage.get('ctest')
-    this.disabled_professional = this.$storage.get('ptest')
-    this.disabled_thinking = this.$storage.get('ttest')
-    this.percentage = this.$storage.get('percentage')
-    this.activeName = this.$storage.get('name')
-    if (this.activeName === null) this.activeName = 'character'
-    console.log(this.activeName)
-    if (this.percentage === 99) {
-      this.percentage = 100
-      this.$storage.set('percentage', this.percentage)
-    }
-    if (this.percentage < 100) {
-      this.disabled_report = true
-    } else {
-      this.disabled_report = false
-    }
+    this.getList()
   },
   methods: {
+    getList() {
+      getCurrentUser().then(response => {
+        this.Sid = response.data.user.sid
+        if (this.$storage.get('activeName' + this.Sid) !== null) {
+          this.activeName = this.$storage.get('activeName' + this.Sid)
+        } else {
+          this.$storage.set('activeName' + this.Sid, this.activeName)
+        }
+        if (this.$storage.get('disabled_character' + this.Sid) !== null) {
+          this.disabled_character = this.$storage.get('disabled_character' + this.Sid)
+          console.log('disabled_character' + this.Sid)
+        } else {
+          this.$storage.set('disabled_character' + this.Sid, this.disabled_character)
+        }
+        if (this.$storage.get('disabled_professional' + this.Sid) !== null) {
+          this.disabled_professional = this.$storage.get('disabled_professional' + this.Sid)
+        } else {
+          this.$storage.set('disabled_professional' + this.Sid, this.disabled_professional)
+        }
+        if (this.$storage.get('disabled_thinking' + this.Sid) !== null) {
+          this.disabled_thinking = this.$storage.get('disabled_thinking' + this.Sid)
+        } else {
+          this.$storage.set('disabled_thinking' + this.Sid, this.disabled_thinking)
+        }
+        console.log(response.data.user.sid)
+        const data = {
+          Sid: this.Sid
+        }
+        fetchListStudentGrade(data).then(response => {
+          this.student = response.data.items[0]
+          if (this.student.sstatus === 100) { this.disabled_report = false }
+        })
+      })
+    },
     clear() {
       this.$storage.set('ctest', false)
       this.$storage.set('ptest', false)

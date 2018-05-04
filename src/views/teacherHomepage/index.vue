@@ -268,9 +268,9 @@
               } else if (this.participation[i].status === '请假') {
                 this.askForLeave++
               } else if (this.participation[i].status === '未到') {
-                this.askForLeave++
+                this.unarrived++
               } else if (this.participation[i].status === '迟到') {
-                this.askForLeave++
+                this.later++
               }
             }
             console.log(2)

@@ -127,7 +127,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.singleSuccess}}/{{midTest.singleTotal}}</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.single_success}}/{{midTest.single_total}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -139,7 +139,7 @@
                         </el-row>
                         <el-row :gutter="20" type="flex" justify="center">
                           <el-col :xs="24" :sm="24" :lg="24">
-                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.judgmentSuccess}}/{{midTest.judgmentTotal}}</div>
+                            <div style="width:100%;text-align:center;line-height:70px;font-size:30px">{{midTest.judgment_success}}/{{midTest.judgment_total}}</div>
                           </el-col>
                         </el-row>
                       </el-col>
@@ -287,6 +287,8 @@ import { fetchListDaily } from '@/api/participation'
 import { fetchListBreakRule } from '@/api/breakRole'
 import { fetchListGreat } from '@/api/otherImportant'
 import { fetchListHighLight } from '@/api/highlighting'
+import { fetchListStudentGrade } from '@/api/StudentGrade'
+import { getCurrentUser } from '@/api/user'
 import storage from '@/utils/storage'
 export default {
   data() {
@@ -322,10 +324,7 @@ export default {
     }
   },
   created() {
-    if (this.$storage.get('midTestSocre') !== null) {
-      this.midTest = this.$storage.get('midTestSocre')
-    }
-    this.init()
+    this.getList()
   },
   components: {
     TeacherReviewResults,
@@ -333,6 +332,18 @@ export default {
     ComprehensiveQualityModel
   },
   methods: {
+    getList() {
+      getCurrentUser().then(response => {
+        const data = { Sid: response.data.user.sid }
+        console.log(data)
+        fetchListStudentGrade(data).then(response => {
+          const data = response.data.items[0]
+          this.midTest = JSON.parse(data.midtest)
+          console.log(this.midTest)
+          this.init()
+        })
+      })
+    },
     init() {
       if (this.$storage.get('dailyList') !== null) {
         this.dailyList = this.$storage.get('dailyList')
