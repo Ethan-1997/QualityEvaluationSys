@@ -8,6 +8,13 @@ export function getStudentData(query) {
   })
 }
 
+export function getStudentAll() {
+  return request({
+    url: '/student/getstudentall',
+    method: 'get'
+  })
+}
+
 export function getStudentByUid() {
   return request({
     url: '/student/get',

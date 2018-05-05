@@ -6,8 +6,9 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import { debounce } from '@/utils'
-import { duration } from 'moment'
 
+import { fetchListStudentGrade } from '@/api/StudentGrade'
+import { getCurrentUser } from '@/api/user'
 export default {
   props: {
     className: {
@@ -50,7 +51,7 @@ export default {
     }
   },
   mounted() {
-    this.initChart()
+    this.getList()
     this.__resizeHanlder = debounce(() => {
       if (this.chart) {
         this.chart.resize()
@@ -67,6 +68,20 @@ export default {
     this.chart = null
   },
   methods: {
+    getList() {
+      getCurrentUser().then(response => {
+        const data = { Sid: response.data.user.sid }
+        fetchListStudentGrade(data).then(response => {
+          const cstr = JSON.parse(response.data.items[0].scharacter)
+          this.characterOneData = cstr[0]
+          this.characterTwoData = cstr[1]
+          this.characterThreeData = cstr[2]
+          this.characterFourData = cstr[3]
+          this.characterFiveData = cstr[4]
+          this.initChart()
+        })
+      })
+    },
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
       this.chart.setOption({

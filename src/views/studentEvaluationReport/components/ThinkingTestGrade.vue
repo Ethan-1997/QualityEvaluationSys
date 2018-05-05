@@ -6,7 +6,8 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import { debounce } from '@/utils'
-
+import { fetchListStudentGrade } from '@/api/StudentGrade'
+import { getCurrentUser } from '@/api/user'
 const animationDuration = 6000
 
 export default {
@@ -57,15 +58,14 @@ export default {
   },
   methods: {
     getList() {
-      this.chart.setOption({
-        series: [{
-          name: '数量',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: this.thinkingData,
-          animationDuration
-        }]
+      getCurrentUser().then(response => {
+        const data = { Sid: response.data.user.sid }
+        fetchListStudentGrade(data).then(response => {
+          const value1 = JSON.parse(response.data.items[0].thinking)
+          this.thinkingData = [value1[2], value1[1], value1[3]]
+          this.initChart()
+          debugger
+        })
       })
     },
     initChart() {
@@ -99,11 +99,11 @@ export default {
           }
         }],
         series: [{
-          name: 'pageA',
+          name: '数量',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [79, 52, 200],
+          data: this.thinkingData,
           animationDuration
         }]
       })

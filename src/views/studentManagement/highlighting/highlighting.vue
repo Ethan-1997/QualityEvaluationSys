@@ -77,13 +77,20 @@
             </el-option>
           </el-select>
         </el-form-item> -->
-        <el-form-item :label="tableCol.sid" prop="sid">
+        
+        <el-form-item :label="tableCol.sname" prop="sname">
+          <el-autocomplete
+          class="inline-input"
+          v-model="temp.sname"
+          :fetch-suggestions="querySearch"
+          placeholder="请输入名字"
+          :trigger-on-focus="false"
+          @select="handleSelect">
+          </el-autocomplete>
+        </el-form-item>
+       <el-form-item :label="tableCol.sid" prop="sid">
           <el-input v-model="temp.sid"></el-input>
         </el-form-item>
-        <el-form-item :label="tableCol.sname" prop="sname">
-          <el-input v-model="temp.sname"></el-input>
-        </el-form-item>
-       
         <el-form-item :label="tableCol.sclass" prop="sclass">
           <el-input v-model="temp.sclass"></el-input>
         </el-form-item>
@@ -119,6 +126,7 @@ import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import UploadExcelComponent from '@/components/UploadExcel/index.vue'
 import compare from '@/utils/compare'
+import { getStudentAll } from '@/api/student'
 
 export default {
   name: 'complexTable',
@@ -131,6 +139,7 @@ export default {
   data() {
     return {
       // '学号', '姓名', '性别', '班级', '生日', '地址', '系别', '入学时间', '操作', '排序规则'
+      restaurants: [],
       tableCol: {
         sid: '学号',
         sname: '姓名',
@@ -210,6 +219,20 @@ export default {
     this.getList()
   },
   methods: {
+    querySearch(queryString, cb) {
+      var restaurants = this.restaurants
+      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
+      // 调用 callback 返回建议列表的数据
+      cb(results)
+    },
+    handleSelect(item) {
+      this.temp.sid = item.address
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      }
+    },
     selected(data) {
       this.tableData = data.results
       this.tableHeader = data.header
@@ -234,11 +257,20 @@ export default {
       }
     },
     getList() {
-      this.listLoading = true
-      fetchListHighLight(this.listQuery).then(response => {
-        this.list = response.data.items
-        this.total = response.data.total
-        this.listLoading = false
+      getStudentAll().then(response => {
+        const items = response.data.items
+        for (let i = 0; i < items.length; i++) {
+          this.restaurants.push({
+            'value': '' + items[i].sname,
+            'address': items[i].sid
+          })
+        }
+        this.listLoading = true
+        fetchListHighLight(this.listQuery).then(response => {
+          this.list = response.data.items
+          this.total = response.data.total
+          this.listLoading = false
+        })
       })
     },
     handleFilter() {
