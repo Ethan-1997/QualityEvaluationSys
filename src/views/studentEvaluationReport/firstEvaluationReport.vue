@@ -256,11 +256,11 @@ export default {
       },
 
       thinkingData: '',
-      characterOneData: '',
-      characterTwoData: '',
-      characterThreeData: '',
-      characterFourData: '',
-      characterFiveData: ''
+      characterOneData: undefined,
+      characterTwoData: undefined,
+      characterThreeData: undefined,
+      characterFourData: undefined,
+      characterFiveData: undefined
     }
   },
   components: {
@@ -281,16 +281,16 @@ export default {
           this.professional = JSON.parse(this.stduent.professional)
           console.log(this.professional.score)
           const tstr = JSON.parse(this.stduent.thinking)
-          this.characterOneData = cstr[0]
-          this.characterTwoData = cstr[0]
-          this.characterThreeData = cstr[0]
-          this.characterFourData = cstr[0]
-          this.characterFiveData = cstr[0]
+          this.characterOneData = +cstr[0]
+          this.characterTwoData = +cstr[1]
+          this.characterThreeData = +cstr[2]
+          this.characterFourData = +cstr[3]
+          this.characterFiveData = +cstr[4]
           this.character = 0
-          let max = cstr[0]
+          let max = +cstr[0]
           for (let i = 1; i < 5; i++) {
-            if (cstr[i] > max) {
-              max = cstr[i]
+            if (+cstr[i] > max) {
+              max = +cstr[i]
               this.character = i
             }
           }

@@ -189,7 +189,7 @@ export default {
     openUploadTask(row) {
       debugger
       this.temp = Object.assign({}, row) // copy obj
-      if (this.temp.stuFileList !== undefined && this.temp.stuFileList !== '' && this.temp.stuFileList !== 'null') {
+      if (this.temp.stuFileList !== undefined && this.temp.stuFileList !== '' && this.temp.stuFileList !== 'null' && this.temp.stuFileList !== null) {
         this.fileList = JSON.parse(this.temp.stuFileList)
       } else {
         this.fileList = undefined

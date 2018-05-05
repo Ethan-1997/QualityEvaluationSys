@@ -244,8 +244,8 @@ export const asyncRouterMap = [
         name: 'midProfessionalKnowledgeTest',
         meta: { title: '专业测试(智育)', icon: 'test' },
         children: [
-          { path: 'midIndex', component: _import('studentTest/systemTest/midIndex'), name: 'systemTest-midIndex', meta: { title: '笔试题', icon: 'icon' }},
-          { path: 'projectDefenseIndex', component: _import('studentTest/midTest/projectDefense/index'), name: 'projectDefenseIndex', meta: { title: '项目答辩', icon: 'mic', noCache: true }}
+          { path: 'midIndex', component: _import('studentTest/systemTest/midIndex'), name: 'systemTest-midIndex', meta: { title: '笔试题', icon: 'icon' }}
+          // { path: 'projectDefenseIndex', component: _import('studentTest/midTest/projectDefense/index'), name: 'projectDefenseIndex', meta: { title: '项目答辩', icon: 'mic', noCache: true }}
         ] },
       { path: 'finProfessionalKnowledgeTest', component: _import('studentTest/midTest/index'), name: 'finalProfessionalKnowledgeTest', meta: { title: '专业集中测试', icon: 'test' }}
     ]
@@ -296,24 +296,24 @@ export const asyncRouterMap = [
       roles: ['student']
     },
     children: [
-      {
-        path: '/studentReview/midStudentReviewIndex',
-        component: _import('reviewSystem/midStudentReview'),
-        name: 'midStudentReviewIndex',
-        meta: { title: '学中评定', icon: 'review' },
-        children: [
-          { path: 'midvotw', component: _import('studentTeam/midindex'), name: 'midStudentGroup', meta: { title: '评定小组投票', icon: 'vote' }},
-          { path: 'midstudentsReview', component: _import('reviewSystem/midStudentGroupReview'), name: 'midGroupReview', meta: { title: '学生小组评定', icon: 'review', noCache: true }}
-        ] },
+      // {
+      //   path: '/studentReview/midStudentReviewIndex',
+      //   component: _import('reviewSystem/midStudentReview'),
+      //   name: 'midStudentReviewIndex',
+      //   meta: { title: '学中评定', icon: 'review' },
+      //   children: [
+      //     { path: 'midvotw', component: _import('studentTeam/midindex'), name: 'midStudentGroup', meta: { title: '评定小组投票', icon: 'vote' }},
+      //     { path: 'midstudentsReview', component: _import('reviewSystem/midStudentGroupReview'), name: 'midGroupReview', meta: { title: '学生小组评定', icon: 'review', noCache: true }}
+      //   ] },
       {
         path: '/studentReview/finalStudentReviewIndex',
         component: _import('reviewSystem/finalStudentReview'),
         name: 'finalStudentReviewIndex',
         meta: { title: '结题评定', icon: 'review' },
         children: [
-          { path: 'selfReview', component: _import('reviewSystem/selfReview'), name: 'selfReview', meta: { title: '学生自评', icon: 'review', noCache: true }},
-          { path: 'votw', component: _import('studentTeam/index'), name: 'student-team', meta: { title: '评定小组投票', icon: 'vote' }},
-          { path: 'studentsReview', component: _import('reviewSystem/studentGroupReview'), name: 'groupReview', meta: { title: '学生小组评定', icon: 'review', noCache: true }}
+          { path: 'selfReview', component: _import('reviewSystem/selfReview'), name: 'selfReview', meta: { title: '学生自评', icon: 'review', noCache: true }}
+          // { path: 'votw', component: _import('studentTeam/index'), name: 'student-team', meta: { title: '评定小组投票', icon: 'vote' }},
+          // { path: 'studentsReview', component: _import('reviewSystem/studentGroupReview'), name: 'groupReview', meta: { title: '学生小组评定', icon: 'review', noCache: true }}
         ] }
     ]
   },

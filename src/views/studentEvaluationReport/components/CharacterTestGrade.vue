@@ -6,6 +6,7 @@
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import { debounce } from '@/utils'
+import { duration } from 'moment'
 
 export default {
   props: {
@@ -22,23 +23,23 @@ export default {
       default: '300px'
     },
     characterOneData: {
-      type: Array,
+      type: Number,
       default: null
     },
     characterTwoData: {
-      type: Array,
+      type: Number,
       default: null
     },
     characterThreeData: {
-      type: Array,
+      type: Number,
       default: null
     },
     characterFourData: {
-      type: Array,
+      type: Number,
       default: null
     },
     characterFiveData: {
-      type: Array,
+      type: Number,
       default: null
     }
   },
