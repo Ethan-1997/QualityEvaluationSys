@@ -220,7 +220,7 @@
             s.midtest = JSON.stringify(professional)
             updateStudentGrade(s)
           })
-          this.$router.push({ name: 'projectDefenseIndex' })
+          this.$router.push({ name: 'studentHomepage' })
         },
         getList() {
           getCurrentUser().then(response => {
