@@ -154,7 +154,17 @@ export default {
         console.log(this.temp)
         updateReviewGrade(this.temp).then(res => {
           if (res.data.data === 'success') {
-            console.log('success')
+            this.$notify({
+              title: '成功',
+              message: '保存成功',
+              type: 'success'
+            })
+          } else {
+            this.$notify({
+              title: '失败',
+              message: '保存失败',
+              type: 'error'
+            })
           }
         })
       }

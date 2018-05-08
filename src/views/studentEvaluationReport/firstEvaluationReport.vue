@@ -214,7 +214,7 @@
                 </el-row>
                 <el-row :gutter="20" type="flex" ju40ify="center">
                   <div style="padding:0px 52px 16px 52px;font-size:18px;">
-                    {{'您的性格为:' + this.characterfont + this.text + '您的专业能力为' + professional.score + '分，您的思维能力' + this.results + '，推荐您选择'+ this.firstReport+'专业'}}
+                    {{content}}
                   </div>
                 </el-row>
               </el-card>
@@ -235,6 +235,7 @@ export default {
   data() {
     return {
       Sid: null,
+      content: null,
       stduent: null,
       character: 0,
       characterfont: '',
@@ -256,11 +257,11 @@ export default {
       },
 
       thinkingData: '',
-      characterOneData: '',
-      characterTwoData: '',
-      characterThreeData: '',
-      characterFourData: '',
-      characterFiveData: ''
+      characterOneData: undefined,
+      characterTwoData: undefined,
+      characterThreeData: undefined,
+      characterFourData: undefined,
+      characterFiveData: undefined
     }
   },
   components: {
@@ -281,22 +282,20 @@ export default {
           this.professional = JSON.parse(this.stduent.professional)
           console.log(this.professional.score)
           const tstr = JSON.parse(this.stduent.thinking)
-          this.characterOneData = cstr[0]
-          this.characterTwoData = cstr[0]
-          this.characterThreeData = cstr[0]
-          this.characterFourData = cstr[0]
-          this.characterFiveData = cstr[0]
+          this.characterOneData = +cstr[0]
+          this.characterTwoData = +cstr[1]
+          this.characterThreeData = +cstr[2]
+          this.characterFourData = +cstr[3]
+          this.characterFiveData = +cstr[4]
           this.character = 0
-          let max = cstr[0]
+          let max = +cstr[0]
           for (let i = 1; i < 5; i++) {
-            if (cstr[i] > max) {
-              max = cstr[i]
+            if (+cstr[i] > max) {
+              max = +cstr[i]
               this.character = i
             }
           }
           this.thinking = tstr[0]
-          const data = [tstr[1], tstr[2], tstr[3]]
-          this.thinkingData = data
           if (this.thinking < 14) {
             this.results = '优秀'
           } else if (this.thinking < 20) {
@@ -306,32 +305,35 @@ export default {
           } else {
             this.results = '不佳'
           }
+          switch (this.character) {
+            case 0:
+              this.characterfont = '老虎'
+              this.text = ',老虎泰格，具备高支配型特质，竞争力强、好胜心盛、积极自信，是个有决断力的组织者。'
+              break
+            case 1:
+              this.characterfont = '孔雀'
+              this.text = ',孔雀型领导人在任何团体内，都是人缘最好的人和最受欢迎的人，是最能吹起领导号角的人物。'
+              break
+            case 2:
+              this.characterfont = '熊猫'
+              this.text = ',无尾熊型领导人强调无为而治，能与周围的人和睦相处而不树敌，是极佳的人事领导者，适宜在企业改革后，为公司和员工重建互信的工作。'
+              break
+            case 3:
+              this.characterfont = '猫头鹰'
+              this.text = ',猫头鹰型领导人尊重传统、重视架构、事事求据喜爱工作安定的性格，是企业安定力量的来源。'
+              break
+            case 4:
+              console.log(2332)
+              this.characterfont = '变色龙'
+              this.text = ',变色龙科尔具有高度的应变能力。他性格善变，处事极具弹性，能为了适应环境的要求而调整其决定甚至信念。'
+              break
+          }
+          const rmd = Math.round(Math.random() * 3)
+          this.firstReport = this.firstReports[rmd]
+          this.content = '您的性格为:' + this.characterfont + this.text + '您的专业能力为' + this.professional.score + '分，您的思维能力' + this.results + '，推荐您选择' + this.firstReport + '专业'
+          console.log(3, this.character)
         })
       })
-      switch (this.character) {
-        case 0:
-          this.characterfont = '老虎'
-          this.text = ',老虎泰格，具备高支配型特质，竞争力强、好胜心盛、积极自信，是个有决断力的组织者。'
-          break
-        case 1:
-          this.characterfont = '孔雀'
-          this.text = ',孔雀型领导人在任何团体内，都是人缘最好的人和最受欢迎的人，是最能吹起领导号角的人物。'
-          break
-        case 2:
-          this.characterfont = '熊猫'
-          this.text = ',无尾熊型领导人强调无为而治，能与周围的人和睦相处而不树敌，是极佳的人事领导者，适宜在企业改革后，为公司和员工重建互信的工作。'
-          break
-        case 3:
-          this.characterfont = '猫头鹰'
-          this.text = ',猫头鹰型领导人尊重传统、重视架构、事事求据喜爱工作安定的性格，是企业安定力量的来源。'
-          break
-        case 4:
-          this.characterfont = '变色龙'
-          this.text = ',变色龙科尔具有高度的应变能力。他性格善变，处事极具弹性，能为了适应环境的要求而调整其决定甚至信念。'
-          break
-      }
-      const rmd = Math.round(Math.random() * 3)
-      this.firstReport = this.firstReports[rmd]
     }
   }
 }

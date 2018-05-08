@@ -39,10 +39,10 @@
                     </el-row>
                     <el-row :gutter="20">
                       <el-col :xs="24" :sm="24" :lg="24">
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>正常出勤：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="10" :percentage="arrived*10" color="#67c23a"></el-progress></div><div>&nbsp;{{ arrived }}/10</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>迟到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="10" :percentage="later*10" color="#e6a23c"></el-progress></div><div>&nbsp;{{ later }}/10</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>未到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="10" :percentage="unarrived*10" color="#F56C6C"></el-progress></div><div>&nbsp;{{ unarrived }}/10</div></div>
-                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>请假：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="10" :percentage="askForLeave*10" color="#909399"></el-progress></div><div>&nbsp;{{ askForLeave }}/10</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>正常出勤：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="10" :percentage="arrived*10" color="#67c23a"></el-progress></div><div>&nbsp;{{ arrived }}/{{Math.ceil(dailyList.length/2)}}</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>迟到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="10" :percentage="later*10" color="#e6a23c"></el-progress></div><div>&nbsp;{{ later }}/{{Math.ceil(dailyList.length/2)}}</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>未到：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="10" :percentage="unarrived*10" color="#F56C6C"></el-progress></div><div>&nbsp;{{ unarrived }}/{{Math.ceil(dailyList.length/2)}}</div></div>
+                        <div style="height:60px;padding:35px 0px"><div style="float:left;width:20%"><span>请假：</span></div><div style="float:left;width:70%"><el-progress :show-text="false" :stroke-width="10" :percentage="askForLeave*10" color="#909399"></el-progress></div><div>&nbsp;{{ askForLeave }}/{{Math.ceil(dailyList.length/2)}}</div></div>
                       </el-col>
                     </el-row>
                   </el-col>
